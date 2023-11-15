@@ -2,8 +2,14 @@
 
 TEMPORARY README
 
+<<<<<<< HEAD
 Setup
 Run this command to clone the repository into your desired directory
+=======
+server folder -> backend (express.js)
+
+client folder -> frontend (tailwind css, react.js, vite)
+>>>>>>> 8c7ef9065ee387cd02dfc94248ad6494a5a25725
 
 # clones the repo into your local device
 git clone <url>
