@@ -20,11 +20,13 @@ Run this command to clone the repository into your desired directory
 Once that's done, you will have to install dependencies on both client and server folders.
 
 For client folder:
+
     # changes directory to client folder and does a clean install of dependencies according to package-lock.json
     cd client 
     npm ci
 
-For server folder:  
+For server folder:
+
     # changes directory to server folder and does a clean install of dependencies according to package-lock.json
     cd server
     npm ci
