@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./index.css";
-import TestPage from "./Pages/testpage.jsx"
+import AboutUs from "./Pages/AboutUs.jsx"
 import HelloWorld from "./Pages/helloworld.jsx"
 
 function App() {
@@ -11,17 +11,14 @@ function App() {
     <>
       <BrowserRouter>
        <header>
-        
-        <nav>
-         <Link to="/TestPage">Test Page</Link>
-         <p></p>
+        <nav className="row">
+         <Link to="/AboutUs">About Us</Link>
          <Link to="/HelloWorld">Hello World</Link>
          </nav>
-        
        </header>
 
          <Routes>
-          <Route path="/TestPage" element={<TestPage/>}/>
+          <Route path="/AboutUs" element={<AboutUs/>}/>
           <Route path="/HelloWorld" element={<HelloWorld/>}/>
          </Routes>
       </BrowserRouter>
