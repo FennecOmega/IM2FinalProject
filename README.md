@@ -2,7 +2,8 @@
 TEMPORARY README
 
 # Tech Stack (INCOMPLETE)
-Frontend: HTML5, CSS3, JavaScript, React, React Router, Vite 
+Frontend: HTML5, CSS3, JavaScript, React, React Router, Vite
+ 
 Backend: Express 
 
 # Setup
