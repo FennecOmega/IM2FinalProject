@@ -2,11 +2,12 @@
 
 TEMPORARY README
 
+Tech Stack (INCOMPLETE)
+Frontend: HTML5, CSS3, JavaScript, React, React Router, Vite 
+Backend: Express 
+
 Setup
 Run this command to clone the repository into your desired directory
-server folder -> backend (express.js)
-
-client folder -> frontend (tailwind css, react.js, vite)
 
 # clones the repo into your local device
 git clone <url>
