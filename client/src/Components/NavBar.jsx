@@ -1,10 +1,10 @@
-function Header(){
+function NavBar(){
 
     return (
    <>
- <h1>This is Header.jsx</h1>
+ <h1>This is NavBar.jsx</h1>
    </>
  )
 }
 
-export default Header
+export default NavBar
