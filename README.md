@@ -47,3 +47,38 @@ To run the backend, change your directory to the server folder and run index.js 
     cd server
     # starts and runs the backend
     node <application name>.js
+
+# Project Organization
+
+If theres any concern about the project organization, feel free to PM me through FB Messenger or through Google Chats.
+
+## FRONTEND
+
+    > client
+        > src
+            > Components
+                # list of components
+            > data
+                # list of data
+            > Pages
+                > ClientPages
+                    # list of pages seen by the clients and staff
+                > StaffPages
+                    # list of pages seen by ONLY the staff
+
+        # our application
+        App.jsx
+        # our css stylesheet 
+        index.css
+        # config files
+        package.json
+        postcss.config.js
+        tailwind.config.js
+        vite.config.js
+
+## BACKEND
+
+    > server
+        index.js
+
+
