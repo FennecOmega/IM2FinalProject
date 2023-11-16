@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./index.css";
-import AboutUs from "./Pages/AboutUs.jsx"
+import AboutUs from "./Pages/ClientPages/AboutUs.jsx"
 import HelloWorld from "./Pages/helloworld.jsx"
 
 function App() {
