@@ -1,21 +1,23 @@
-import "../index.css";
-import bakingbread1 from "../data/images/BakingBread.jpg";
-import bakingbread2 from "../data/images/BakingBread2.jpg";
+import "../../index.css"
+import bakingbread1 from "../../data/images/BakingBread.jpg";
+import bakingbread2 from "../../data/images/BakingBread2.jpg";
+import NavBar from "../../Components/NavBar.jsx";
 
 function AboutUs() {
   return (
     <>
-      <div>
-        <div className="content-center items-center">
+      <div className="flex flex-wrap">
+       
+        <div className="flex items-center">
           We are Walter White Bakery
         </div>
-        <div>
-          <img src={bakingbread1} className="object-scale-down h-120 w-240" />
+        <div className="flex items-center">
+          <img src={bakingbread1}/>
           <p>Jesse Pinkman and Walter White recreate our famous White Bread.</p>
         </div>
 
-        <div>
-          <img src={bakingbread2} className="opacity-50 object-fill" />
+        <div className="flex items-center">
+          <img src={bakingbread2}/>
           <p>Walter White holding our signature White Bread.</p>
         </div>
       </div>

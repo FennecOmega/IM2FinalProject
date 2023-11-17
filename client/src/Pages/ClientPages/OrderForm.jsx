@@ -1,9 +1,9 @@
-import "../index.css";
+import "../../index.css";
 
 function OrderForm() {
   return (
    <>
-    <h1>This is OrderForm.jsx</h1>
+    <h1 className="w-screen">This is OrderForm.jsx</h1>
    </>
   );
 }
