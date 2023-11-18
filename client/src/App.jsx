@@ -13,12 +13,19 @@ function App() {
 
 const [ isLoggedIn, setLogin ] = useState(false);
 
+const LogIn = () => {
+  setLogin(true);
+}
+
+const LogOut = () => {
+  setLogin(false);
+}
 
   return (
     <>
       <BrowserRouter>
         <header>
-          { (!isLoggedIn) ? <NavBar/> : <DashboardSidePanel/> }
+          { (!isLoggedIn) ? <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} /> : <DashboardSidePanel/> }
         </header>
         <main className="flex mt-20">
          
