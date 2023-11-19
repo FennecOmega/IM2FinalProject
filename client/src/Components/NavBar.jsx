@@ -12,11 +12,11 @@ function NavBar({LoginState, Login, Logout}){
       
       <div className=" block flex-grow lg:flex lg:items-center lg:w-auto">
        <div className="text-sm lg:flex-grow">
-         <Link to="/AboutUs" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">About Us</Link>
+         <Link to="/about-us" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">About Us</Link>
 
-         <Link to="/ProductDisplay" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Our Products</Link>
+         <Link to="/products" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Our Products</Link>
 
-         <Link to="/OrderForm" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Order Now</Link>
+         <Link to="/order-form" href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Order Now</Link>
          </div>
 
          <div>

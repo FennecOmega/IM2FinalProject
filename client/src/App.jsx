@@ -32,7 +32,7 @@ const LogOut = () => {
          <Routes>
           <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard"/> : <Navigate to="/about-us"/>}/>
           <Route path="/about-us" element={<AboutUs/>}/>
-          <Route path="/product-display" element={<ProductDisplay/>}/>
+          <Route path="/our-products" element={<ProductDisplay/>}/>
           <Route path="/order-form" element={<OrderForm/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
          </Routes>
