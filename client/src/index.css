@@ -71,3 +71,46 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+.currentPage{
+  display: block; 
+padding-top: 0.5rem;
+padding-bottom: 0.5rem; 
+padding-left: 0.75rem;
+padding-right: 0.75rem; 
+border-radius: 0.25rem; 
+color: #ffffff; 
+background-color: #1D4ED8; 
+
+
+@media (min-width: 768px) { 
+  padding: 0; 
+color: #1D4ED8; 
+background-color: transparent; 
+ }
+
+}
+
+.otherPage{
+
+  display: block; 
+padding-top: 0.5rem;
+padding-bottom: 0.5rem; 
+padding-left: 0.75rem;
+padding-right: 0.75rem; 
+border-radius: 0.25rem; 
+color: white; 
+
+
+@media (min-width: 768px) { 
+  padding: 0; 
+ }
+
+
+
+:hover {
+ background-color: #F3F4F6; 
+ }
+
+}
