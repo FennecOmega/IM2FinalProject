@@ -7,6 +7,7 @@ import OrderForm from "./Pages/ClientPages/OrderForm.jsx"
 import Dashboard from "./Pages/StaffPages/Dashboard.jsx"
 import DashboardSidePanel from "./Components/DashboardSidePanel.jsx"
 import NavBar from "./Components/NavBar.jsx"
+import OrderList from "./Pages/StaffPages/OrderList.jsx"
 
 
 function App() {
@@ -35,6 +36,7 @@ const LogOut = () => {
           <Route path="/our-products" element={<ProductDisplay/>}/>
           <Route path="/order-form" element={<OrderForm/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/order-list" element={<OrderList/>}/>
          </Routes>
         
         </main> 

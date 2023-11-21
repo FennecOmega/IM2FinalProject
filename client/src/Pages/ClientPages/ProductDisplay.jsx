@@ -1,6 +1,10 @@
 import "../../index.css";
 
 function ProductDisplay() {
+
+  
+
+
   return (
    <>
    <div className="w-screen">
