@@ -1,9 +1,22 @@
 import "../../index.css";
 import { useState, useEffect } from 'react'
 import OrdersList from "../../Components/OrdersList.jsx"
+// import { createRequire } from 'node:module'
+// const require  = createRequire(import.meta.url)
+// const axios = require('axios')
 
 function OrderList() {
 
+  // axios.get('http://localhost:3000/sampleList')
+  // .then(function (response) {
+  //   setForms(response)
+  //   console.log(response)
+  //   console.log(response)
+  // })
+  // .catch(function (error){
+  //   console.log(error)
+  // })
+ 
   const [ forms, setForms ] = useState([]);
 
   useEffect(() => {
@@ -19,14 +32,16 @@ function OrderList() {
       .catch((error) => console.log(error));
   }, []);
 
-  
 
-  console.log(forms)
+
 
   return (
    <>
-    <div className="flex align-content: center mt-10">
-    {forms.map((form) => <div> <OrdersList Order={form}/> </div>)}
+    <div className="w-full">
+    {/* {forms.map((form) => <div> <OrdersList Order={form}/> </div>)} */
+    
+    }
+     <OrdersList Orders={forms}/>
     </div>
    </>
   );

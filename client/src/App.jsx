@@ -9,7 +9,6 @@ import DashboardSidePanel from "./Components/DashboardSidePanel.jsx"
 import NavBar from "./Components/NavBar.jsx"
 import OrderList from "./Pages/StaffPages/OrderList.jsx"
 
-
 function App() {
 
 const [ isLoggedIn, setLogin ] = useState(false);
