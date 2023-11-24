@@ -1,9 +1,15 @@
 import "../../index.css";
+import { useState } from 'react'
+import NameForm from "../../Components/NameForm.jsx"
+import OrdersList from "../../Components/OrdersList.jsx"
 
 function OrderForm() {
+
   return (
    <>
-    <h1 className="w-screen">This is OrderForm.jsx</h1>
+    <div className="flex align-content: center">
+    <NameForm/>
+    </div>
    </>
   );
 }

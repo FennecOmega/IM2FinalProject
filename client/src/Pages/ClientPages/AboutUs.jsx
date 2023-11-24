@@ -1,7 +1,7 @@
 import "../../index.css"
 import bakingbread1 from "../../data/images/BakingBread.jpg";
 import bakingbread2 from "../../data/images/BakingBread2.jpg";
-import NavBar from "../../Components/NavBar.jsx";
+
 
 function AboutUs() {
   return (
