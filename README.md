@@ -48,6 +48,32 @@ To run the backend, change your directory to the server folder and run index.js 
     # starts and runs the backend
     node <application name>.js
 
+# To Contribute
+
+To contribute, #Fork this repository in your Github which can be seen on the top right. 
+
+![image of github watch, star, fork](https://user-images.githubusercontent.com/111989096/273213128-089875d8-74bc-4919-809c-b4ff11e82c79.png)
+
+Go to your Forked Repository, click on Code, and copy the URL as shown.
+
+![image of github](https://user-images.githubusercontent.com/111989096/273165397-09e93194-be12-423d-845b-64540ac63a0e.png)
+
+In your terminal, navigate to the Directory you want it to be saved, and with the saved URL do the following:
+
+    git clone <the_url_you_copied>
+
+    git clone https://github.com/FennecOmega/IM2FinalProject.git    # Example
+    cd IM2FinalProject                                                     # Make that file the current directory
+
+
+You can then make changes within that file whenever you want, but make sure to git pull everytime you start coding to fetch the most recent changes. Once you are done adding new features, you want the changes to appear in your Forked Repository.
+
+    git add .                                # Prepares all files to be pushed (NOTE: You can prepare specific files through file path syntax)
+    git commit -m "Your commit message"      # A commit message example would be "fix: handle zero division"
+    git push origin master                   # Makes the changes to your Forked Repository
+
+Once that is finished, go to your Forked Repository and click on Compare and Pull Request to make a pull request on the actual Repository. Wait for the owner of the Repository to approve or suggest you to make more changes.
+
 # Project Organization
 
 If theres any concern about the project organization, feel free to PM me through FB Messenger or through Google Chats.
