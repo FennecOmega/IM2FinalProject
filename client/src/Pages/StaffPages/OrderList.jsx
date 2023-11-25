@@ -1,5 +1,6 @@
 import "../../index.css";
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import OrdersList from "../../Components/OrdersList.jsx"
 // import { createRequire } from 'node:module'
 // const require  = createRequire(import.meta.url)
@@ -7,30 +8,30 @@ import OrdersList from "../../Components/OrdersList.jsx"
 
 function OrderList() {
 
-  // axios.get('http://localhost:3000/sampleList')
-  // .then(function (response) {
-  //   setForms(response)
-  //   console.log(response)
-  //   console.log(response)
-  // })
-  // .catch(function (error){
-  //   console.log(error)
-  // })
+   useEffect(() => {axios.get('http://localhost:3000/sample-list')
+   .then(function (response) {
+     setForms(response.data)
+     console.log(response.data)
+   })
+   .catch(function (error){
+     console.log(error)
+   })}, 
+   [])
  
   const [ forms, setForms ] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/sampleList", { // replace fetch link with express link
-      method: "GET",
-      header: "cors"
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setForms(data);
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/sampleList", { // replace fetch link with express link
+  //     method: "GET",
+  //     header: "cors"
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setForms(data);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, []);
 
 
 

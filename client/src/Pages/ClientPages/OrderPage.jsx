@@ -1,17 +1,17 @@
 import "../../index.css";
 import { useState } from 'react'
-import NameForm from "../../Components/NameForm.jsx"
+import OrderForms from "../../Components/OrderForms.jsx"
 import OrdersList from "../../Components/OrdersList.jsx"
 
-function OrderForm() {
+function OrderPage() {
 
   return (
    <>
     <div className="flex align-content: center">
-    <NameForm/>
+    <OrderForms/>
     </div>
    </>
   );
 }
 
-export default OrderForm;
+export default OrderPage;

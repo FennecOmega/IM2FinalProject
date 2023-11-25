@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import "./index.css";
 import AboutUs from "./Pages/ClientPages/AboutUs.jsx"
 import ProductDisplay from "./Pages/ClientPages/ProductDisplay.jsx"
-import OrderForm from "./Pages/ClientPages/OrderForm.jsx"
+import OrderPage from "./Pages/ClientPages/OrderPage.jsx"
 import Dashboard from "./Pages/StaffPages/Dashboard.jsx"
 import DashboardSidePanel from "./Components/DashboardSidePanel.jsx"
 import NavBar from "./Components/NavBar.jsx"
@@ -33,7 +33,7 @@ const LogOut = () => {
           <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard"/> : <Navigate to="/about-us"/>}/>
           <Route path="/about-us" element={<AboutUs/>}/>
           <Route path="/our-products" element={<ProductDisplay/>}/>
-          <Route path="/order-form" element={<OrderForm/>}/>
+          <Route path="/order-form" element={<OrderPage/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/order-list" element={<OrderList/>}/>
          </Routes>

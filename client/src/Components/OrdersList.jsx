@@ -16,12 +16,15 @@ function OrdersList({Orders}){
 
   return(
     <>
-     <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+     <div className="relative w-screen overflow-x-auto shadow-md sm:rounded-lg ">
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" className="px-6 py-3">
                     Order ID
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Transaction Date
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Customer Name
@@ -30,10 +33,10 @@ function OrdersList({Orders}){
                     Contact Number
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Product Name
+                    Products Ordered
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Quantity
+                    Total Price
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Actions
