@@ -4,59 +4,65 @@ import ProductOrderCard from './ProductOrderCard.jsx'
 
 function OrderForms(){
 
-    const [list, setList] = useState({
+    const [order, setOrder] = useState({
       ID: 0,
       TransactionDate: "", 
       Name: "",
       Contact: "",
       OrderedProducts: [{}], 
-      TotalPrice: 0
+      TotalPrice: 0,
+      PaymentMethod: "",
+      Status: "PENDING"
     })
     const [prodList, setProdList] = useState([])
-    const [orderList, setOrderList] = useState([])
-
-    console.log(list)
+    const [itemList, setItemList] = useState([])
 
     function AddProduct(item) {
-      console.log(item)
-      var product = {ProductID: item.ProductID, Qty: 1, Subtotal: 1 * item.UnitPrice}
-      var currPrice = list.TotalPrice;
-      var temp = orderList.map(product => product.ProductID).indexOf(item.ProductID);
-      console.log(temp)
-      if(temp == -1){
-      setOrderList([...orderList, product])
-      }else{
-      orderList[temp].Qty += 1; orderList[temp].Subtotal = item.UnitPrice * orderList[temp].Qty;
-      }
       
-      setList({...list, OrderedProducts: orderList, TotalPrice: currPrice + item.UnitPrice})
+      var product = {ProductID: item.ProductID, Qty: 1, Subtotal: 1 * item.UnitPrice}
+      var currPrice = order.TotalPrice;
+      var temp = itemList.map(product => product.ProductID).indexOf(item.ProductID);
+      
+      if(temp == -1){
+        setItemList([...itemList, product])
+      }else{
+      itemList[temp].Qty += 1; itemList[temp].Subtotal = item.UnitPrice * itemList[temp].Qty;
+      }
+      console.log(itemList)
+      setOrder({...order, TotalPrice: currPrice + item.UnitPrice})
+      setOrder({...order, OrderedProducts: itemList})
     }
 
     function DelProduct(item) {
-      var temp = orderList.map(product => product.ProductID).indexOf(item.ProductID);
-      var currPrice = list.TotalPrice;
-      if(temp == 0 && orderList[temp].Qty > 0){
-        orderList[temp].Qty--; orderList[temp].Subtotal = item.UnitPrice * orderList[temp].Qty;
+      var temp = itemList.map(product => product.ProductID).indexOf(item.ProductID);
+      var currPrice = order.TotalPrice;
+      if(temp != -1 && itemList[temp].Qty > 0){
+        itemList[temp].Qty--; itemList[temp].Subtotal = item.UnitPrice * itemList[temp].Qty;
+        setOrder({...order, TotalPrice: currPrice - item.UnitPrice})
       }
-      setList({...list, OrderedProducts: orderList, TotalPrice: currPrice - item.UnitPrice})
+      setOrder({...order, OrderedProducts: itemList})
     }
 
     // TODO
     // User inputs contact (optional), payment method, and order.
-    // FINISHED The order product process works by choosing from the entire list of available products 
+    // FINISHED The order product process works by choosing from the entire order of available products 
     // FINISHED The user then clicks on an add button to increase quantity of that specific item
     // FINISHED this item is then passed into an array of products, and will stay there even if qty is 0 
     // IF cash on delivery/cash on pickup is chosen, skip. Else, if gcash, prompt user to upload gcash receipt or reference number
     // Order post process: Before posting the order item into the backend, it will undergo 3 processes
-    // Add date and time to log when the order was taken, then filter out the product order list 
+    // Add date and time to log when the order was taken, then filter out the product order order 
     // FINISHED Filtering works by removing all product orders with a quantity of 0.
+    // FINISHED Add the date and time of the transaction
     // If this process returns an empty array, prompt the user to add items and stop the post. 
     // Else, collate the subtotal into the total price and add user account ID and post the object into the express backend.
 
-    useEffect(() => {axios.get('http://localhost:3000/product-list')
+    //BUGFIX
+    // Date does not show up on post.
+    // Bug where it takes 2 attempts to add itemList into OrderedProducts.
+
+    useEffect(() => {axios.get('http://localhost:3000/product-order')
    .then(function (response) {
      setProdList(response.data)
-     console.log(response.data)
    })
    .catch(function (error){
      console.log(error)
@@ -64,9 +70,9 @@ function OrderForms(){
    [])
 
   
-    async function postList(){
+    async function postorder(){
      
-        await axios.post("http://localhost:3000/append-list", list)
+        await axios.post("http://localhost:3000/append-order", order)
         .then(function (response) {
             console.log(response)
         })
@@ -77,21 +83,28 @@ function OrderForms(){
     }
 
   async function handleClick(){
-     var temp = orderList.map(product => product.Qty).indexOf(0)
+     var temp = itemList.map(product => product.Qty).indexOf(0)
      console.log(temp)
 
-     if(temp == -1){
-     setList({...list, TransactionDate: new Date().toISOString().slice(0, 19).replace('T', ' ')})
+     if(temp == -1 && order.Name != ""){
+     order.TransactionDate = new Date().toISOString().slice(0, 19).replace('T', ' ')
+     
 
-     await postList()
-     setList({ID: 0, Name: "",
-     Contact: "",
-     OrderedProducts: [{}], 
-     TotalPrice: 0})
+     await postorder()
+     setOrder({ID: 0,
+      TransactionDate: "", 
+      Name: "",
+      Contact: "",
+      OrderedProducts: [{}], 
+      TotalPrice: 0,
+      Status: "PENDING"})
+     setItemList([])
      }
 
      else{
-      return "ERROR: No items ordered/missing information."
+      const error = "ERROR: No items ordered/missing information."
+      console.log(error)
+      return document.getElementById("errMessage").innerHTML = error
      }
    }
 
@@ -101,14 +114,15 @@ function OrderForms(){
       
       <>
       <p>name</p>
-      <input type="text" className="border-4 border-black" onChange={(e) => setList({...list, Name: e.target.value})}></input>
+      <input id="username" type="text" className="border-4 border-black" onChange={(e) => setOrder({...order, Name: e.target.value})}></input>
       <p>contact no.</p>
-      <input type="text" className="border-4 border-black" onChange={(e) => setList({...list, Contact: e.target.value})}></input>
+      <input id="contact" type="text" className="border-4 border-black" onChange={(e) => setOrder({...order, Contact: e.target.value})}></input>
       <p>Products</p>
       {prodList.map((prod, index) => <ProductOrderCard key={index} AddQty={AddProduct} DelQty={DelProduct} item={prod}/>)}
       
-      <p>Current Total: {list.TotalPrice}</p>
+      <p>Current Total: {order.TotalPrice}</p>
       <button onClick={handleClick}>ADD</button>
+      <p id="errMessage"></p>
 
       </>
 

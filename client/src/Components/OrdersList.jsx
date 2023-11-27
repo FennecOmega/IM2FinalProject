@@ -1,10 +1,11 @@
 import "../index.css"
 import OrderRow from "./OrderRow.jsx"
+import axios from 'axios'
 
 
-function OrdersList({Orders}){
+function OrdersList({Order, setOrder}){
 
-  
+ 
 
   function editFunction(){
 
@@ -37,6 +38,9 @@ function OrdersList({Orders}){
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Total Price
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Status
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Actions

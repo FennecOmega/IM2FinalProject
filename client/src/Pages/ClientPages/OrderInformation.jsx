@@ -1,18 +1,17 @@
 import "../../index.css";
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import OrderForms from "../../Components/OrderForms.jsx"
 import OrdersList from "../../Components/OrdersList.jsx"
 
-function OrderPage() {
+function OrderInformation() {
 
   return (
    <>
     <div className="flex align-content: center">
-    <OrderForms/>
+       This is OrderInformation.jsx
     </div>
    </>
   );
 }
 
-export default OrderPage;
+export default OrderInformation;
