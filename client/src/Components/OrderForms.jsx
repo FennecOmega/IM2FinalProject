@@ -36,17 +36,24 @@ function OrderForms(){
     }
 
     // TODO
-    // User inputs contact (optional), payment method, and order.
     // FINISHED The order product process works by choosing from the entire order of available products 
     // FINISHED The user then clicks on an add button to increase quantity of that specific item
     // FINISHED this item is then passed into an array of products, and will stay there even if qty is 0 
-    // IF cash on delivery/cash on pickup is chosen, skip. Else, if gcash, prompt user to upload gcash receipt or reference number
-    // Order post process: Before posting the order item into the backend, it will undergo 3 processes
-    // Add date and time to log when the order was taken, then filter out the product order order 
+    // FINISHED Order post process: Before posting the order item into the backend, it will undergo 3 processes
+    // FINISHED Add date and time to log when the order was taken, then filter out the product order 
     // FINISHED Filtering works by removing all product orders with a quantity of 0.
-    // FINISHED Add the date and time of the transaction
-    // If this process returns an empty array, prompt the user to add items and stop the post. 
-    // Else, collate the subtotal into the total price and add user account ID and post the object into the express backend.
+    // FINISHED If this process returns an empty array, prompt the user to add items and stop the post. 
+    // FINISHED Else, collate the subtotal into the total price and add user account ID and post the object into the express backend.
+    
+    // NEW TODO
+    // Finished form (Cart/itemList) will be the first page in order form.
+    // Afterwards, if user is not logged in, they will be prompted to enter customer details. This will be posted to the backend.
+    // Else, if user is logged in, use the current user token too check for customer type and customer ID, and Order inherits that ID.
+    // Once the backend generates a unique customer ID, it will be inherited by the Order object upon continuing to payment.
+    // Payment can be done in-person or through GCASH.
+    // if in-person payment is chosen, immediately skip to confirming order, showing details of the customer's order.
+    // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
+    // After confirmation, print out a png/pdf of the order ticket, format will be specified.
 
     //BUGFIX
     // fixed jajajaja Date does not show up on post.

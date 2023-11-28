@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useLocation } from 'react-router-dom';
 import '../index.css'
 import '../ui/Login.css'
-import BakingBreadLogo from '../data/images/Breaking_Bad_logo.png'
+import BakingBreadLogo from '/data/images/Breaking_Bad_logo.png'
 
 function NavBar({LoginState, Login, Logout}){
 
