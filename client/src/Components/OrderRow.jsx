@@ -53,8 +53,8 @@ return(
                     {Order.Status}
                 </td>
                 <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-5">Cancel</a>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick="">Edit</button>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-5" onClick="">Cancel</button>
                 </td>
             </tr>
          </>

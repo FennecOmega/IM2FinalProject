@@ -3,44 +3,36 @@ import axios from 'axios'
 import ProductOrderCard from './ProductOrderCard.jsx'
 
 function OrderForms(){
-
-    const [order, setOrder] = useState({
-      ID: 0,
-      TransactionDate: "", 
-      Name: "",
-      Contact: "",
-      OrderedProducts: [{}], 
-      TotalPrice: 0,
-      PaymentMethod: "",
-      Status: "PENDING"
-    })
+   console.log("re-render")
+ 
+    const [details, setDetails] = useState({Name: "", Contact: ""})
     const [prodList, setProdList] = useState([])
     const [itemList, setItemList] = useState([])
 
     function AddProduct(item) {
       
-      var product = {ProductID: item.ProductID, Qty: 1, Subtotal: 1 * item.UnitPrice}
-      var currPrice = order.TotalPrice;
-      var temp = itemList.map(product => product.ProductID).indexOf(item.ProductID);
+      var product = {ProductID: item.ProductID, Qty: 1, Price: item.UnitPrice, Subtotal: 0.0}
+
+      let newProductIndex = itemList.findIndex((i) => item.ProductID === i.ProductID)
       
-      if(temp == -1){
+      if(newProductIndex == -1){
         setItemList([...itemList, product])
       }else{
-      itemList[temp].Qty += 1; itemList[temp].Subtotal = item.UnitPrice * itemList[temp].Qty;
+        const newCart = itemList
+        newCart[newProductIndex].Qty++;
+        setItemList(newCart)
       }
-      console.log(itemList)
-      setOrder({...order, TotalPrice: currPrice + item.UnitPrice})
-      setOrder({...order, OrderedProducts: itemList})
     }
 
     function DelProduct(item) {
       var temp = itemList.map(product => product.ProductID).indexOf(item.ProductID);
-      var currPrice = order.TotalPrice;
       if(temp != -1 && itemList[temp].Qty > 0){
-        itemList[temp].Qty--; itemList[temp].Subtotal = item.UnitPrice * itemList[temp].Qty;
-        setOrder({...order, TotalPrice: currPrice - item.UnitPrice})
+        itemList[temp].Qty--;
+        if(itemList[temp].Qty == 0){
+          setItemList(itemList.filter((i) => i.Qty > 0))
+        }
       }
-      setOrder({...order, OrderedProducts: itemList})
+
     }
 
     // TODO
@@ -57,10 +49,10 @@ function OrderForms(){
     // Else, collate the subtotal into the total price and add user account ID and post the object into the express backend.
 
     //BUGFIX
-    // Date does not show up on post.
-    // Bug where it takes 2 attempts to add itemList into OrderedProducts.
+    // fixed jajajaja Date does not show up on post.
+    // fixed jajajaja Bug where it takes 2 attempts to add itemList into OrderedProducts.
 
-    useEffect(() => {axios.get('http://localhost:3000/product-order')
+    useEffect(() => {axios.get('http://localhost:3000/product-list')
    .then(function (response) {
      setProdList(response.data)
    })
@@ -70,9 +62,9 @@ function OrderForms(){
    [])
 
   
-    async function postorder(){
+    async function postorder(order){
      
-        await axios.post("http://localhost:3000/append-order", order)
+        await axios.post("http://localhost:3000/append-list", order)
         .then(function (response) {
             console.log(response)
         })
@@ -83,22 +75,21 @@ function OrderForms(){
     }
 
   async function handleClick(){
-     var temp = itemList.map(product => product.Qty).indexOf(0)
-     console.log(temp)
+     const order = {
+      ID: 0,
+      TransactionDate: new Date().toISOString().slice(0, 19).replace('T', ' '), 
+      Name: details.Name,
+      Contact: details.Contact,
+      OrderedProducts: itemList.map((item) => (item.Subtotal = item.Price * item.Qty, item)), 
+      TotalPrice: itemList.reduce((currPrice, item) => currPrice += item.Subtotal, 0),
+      PaymentMethod: "",
+      Status: "PENDING"
+     }
 
-     if(temp == -1 && order.Name != ""){
-     order.TransactionDate = new Date().toISOString().slice(0, 19).replace('T', ' ')
+     if(order.TotalPrice != 0 && details.Name != ""){
+       console.log(order)
+       await postorder(order)
      
-
-     await postorder()
-     setOrder({ID: 0,
-      TransactionDate: "", 
-      Name: "",
-      Contact: "",
-      OrderedProducts: [{}], 
-      TotalPrice: 0,
-      Status: "PENDING"})
-     setItemList([])
      }
 
      else{
@@ -114,13 +105,13 @@ function OrderForms(){
       
       <>
       <p>name</p>
-      <input id="username" type="text" className="border-4 border-black" onChange={(e) => setOrder({...order, Name: e.target.value})}></input>
+      <input id="username" type="text" className="border-4 border-black" onChange={(e) => setDetails({...details, Name: e.target.value})}></input>
       <p>contact no.</p>
-      <input id="contact" type="text" className="border-4 border-black" onChange={(e) => setOrder({...order, Contact: e.target.value})}></input>
+      <input id="contact" type="text" className="border-4 border-black" onChange={(e) => setDetails({...details, Contact: e.target.value})}></input>
       <p>Products</p>
       {prodList.map((prod, index) => <ProductOrderCard key={index} AddQty={AddProduct} DelQty={DelProduct} item={prod}/>)}
       
-      <p>Current Total: {order.TotalPrice}</p>
+      <p>Current Total: </p>
       <button onClick={handleClick}>ADD</button>
       <p id="errMessage"></p>
 

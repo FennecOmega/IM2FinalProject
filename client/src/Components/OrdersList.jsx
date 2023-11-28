@@ -3,7 +3,7 @@ import OrderRow from "./OrderRow.jsx"
 import axios from 'axios'
 
 
-function OrdersList({Order, setOrder}){
+function OrdersList({Orders, setOrder}){
 
  
 
@@ -11,7 +11,11 @@ function OrdersList({Order, setOrder}){
 
   }
 
-  function deleteFunction(){
+  function approveFunction(){
+
+  }
+
+  function cancelFunction(){
 
   }
 
