@@ -14,19 +14,19 @@ const productList = [
    ProductID: 1,
    ProductName: "Small Chocolate Cake",
    ProductDesc: "Our signature 8\"\ chocolate cake.",
-   UnitPrice: 6.50
+   UnitPrice: 350.00
   },
   {
     ProductID: 2,
     ProductName: "Monster Cookie",
     ProductDesc: "A large chocolate chip cookie.",
-    UnitPrice: 3.50
+    UnitPrice: 175.00
   },
   {
     ProductID: 3,
     ProductName: "Box of Churros",
     ProductDesc: "Freshly fried churros, 4 per box.",
-    UnitPrice: 2.50
+    UnitPrice: 100.00
   }
 
 ]
@@ -37,8 +37,9 @@ const sampleList = [
    TransactionDate: "2023-11-25 17:36:57",
    Name: "Cookie Monster",
    Contact: "+63 123 456 7890",
-   OrderedProducts: [{ProductID: 2, Qty: 10, Subtotal: 35.00}, {ProductID: 1, Qty: 1, Subtotal: 6.50}],
-   TotalPrice: 41.50
+   OrderedProducts: [{ProductID: 2, Qty: 10, Subtotal: 1750.00}, {ProductID: 1, Qty: 1, Subtotal: 350.00}],
+   TotalPrice: 2100.00,
+   Status: "PENDING"
   },
 
   {
@@ -46,8 +47,9 @@ const sampleList = [
    TransactionDate: "2023-10-31 22:32:56",
    Name: "Mookie Nonster",
    Contact: "+63 232 454 3462",
-   OrderedProducts: [{ProductID: 3, Qty: 10, Subtotal: 25.00}, {ProductID: 1, Qty: 5, Subtotal: 32.50}],
-   TotalPrice: 57.50
+   OrderedProducts: [{ProductID: 3, Qty: 10, Subtotal: 1000.00}, {ProductID: 1, Qty: 5, Subtotal: 1750.00}],
+   TotalPrice: 2750.00,
+   Status: "COMPLETED"
    }
 
 ]
