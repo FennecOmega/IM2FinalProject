@@ -1,22 +1,63 @@
 import "../index.css"
 import OrderRow from "./OrderRow.jsx"
 import axios from 'axios'
+import { useState } from "react"
 
 
-function OrdersList({Orders, setOrder}){
+function OrdersList({Orders, setOrder, item, setItem}){
 
- 
+    const [loading, setLoading] = useState(false)
 
-  function editFunction(){
+  function editFunction(order){
+
+    let orderPos = Orders.findIndex((O) => O.ID === order.ID)
 
   }
 
-  function approveFunction(){
+  function approveFunction(order){
+      console.log("approveFunction")
+    let orderPos = Orders.findIndex((O) => O.ID === order.ID)
+    if(orderPos != -1 && order.Status == "PENDING"){
+        Orders[orderPos].Status = "COMPLETED"
+        updateStatus(Orders[orderPos]);
+        setLoading(true)
+    }
+  }
+
+  function cancelFunction(order){
+
+    let orderPos = Orders.findIndex((O) => O.ID === order.ID)
+    if(orderPos != -1 && order.Status == "PENDING"){
+        Orders[orderPos].Status = "CANCELLED"
+        updateStatus(Orders[orderPos]);
+        setLoading(true)
+    }
 
   }
 
-  function cancelFunction(){
+  async function updateStatus(order){
+     
+    await axios.patch("http://localhost:3000/update-status", order)
+    .then(function (response) {
+        console.log(response)
+    })
+    .catch(function (error){
+        console.log(error)
+    }).finally(() => {
+        setLoading(false)
+    })
+  
+  }
 
+  async function refreshOrders(){
+   await axios.get('http://localhost:3000/sample-list')
+   .then(function (response) {
+     setOrder(response.data)+
+     console.log(response.data)
+   })
+   .catch(function (error){
+     console.log(error)
+   })
   }
 
   return(
@@ -52,7 +93,7 @@ function OrdersList({Orders, setOrder}){
             </tr>
         </thead>
         <tbody>
-            {Orders.map((form, index) => <OrderRow Order={form} Edit={editFunction} Delete={deleteFunction} key={index}/>)}
+            {Orders.map((form, index) => <OrderRow Order={form} Edit={editFunction} Approve={approveFunction} Cancel={cancelFunction} key={index}/>)}
         </tbody>
     </table>
 </div>

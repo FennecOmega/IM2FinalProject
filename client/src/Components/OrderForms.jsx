@@ -34,16 +34,6 @@ function OrderForms(){
       }
 
     }
-
-    // TODO
-    // FINISHED The order product process works by choosing from the entire order of available products 
-    // FINISHED The user then clicks on an add button to increase quantity of that specific item
-    // FINISHED this item is then passed into an array of products, and will stay there even if qty is 0 
-    // FINISHED Order post process: Before posting the order item into the backend, it will undergo 3 processes
-    // FINISHED Add date and time to log when the order was taken, then filter out the product order 
-    // FINISHED Filtering works by removing all product orders with a quantity of 0.
-    // FINISHED If this process returns an empty array, prompt the user to add items and stop the post. 
-    // FINISHED Else, collate the subtotal into the total price and add user account ID and post the object into the express backend.
     
     // NEW TODO
     // Finished form (Cart/itemList) will be the first page in order form.
@@ -54,10 +44,6 @@ function OrderForms(){
     // if in-person payment is chosen, immediately skip to confirming order, showing details of the customer's order.
     // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
     // After confirmation, print out a png/pdf of the order ticket, format will be specified.
-
-    //BUGFIX
-    // fixed jajajaja Date does not show up on post.
-    // fixed jajajaja Bug where it takes 2 attempts to add itemList into OrderedProducts.
 
     useEffect(() => {axios.get('http://localhost:3000/product-list')
    .then(function (response) {
@@ -82,9 +68,13 @@ function OrderForms(){
     }
 
   async function handleClick(){
+     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+     var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ')
+     console.log(localISOTime);
+
      const order = {
       ID: 0,
-      TransactionDate: new Date().toISOString().slice(0, 19).replace('T', ' '), 
+      TransactionDate: localISOTime,
       Name: details.Name,
       Contact: details.Contact,
       OrderedProducts: itemList.map((item) => (item.Subtotal = item.Price * item.Qty, item)), 

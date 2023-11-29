@@ -68,6 +68,12 @@ app.get('/', (req, res) => {
   console.log("Hello World!")
 })
 
+app.patch('/update-status', (req, res) => {
+  var temp = sampleList.findIndex((SL) => SL.ID === req.body.ID)
+  sampleList[temp] = req.body;
+  res.send("Order successfully "+req.body.Status);
+})
+
 app.get('/sample-list', (req, res) => {
   res.send(sampleList)
 })

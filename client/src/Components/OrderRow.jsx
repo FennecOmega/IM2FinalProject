@@ -1,15 +1,13 @@
-import "../index.css"
 import axios from 'axios'
 import { useEffect, useState } from 'react'
  
-function OrderRow({Order, Edit, Delete, key}){
+function OrderRow({Order, Edit, Approve, Cancel}){
 
     const [prodList, setProdList] = useState([])
 
     useEffect(() => {axios.get('http://localhost:3000/product-list')
     .then(function (response) {
       setProdList(response.data)
-      console.log(response.data)
     })
     .catch(function (error){
       console.log(error)
@@ -28,9 +26,19 @@ function OrderRow({Order, Edit, Delete, key}){
         return Intl.NumberFormat('en-DE', {style: 'currency', currency: 'PHP'}).format(price)
     }
 
+    function EditFunc(){
+        Edit(Order)
+    }
+    function ApproveFunc(){
+        Approve(Order)
+    }
+    function CancelFunc(){
+        Cancel(Order)
+    }
+
 return(
          <>
-           <tr className={(key % 2 == 0) ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700" : "bg-white dark:bg-gray-800"}>
+           <tr className={(true) ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700" : "bg-white dark:bg-gray-800"}>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {Order.ID}
                 </th>
@@ -44,7 +52,7 @@ return(
                     {Order.Contact}
                 </td>
                 <td className="px-6 py-4">
-                    {Order.OrderedProducts.map((product, index) => {return <div>{getProdName(product)} | Quantity: {product.Qty} | {convertPhp(product.Subtotal)}</div>})}
+                    {Order.OrderedProducts.map((product, index) => {return <div key={index}>{getProdName(product)} | Quantity: {product.Qty} | {convertPhp(product.Subtotal)}</div>})}
                 </td>
                 <td className="px-6 py-4">
                     {convertPhp(Order.TotalPrice)}
@@ -53,8 +61,9 @@ return(
                     {Order.Status}
                 </td>
                 <td className="px-6 py-4">
-                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick="">Edit</button>
-                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-5" onClick="">Cancel</button>
+                <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-5" onClick={ApproveFunc}>Approve</button>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={EditFunc}>Edit</button>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-5" onClick={CancelFunc}>Cancel</button>
                 </td>
             </tr>
          </>
