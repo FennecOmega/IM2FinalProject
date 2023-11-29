@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  width: 100vw;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -29,9 +30,9 @@ a:hover {
 
 body {
   margin: 0;
+  justify-content: center;
   display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -72,45 +73,37 @@ button:focus-visible {
   }
 }
 
+.currentPage {
+  display: block;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  background-color: #1d4ed8;
 
-.currentPage{
-  display: block; 
-padding-top: 0.5rem;
-padding-bottom: 0.5rem; 
-padding-left: 0.75rem;
-padding-right: 0.75rem; 
-border-radius: 0.25rem; 
-color: #ffffff; 
-background-color: #1D4ED8; 
-
-
-@media (min-width: 768px) { 
-  padding: 0; 
-color: #1D4ED8; 
-background-color: transparent; 
- }
-
+  @media (min-width: 768px) {
+    padding: 0;
+    color: #1d4ed8;
+    background-color: transparent;
+  }
 }
 
-.otherPage{
+.otherPage {
+  display: block;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 0.25rem;
+  color: white;
 
-  display: block; 
-padding-top: 0.5rem;
-padding-bottom: 0.5rem; 
-padding-left: 0.75rem;
-padding-right: 0.75rem; 
-border-radius: 0.25rem; 
-color: white; 
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 
-
-@media (min-width: 768px) { 
-  padding: 0; 
- }
-
-
-
-:hover {
- background-color: #F3F4F6; 
- }
-
+  :hover {
+    background-color: #f3f4f6;
+  }
 }
