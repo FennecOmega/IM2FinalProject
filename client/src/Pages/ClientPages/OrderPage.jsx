@@ -7,7 +7,7 @@ import OrdersList from "../../Components/OrdersList.jsx";
 function OrderPage() {
   return (
     <>
-      <div className="flex flex-col items-center gap-4 p-">
+      <div className="flex flex-col items-center gap-4">
         <OrderForms />
       </div>
     </>

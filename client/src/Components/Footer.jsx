@@ -5,17 +5,17 @@ function Footer(){
 
     return (
    <>
-    <footer class="h-fit bg-green-700">
-    <div class="px-36 py-14 text-white">
-      <div class="flex justify-between">
+    <footer className="h-fit bg-green-700 static w-screen z-20 bottom-0 start-0">
+    <div className="px-36 py-14 text-white">
+      <div className="flex justify-between">
       <img src={BakingBreadLogo} className="h-12" alt="Baking Bread Logo"/>
-        <div class="flex gap-20">
+        <div className="flex gap-20">
           <ul>
-            <li class="font-bold">About Us</li>
+            <li className="font-bold">About Us</li>
             <li>About BakingBread</li>
           </ul>
           <ul>
-            <li class="font-bold">Contact Us</li>
+            <li className="font-bold">Contact Us</li>
             <li>2022 @bakingbread.com All rights reserved</li>
           </ul>
         </div>

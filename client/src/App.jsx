@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <header>
           {!isLoggedIn ? (
-            <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} />
+            <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} /> 
           ) : (
             <DashboardSidePanel />
           )}
@@ -57,8 +57,10 @@ function App() {
             
           </Routes>
         </main>
+        <footer>
+          {!isLoggedIn ? <Footer/> : <></>}
+        </footer>
       </BrowserRouter>
-      <Footer/>
     </>
   );
 }
