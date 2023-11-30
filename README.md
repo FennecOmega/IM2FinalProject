@@ -81,11 +81,13 @@ If theres any concern about the project organization, feel free to PM me through
 ## FRONTEND
 
     > client
+        > public
+            > data
+                > images
+                    # list of images to be used by the frontend
         > src
             > Components
                 # list of components
-            > data
-                # list of data
             > Pages
                 > ClientPages
                     # list of pages seen by the clients and staff
