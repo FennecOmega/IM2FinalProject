@@ -54,7 +54,7 @@ function OrderForms() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/product-list")
+      .get("http://localhost:3000/product/send-product-list")
       .then(function (response) {
         setProdList(response.data);
       })
@@ -65,7 +65,7 @@ function OrderForms() {
 
   async function postorder(order) {
     await axios
-      .post("http://localhost:3000/append-list", order)
+      .post("http://localhost:3000/order/add-order", order)
       .then(function (response) {
         console.log(response);
       })
@@ -101,8 +101,14 @@ function OrderForms() {
     if (order.TotalPrice != 0 && details.Name != "") {
       console.log(order);
       await postorder(order);
-    } else {
-      const error = "ERROR: No items ordered/missing information.";
+      return (document.getElementById("errMessage").innerHTML =
+        "Order successful.");
+    } else if (details.Name == "") {
+      const error = "ERROR: Name does not exist.";
+      console.log(error);
+      return (document.getElementById("errMessage").innerHTML = error);
+    } else if (order.TotalPrice == 0) {
+      const error = "ERROR: No items ordered.";
       console.log(error);
       return (document.getElementById("errMessage").innerHTML = error);
     }

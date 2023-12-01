@@ -7,6 +7,12 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
+// NOTE:
+// This is just a prototype, this is not the final express.js file unless circumstances require.
+// ONLY use this to validate that the frontend functionalities are working, and are sending/receiving requests properly.
+// Any functionalities that will be used in the final output will be commented as such (mostly jsonwebtoken auth)
+// Prototype features missing: password hashes, jsonwebtoken integration
+
 const customerList = [
   {
     CustomerID: 1,
@@ -120,7 +126,7 @@ const productList = [
   },
 ];
 
-const sampleList = [
+const orderList = [
   {
     ID: 1,
     TransactionDate: "2023-11-25 17:36:57",
@@ -148,31 +154,35 @@ const sampleList = [
   },
 ];
 
-var ctr = sampleList[sampleList.length - 1].ID;
+var ctr = orderList[orderList.length - 1].ID;
 
-app.post("/append-list", (req, res) => {
+app.post("/order/add-order", (req, res) => {
+  // Adds order into the list of orders named orderList
   req.body.ID = ++ctr;
-  sampleList.push(req.body);
+  orderList.push(req.body);
   res.send("Successfully Inserted");
+});
+
+app.patch("/order/update-order-status", (req, res) => {
+  // Updates the order status to APPROVED, CANCELLED, or appends edited changes made to the order.
+  var temp = orderList.findIndex((SL) => SL.ID === req.body.ID);
+  orderList[temp] = req.body;
+  res.send("Order successfully " + req.body.Status);
+});
+
+app.get("/order/send-order-list", (req, res) => {
+  // Sends order list to frontend.
+  res.send(orderList);
+});
+
+app.get("/product/send-product-list", (req, res) => {
+  // Sends product list to frontend.
+  res.send(productList);
 });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
   console.log("Hello World!");
-});
-
-app.patch("/update-status", (req, res) => {
-  var temp = sampleList.findIndex((SL) => SL.ID === req.body.ID);
-  sampleList[temp] = req.body;
-  res.send("Order successfully " + req.body.Status);
-});
-
-app.get("/sample-list", (req, res) => {
-  res.send(sampleList);
-});
-
-app.get("/product-list", (req, res) => {
-  res.send(productList);
 });
 
 app.listen(port, () => {

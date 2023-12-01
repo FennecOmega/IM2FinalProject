@@ -31,7 +31,7 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
 
   async function updateStatus(order) {
     await axios
-      .patch("http://localhost:3000/update-status", order)
+      .patch("http://localhost:3000/order/update-order-status", order)
       .then(function (response) {
         console.log(response);
       })
@@ -45,7 +45,7 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
 
   async function refreshOrders() {
     await axios
-      .get("http://localhost:3000/sample-list")
+      .get("http://localhost:3000/order/send-order-list")
       .then(function (response) {
         setOrder(response.data) + console.log(response.data);
       })

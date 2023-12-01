@@ -6,7 +6,7 @@ function OrderRow({ Order, Edit, Approve, Cancel }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/product-list")
+      .get("http://localhost:3000/product/send-product-list")
       .then(function (response) {
         setProdList(response.data);
       })
