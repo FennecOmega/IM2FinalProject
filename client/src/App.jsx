@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <header>
           {!isLoggedIn ? (
-            <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} /> 
+            <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} />
           ) : (
             <DashboardSidePanel />
           )}
@@ -54,12 +54,9 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
-            
           </Routes>
         </main>
-        <footer>
-          {!isLoggedIn ? <Footer/> : <></>}
-        </footer>
+        {!isLoggedIn ? <Footer /> : <></>}
       </BrowserRouter>
     </>
   );

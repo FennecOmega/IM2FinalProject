@@ -1,28 +1,27 @@
-
-
 function ProductOrderCard({ AddQty, DelQty, item }) {
+  const image = "/data/images/" + item.ProductID + ".jpg";
 
-  
-  const image = "/data/images/"+item.ProductID+".jpg"
-
-  function DelFunc(){
-   DelQty(item)
+  function DelFunc() {
+    DelQty(item);
   }
 
-  function AddFunc(){
-    AddQty(item)
+  function AddFunc() {
+    AddQty(item);
   }
 
-  function convertPhp(price){
-    return Intl.NumberFormat('en-DE', {style: 'currency', currency: 'PHP'}).format(price)
-}
+  function convertPhp(price) {
+    return Intl.NumberFormat("en-DE", {
+      style: "currency",
+      currency: "PHP",
+    }).format(price);
+  }
 
   return (
     <>
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <div className="flex flex-col items-center pb-10">
           <img
-            className="w-24 h-24 mb-3 rounded-full shadow-lg mt-5"
+            className="w-24 h-24 mt-5 mb-3 rounded-full shadow-lg"
             src={image}
             alt="Bonnie image"
           />
