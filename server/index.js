@@ -158,9 +158,15 @@ var ctr = orderList[orderList.length - 1].ID;
 
 app.post("/order/add-order", (req, res) => {
   // Adds order into the list of orders named orderList
-  req.body.ID = ++ctr;
-  orderList.push(req.body);
-  res.send("Successfully Inserted");
+  if (req.body.Name == "") {
+    res.status(400).send({ error: "Name is empty!" });
+  } else if (req.body.TotalPrice == 0) {
+    res.status(400).send({ error: "No products in cart!" });
+  } else {
+    req.body.ID = ++ctr;
+    orderList.push(req.body);
+    res.send("Successfully Inserted");
+  }
 });
 
 app.patch("/order/update-order-status", (req, res) => {

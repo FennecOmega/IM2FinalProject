@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductOrderCard from "./ProductOrderCard.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function OrderForms() {
-  console.log("re-render");
-
   const [details, setDetails] = useState({ Name: "", Contact: "" });
   const [prodList, setProdList] = useState([]);
   const [itemList, setItemList] = useState([]);
@@ -68,9 +68,19 @@ function OrderForms() {
       .post("http://localhost:3000/order/add-order", order)
       .then(function (response) {
         console.log(response);
+        toast.success(response.data, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return (document.getElementById("errMessage").innerHTML =
+          response.data);
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(error.response.data.error, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return (document.getElementById("errMessage").innerHTML =
+          error.response.data.error);
       });
   }
 
@@ -98,20 +108,8 @@ function OrderForms() {
       Status: "PENDING",
     };
 
-    if (order.TotalPrice != 0 && details.Name != "") {
-      console.log(order);
-      await postorder(order);
-      return (document.getElementById("errMessage").innerHTML =
-        "Order successful.");
-    } else if (details.Name == "") {
-      const error = "ERROR: Name does not exist.";
-      console.log(error);
-      return (document.getElementById("errMessage").innerHTML = error);
-    } else if (order.TotalPrice == 0) {
-      const error = "ERROR: No items ordered.";
-      console.log(error);
-      return (document.getElementById("errMessage").innerHTML = error);
-    }
+    console.log(order);
+    await postorder(order);
   }
 
   // todo: create a functional order
@@ -146,6 +144,7 @@ function OrderForms() {
 
       <p>Current Total: </p>
       <button onClick={handleClick}>ADD</button>
+      <ToastContainer />
       <p id="errMessage"></p>
     </>
   );
