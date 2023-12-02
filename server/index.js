@@ -3,6 +3,7 @@ const app = express();
 var router = express.Router();
 const port = 3000;
 const cors = require("cors");
+const jsonwebtoken = require("jsonwebtoken");
 
 app.use(express.json());
 app.use(cors());
@@ -182,6 +183,32 @@ app.get("/order/send-order-list", (req, res) => {
 });
 
 app.get("/product/send-product-list", (req, res) => {
+  // Sends product list to frontend.
+  res.send(productList);
+});
+
+app.post("/user/login", (req, res) => {
+  // receives user login information and authenticates it
+  let userPos = userList.findIndex((u) => req.body.Email == u.Email);
+  if (userPos == -1) {
+    res.status(400).send({ error: "Email not found" });
+  } else if (userList[userPos].Password != req.body.Password) {
+    res.status(400).send({ error: "Password Mismatch" });
+  } else {
+    const userInfo = {
+      message: "Successfully logged in!",
+      data: userList[userPos],
+    };
+    res.send(userInfo);
+  }
+});
+
+app.post("/user/signup", (req, res) => {
+  // Sends signup details from frontend.
+  res.send(productList);
+});
+
+app.post("/customer/send-details", (req, res) => {
   // Sends product list to frontend.
   res.send(productList);
 });

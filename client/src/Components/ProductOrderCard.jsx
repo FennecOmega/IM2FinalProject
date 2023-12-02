@@ -1,4 +1,4 @@
-function ProductOrderCard({ AddQty, DelQty, item }) {
+function ProductOrderCard({ AddQty, DelQty, Qty, item }) {
   const image = "/data/images/" + item.ProductID + ".jpg";
 
   function DelFunc() {
@@ -30,6 +30,9 @@ function ProductOrderCard({ AddQty, DelQty, item }) {
           </h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {convertPhp(item.UnitPrice)}
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Quantity: {Qty}
           </span>
           <div className="flex mt-4 md:mt-6">
             <button

@@ -8,6 +8,17 @@ function OrderForms() {
   const [details, setDetails] = useState({ Name: "", Contact: "" });
   const [prodList, setProdList] = useState([]);
   const [itemList, setItemList] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  // NEW TODO
+  // Finished form (Cart/itemList) will be the first page in order form.
+  // Afterwards, if user is not logged in, they will be prompted to enter customer details. This will be posted to the backend.
+  // Else, if user is logged in, use the current user token too check for customer type and customer ID, and Order inherits that ID.
+  // Once the backend generates a unique customer ID, it will be inherited by the Order object upon continuing to payment.
+  // Payment can be done in-person or through GCASH.
+  // if in-person payment is chosen, immediately skip to confirming order, showing details of the customer's order.
+  // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
+  // After confirmation, print out a png/pdf of the order ticket, format will be specified.
 
   function AddProduct(item) {
     var product = {
@@ -24,9 +35,8 @@ function OrderForms() {
     if (newProductIndex == -1) {
       setItemList([...itemList, product]);
     } else {
-      const newCart = itemList;
-      newCart[newProductIndex].Qty++;
-      setItemList(newCart);
+      itemList[newProductIndex].Qty++;
+      setRefresh(!refresh);
     }
   }
 
@@ -42,15 +52,18 @@ function OrderForms() {
     }
   }
 
-  // NEW TODO
-  // Finished form (Cart/itemList) will be the first page in order form.
-  // Afterwards, if user is not logged in, they will be prompted to enter customer details. This will be posted to the backend.
-  // Else, if user is logged in, use the current user token too check for customer type and customer ID, and Order inherits that ID.
-  // Once the backend generates a unique customer ID, it will be inherited by the Order object upon continuing to payment.
-  // Payment can be done in-person or through GCASH.
-  // if in-person payment is chosen, immediately skip to confirming order, showing details of the customer's order.
-  // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
-  // After confirmation, print out a png/pdf of the order ticket, format will be specified.
+  function retQty(ID) {
+    var a = itemList.findIndex((i) => ID == i.ProductID);
+    if (a != -1) {
+      return itemList[a].Qty;
+    } else {
+      return 0;
+    }
+  }
+
+  function removeAll() {
+    setItemList([]);
+  }
 
   useEffect(() => {
     axios
@@ -110,6 +123,7 @@ function OrderForms() {
 
     console.log(order);
     await postorder(order);
+    setItemList([]);
   }
 
   // todo: create a functional order
@@ -137,13 +151,17 @@ function OrderForms() {
             key={index}
             AddQty={AddProduct}
             DelQty={DelProduct}
+            Qty={retQty(prod.ProductID)}
             item={prod}
           />
         ))}
       </div>
 
       <p>Current Total: </p>
-      <button onClick={handleClick}>ADD</button>
+      <div>
+        <button onClick={handleClick}>ADD</button>
+        <button onClick={removeAll}>REMOVE ALL</button>
+      </div>
       <ToastContainer />
       <p id="errMessage"></p>
     </>

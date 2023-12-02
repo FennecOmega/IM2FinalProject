@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 function LoginPage() {
   const [LoginDetails, setLoginDetails] = useState({});
   // const [ showPassword, setShowPassword ] = useState(false)
+  const { handleLogin } = useAuthContext(AuthContext);
 
-  function handleClick() {}
+  function handleClick() {
+    handleLogin(LoginDetails);
+  }
 
   return (
     <>
@@ -39,7 +43,7 @@ function LoginPage() {
         <button
           className="px-10 py-1 text-white bg-green-700 rounded-full"
           type="submit"
-          onClick=""
+          onClick={handleClick}
         >
           Login
         </button>

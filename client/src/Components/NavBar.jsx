@@ -1,15 +1,20 @@
 // NOTE: To be used ONLY in client pages
 
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useContext } from "react";
 import "../index.css";
 import "../ui/Login.css";
 import BakingBreadLogo from "/data/images/Breaking_Bad_logo.png";
+import { useAuthContext } from "../hooks/useAuthContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
 
-function NavBar({ LoginState, Login, Logout }) {
+function NavBar() {
   const location = useLocation();
   location.pathname;
-  // sadasd
+
+  const { user, handleLogout } = useAuthContext(AuthContext);
+
+  console.log(user);
 
   return (
     <>
@@ -29,14 +34,24 @@ function NavBar({ LoginState, Login, Logout }) {
             </span>
           </a>
           <div className="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
-            <Link to="/login-page">
+            {user == null ? (
+              <Link to="/login-page">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Login
+                </button>
+              </Link>
+            ) : (
               <button
                 type="button"
                 className="px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={handleLogout}
               >
-                Login
+                Logout
               </button>
-            </Link>
+            )}
             <button
               data-collapse-toggle="navbar-sticky"
               type="button"

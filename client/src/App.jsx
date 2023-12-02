@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import AboutUs from "./Pages/ClientPages/AboutUs.jsx";
@@ -12,24 +12,19 @@ import Footer from "./Components/Footer.jsx";
 import LoginPage from "./Pages/ClientPages/LoginPage.jsx";
 import SignUpPage from "./Pages/ClientPages/SignUpPage.jsx";
 import ForgotPassword from "./Pages/ClientPages/ForgotPassword.jsx";
+import { useAuthContext } from "./hooks/useAuthContext.jsx";
+import { AuthContext } from "./context/AuthContext.jsx";
 
 function App() {
-  const [isLoggedIn, setLogin] = useState(false);
-
-  const LogIn = () => {
-    setLogin(true);
-  };
-
-  const LogOut = () => {
-    setLogin(false);
-  };
-
+  const { user } = useAuthContext(AuthContext);
   return (
     <>
       <BrowserRouter>
         <header>
-          {!isLoggedIn ? (
-            <NavBar LoginState={isLoggedIn} Login={LogIn} Logout={LogOut} />
+          {user == null ? (
+            <NavBar />
+          ) : user.UserType == "Customer" ? (
+            <NavBar />
           ) : (
             <DashboardSidePanel />
           )}
@@ -39,7 +34,7 @@ function App() {
             <Route
               path="/"
               element={
-                isLoggedIn ? (
+                user == null ? (
                   <Navigate to="/dashboard" />
                 ) : (
                   <Navigate to="/about-us" />
@@ -56,7 +51,13 @@ function App() {
             <Route path="/order-list" element={<OrderList />} />
           </Routes>
         </main>
-        {!isLoggedIn ? <Footer /> : <></>}
+        {user == null ? (
+          <Footer />
+        ) : user.UserType == "Customer" ? (
+          <Footer />
+        ) : (
+          <></>
+        )}
       </BrowserRouter>
     </>
   );
