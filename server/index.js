@@ -4,6 +4,7 @@ var router = express.Router();
 const port = 3000;
 const cors = require("cors");
 const jsonwebtoken = require("jsonwebtoken");
+const db = require("./database.js");
 
 app.use(express.json());
 app.use(cors());
@@ -170,19 +171,19 @@ app.post("/order/add-order", (req, res) => {
   }
 });
 
-app.patch("/order/update-order-status", (req, res) => {
+app.patch("/order/update-status", (req, res) => {
   // Updates the order status to APPROVED, CANCELLED, or appends edited changes made to the order.
   var temp = orderList.findIndex((SL) => SL.ID === req.body.ID);
   orderList[temp] = req.body;
   res.send("Order successfully " + req.body.Status);
 });
 
-app.get("/order/send-order-list", (req, res) => {
+app.get("/order/send-list", (req, res) => {
   // Sends order list to frontend.
   res.send(orderList);
 });
 
-app.get("/product/send-product-list", (req, res) => {
+app.get("/product/send-list", (req, res) => {
   // Sends product list to frontend.
   res.send(productList);
 });
@@ -204,12 +205,12 @@ app.post("/user/login", (req, res) => {
 });
 
 app.post("/user/signup", (req, res) => {
-  // Sends signup details from frontend.
+  // Receives signup details from frontend.
   res.send(productList);
 });
 
 app.post("/customer/send-details", (req, res) => {
-  // Sends product list to frontend.
+  // Reveices
   res.send(productList);
 });
 
