@@ -5,7 +5,7 @@ function ForgotPassword() {
     <>
       <div className="flex-1 mb-24">
         <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
-          <h1 className="mb-3 text-3xl font-bold">Lost Account</h1>
+          <h1 className="mb-3 text-3xl font-bold">Reset your password</h1>
           <p className="mb-3">
             Return to{" "}
             <span className="text-green-700">
@@ -22,12 +22,12 @@ function ForgotPassword() {
           <p className="mb-3 text-sm">
             You'll receive an email for recovering your account.
           </p>
-          <button
+          <Link to="/check-email"><button
             className="px-10 py-1 text-white bg-green-700 rounded-full"
             type="submit"
           >
             Send
-          </button>
+          </button></Link>
         </div>
       </div>
     </>
