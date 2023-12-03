@@ -1,7 +1,7 @@
-import { Link, Router, BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function SignUpPage() {
+function CustomerDetails() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
   const [confirmPass, setConfirmPass] = useState("");
@@ -58,4 +58,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default CustomerDetails;

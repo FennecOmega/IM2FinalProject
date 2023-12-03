@@ -61,6 +61,14 @@ function OrderForms() {
     }
   }
 
+  function setTotal() {
+    itemList.map((item) => ((item.Subtotal = item.Price * item.Qty), item));
+    return itemList.reduce(
+      (currPrice, item) => (currPrice += item.Subtotal),
+      0
+    );
+  }
+
   function removeAll() {
     setItemList([]);
   }
@@ -157,7 +165,7 @@ function OrderForms() {
         ))}
       </div>
 
-      <p>Current Total: </p>
+      <p>Current Total: {setTotal()}</p>
       <div>
         <button onClick={handleClick}>ADD</button>
         <button onClick={removeAll}>REMOVE ALL</button>

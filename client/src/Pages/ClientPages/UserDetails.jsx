@@ -1,10 +1,8 @@
-import { Link, Router, BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function SignUpPage() {
-  const [userInfo, setUserInfo] = useState({});
+function CustomerDetails() {
   const [customerInfo, setCustomerInfo] = useState({});
-  const [confirmPass, setConfirmPass] = useState("");
 
   return (
     <>
@@ -21,25 +19,45 @@ function SignUpPage() {
           <div className="flex flex-col gap-4 mb-3">
             <input
               className="px-3 py-1 bg-gray-200 rounded-lg"
-              type="email"
-              placeholder="Email Address"
+              placeholder="First Name"
               onChange={(e) =>
-                setUserInfo({ ...userInfo, Email: e.target.value })
+                setCustomerInfo({ ...customerInfo, FName: e.target.value })
               }
             />
             <input
               className="px-3 py-1 bg-gray-200 rounded-lg"
-              type="password"
-              placeholder="Password"
+              placeholder="Middle Initial"
               onChange={(e) =>
-                setUserInfo({ ...userInfo, Password: e.target.value })
+                setCustomerInfo({ ...customerInfo, MI: e.target.value })
               }
             />
             <input
               className="px-3 py-1 bg-gray-200 rounded-lg"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => confirmPass(e.target.value)}
+              placeholder="Last Name"
+              onChange={(e) =>
+                setCustomerInfo({ ...customerInfo, LName: e.target.value })
+              }
+            />
+            <input
+              className="px-3 py-1 bg-gray-200 rounded-lg"
+              placeholder="Address"
+              onChange={(e) =>
+                setCustomerInfo({ ...customerInfo, Address: e.target.value })
+              }
+            />
+            <input
+              className="px-3 py-1 bg-gray-200 rounded-lg"
+              placeholder="Contact Number"
+              onChange={(e) =>
+                setCustomerInfo({ ...customerInfo, ContactNo: e.target.value })
+              }
+            />
+            <input
+              className="px-3 py-1 bg-gray-200 rounded-lg"
+              placeholder="Birthdate"
+              onChange={(e) =>
+                setCustomerInfo({ ...customerInfo, BirthDate: e.target.value })
+              }
             />
           </div>
           <p className="mb-3 text-sm">
@@ -58,4 +76,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default CustomerDetails;

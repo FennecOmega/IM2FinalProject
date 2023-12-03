@@ -5,7 +5,7 @@ import AboutUs from "./Pages/ClientPages/AboutUs.jsx";
 import ProductDisplay from "./Pages/ClientPages/ProductDisplay.jsx";
 import OrderPage from "./Pages/ClientPages/OrderPage.jsx";
 import Dashboard from "./Pages/StaffPages/Dashboard.jsx";
-import DashboardSidePanel from "./Components/DashboardSidePanel.jsx";
+import DashboardSideBar from "./Components/DashboardSideBar.jsx";
 import NavBar from "./Components/NavBar.jsx";
 import OrderList from "./Pages/StaffPages/OrderList.jsx";
 import Footer from "./Components/Footer.jsx";
@@ -26,7 +26,7 @@ function App() {
           ) : user.UserType == "Customer" ? (
             <NavBar />
           ) : (
-            <DashboardSidePanel />
+            <DashboardSideBar />
           )}
         </header>
         <main>
