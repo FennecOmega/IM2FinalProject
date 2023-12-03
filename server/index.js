@@ -3,7 +3,7 @@ const app = express();
 var router = express.Router();
 const port = 3000;
 const cors = require("cors");
-const jsonwebtoken = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const db = require("./database.js");
 
 app.use(express.json());
@@ -160,6 +160,8 @@ var ctr = orderList[orderList.length - 1].ID;
 
 app.post("/order/add-order", (req, res) => {
   // Adds order into the list of orders named orderList
+  let tempOrder = req.body;
+
   if (req.body.Name == "") {
     res.status(400).send({ error: "Name is empty!" });
   } else if (req.body.TotalPrice == 0) {
@@ -192,7 +194,7 @@ app.post("/user/login", (req, res) => {
   // receives user login information and authenticates it
   let userPos = userList.findIndex((u) => req.body.Email == u.Email);
   if (userPos == -1) {
-    res.status(400).send({ error: "Email not found" });
+    res.status(400).send({ error: "Email and/or Password Mismatch" });
   } else if (userList[userPos].Password != req.body.Password) {
     res.status(400).send({ error: "Password Mismatch" });
   } else {

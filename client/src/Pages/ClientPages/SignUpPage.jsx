@@ -12,8 +12,6 @@ function SignUpPage() {
     Array.from({ length: 110 }, (_, i) => 2023 - i)
   );
 
-  console.log("re-render");
-
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
