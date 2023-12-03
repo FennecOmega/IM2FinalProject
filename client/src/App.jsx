@@ -14,6 +14,7 @@ import SignUpPage from "./Pages/ClientPages/SignUpPage.jsx";
 import ForgotPassword from "./Pages/ClientPages/ForgotPassword.jsx";
 import { useAuthContext } from "./hooks/useAuthContext.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
+import InventoryDisplay from "./Pages/StaffPages/InventoryDisplay.jsx";
 
 function App() {
   const { user } = useAuthContext(AuthContext);
@@ -49,6 +50,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
+            <Route path="/inventory-display" element={<InventoryDisplay />} />
           </Routes>
         </main>
         {user == null ? (
