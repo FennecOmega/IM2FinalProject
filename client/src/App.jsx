@@ -15,6 +15,9 @@ import ForgotPassword from "./Pages/ClientPages/ForgotPassword.jsx";
 import { useAuthContext } from "./hooks/useAuthContext.jsx";
 import { AuthContext } from "./context/AuthContext.jsx";
 import InventoryDisplay from "./Pages/StaffPages/InventoryDisplay.jsx";
+import ResetForgottenPassword from "./Pages/ClientPages/ResetForgottenPassword.jsx";
+import SuccessChangedPassword from "./Pages/ClientPages/SuccessChangedPassword.jsx";
+import CheckEmailNewPassword from "./Pages/ClientPages/CheckEmailNewPassword.jsx";
 
 function App() {
   const { user } = useAuthContext(AuthContext);
@@ -51,6 +54,9 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
             <Route path="/inventory-display" element={<InventoryDisplay />} />
+            <Route path="/reset-forgottenpassword" element={<ResetForgottenPassword />} />
+            <Route path="/check-email" element={<CheckEmailNewPassword />} />
+            <Route path="/success-changedpassword" element={<SuccessChangedPassword />} />
           </Routes>
         </main>
         {user == null ? (
