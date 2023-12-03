@@ -1,6 +1,6 @@
 // NOTE: To be used ONLY in staff pages
 
-function DashboardSidePanel() {
+function DashboardSideBar() {
   return (
     <>
       <h1>This is DashboardSidePanel.jsx</h1>
@@ -8,4 +8,4 @@ function DashboardSidePanel() {
   );
 }
 
-export default DashboardSidePanel;
+export default DashboardSideBar;
