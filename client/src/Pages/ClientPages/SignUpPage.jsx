@@ -6,6 +6,7 @@ function SignUpPage() {
   const [customerInfo, setCustomerInfo] = useState({});
   const [confirmPass, setConfirmPass] = useState("");
   const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
+  const [selectedDay, setSelectedDay] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState("january");
   const [selectedYear, setSelectedYear] = useState(2023);
   const [years, setYears] = useState(
@@ -14,6 +15,10 @@ function SignUpPage() {
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
+  };
+
+  const handleDayChange = (e) => {
+    setSelectedDay(e.target.value);
   };
 
   const handleYearChange = (e) => {
@@ -68,6 +73,9 @@ function SignUpPage() {
                 type="text"
                 id="first_name"
                 name="first_name"
+                onChange={(e) => {
+                  setCustomerInfo({ ...customerInfo, fname: e.target.value });
+                }}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -79,6 +87,9 @@ function SignUpPage() {
                 type="text"
                 id="last_name"
                 name="last_name"
+                onChange={(e) => {
+                  setCustomerInfo({ ...customerInfo, lname: e.target.value });
+                }}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -92,6 +103,12 @@ function SignUpPage() {
               type="text"
               id="contact_number"
               name="contact_number"
+              onChange={(e) => {
+                setCustomerInfo({
+                  ...customerInfo,
+                  contact_no: e.target.value,
+                });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -104,6 +121,9 @@ function SignUpPage() {
               type="text"
               id="address"
               name="address"
+              onChange={(e) => {
+                setCustomerInfo({ ...customerInfo, address: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             ></input>
           </div>
@@ -146,6 +166,7 @@ function SignUpPage() {
               <select
                 id="day"
                 name="day"
+                onChange={handleDayChange}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
                 {<GetMonthDays />}
@@ -212,6 +233,7 @@ function SignUpPage() {
           </p>
           <button
             className="px-10 py-1 text-white bg-green-700 rounded-full"
+            onClick={handleClick}
             type="submit"
           >
             Create Account

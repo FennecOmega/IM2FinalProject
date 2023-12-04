@@ -19,7 +19,7 @@ const customerList = [
   {
     CustomerID: 1,
     FName: "Gusion Lodicakes",
-    MI: "A.",
+    MI: "A",
     LName: "dela Cruz",
     Address: "Gyatt Towers, Skibidi City",
     ContactNo: "+63 123 456 7890",
@@ -192,6 +192,8 @@ app.get("/product/send-list", (req, res) => {
 
 app.post("/user/login", (req, res) => {
   // receives user login information and authenticates it
+  const tempUser = db.createQuery("SELECT * FROM users WHERE Email = (?)");
+
   let userPos = userList.findIndex((u) => req.body.Email == u.Email);
   if (userPos == -1) {
     res.status(400).send({ error: "Email and/or Password Mismatch" });
