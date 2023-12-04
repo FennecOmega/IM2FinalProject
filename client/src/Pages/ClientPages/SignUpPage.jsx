@@ -58,7 +58,7 @@ function SignUpPage() {
       address: customerInfo.address,
       email: userInfo.email,
       password: userInfo.password,
-      confirmedpassword: userInfo.password,
+      confirmedpassword: userInfo.confirmedpassword,
     };
 
     await sendDetails(userDetails);
