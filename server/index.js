@@ -1,111 +1,34 @@
 const express = require("express");
 const app = express();
 var router = express.Router();
-const port = 3000;
+const port = 3007;
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const db = require("./database.js");
-
 app.use(express.json());
 app.use(cors());
+var database = require('./database');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'bananadb'
+});
+
+db.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL database');
+});
 
 // NOTE:
 // This is just a prototype, this is not the final express.js file unless circumstances require.
 // ONLY use this to validate that the frontend functionalities are working, and are sending/receiving requests properly.
 // Any functionalities that will be used in the final output will be commented as such (mostly jsonwebtoken auth)
 // Prototype features missing: password hashes, jsonwebtoken integration
-
-const customerList = [
-  {
-    CustomerID: 1,
-    FName: "Gusion Lodicakes",
-    MI: "A.",
-    LName: "dela Cruz",
-    Address: "Gyatt Towers, Skibidi City",
-    ContactNo: "+63 123 456 7890",
-    Birthdate: "2000-05-02",
-  },
-  {
-    CustomerID: 2,
-    FName: "Fanum",
-    MI: "",
-    LName: "Taxer",
-    Address: "Rizzler Road, Ohio",
-    ContactNo: "+63 420 6969 1337",
-    Birthdate: "2002-11-12",
-  },
-];
-
-const staffList = [
-  {
-    StaffID: 1,
-    FName: "Administrator",
-    MI: "D.",
-    LName: "Admin",
-    Residence: "Warra House Lane, Kai City",
-    BirthDate: "1993-10-17",
-    StaffStatus: "active",
-    StaffType: "ADMIN",
-  },
-  {
-    StaffID: 2,
-    FName: "Accountancy",
-    MI: "D.",
-    LName: "Accountant",
-    Residence: "Rizz Calculator Street, Cenat City",
-    BirthDate: "2000-01-15",
-    StaffStatus: "active",
-    StaffType: "ACCOUNTANCY",
-  },
-  {
-    StaffID: 3,
-    FName: "Boxe",
-    MI: "S.",
-    LName: "Packman",
-    Residence: "Cardboard Street, Fanum Town",
-    BirthDate: "1993-10-17",
-    StaffStatus: "active",
-    StaffType: "INVENTORY",
-  },
-];
-
-const userList = [
-  {
-    UserID: 1,
-    Email: "JohnDoe23@gmail.com",
-    Password: "lightweight", // lightweight
-    UserType: "Customer",
-    TypeID: 1,
-  },
-  {
-    UserID: 2,
-    Email: "AdminMyAdmin@gmail.com",
-    Password: "AdminPassword", // AdminPassword
-    UserType: "Staff",
-    TypeID: 1,
-  },
-  {
-    UserID: 3,
-    Email: "LegitAccountant@gmail.com",
-    Password: "ILikeNumbers89", // ILikeNumbers89
-    UserType: "Staff",
-    TypeID: 2,
-  },
-  {
-    UserID: 4,
-    Email: "InventoryMan@gmail.com",
-    Password: "BigBoxes", // BigBoxes
-    UserType: "Staff",
-    TypeID: 3,
-  },
-  {
-    UserID: 5,
-    Email: "JaneDoe89@gmail.com",
-    Password: "TaylorSwift89", // TaylorSwift89
-    UserType: "Customer",
-    TypeID: 2,
-  },
-];
 
 const productList = [
   {
@@ -160,59 +83,25 @@ var ctr = orderList[orderList.length - 1].ID;
 
 app.post("/order/add-order", (req, res) => {
   // Adds order into the list of orders named orderList
-  let tempOrder = req.body;
-
-  if (req.body.Name == "") {
-    res.status(400).send({ error: "Name is empty!" });
-  } else if (req.body.TotalPrice == 0) {
-    res.status(400).send({ error: "No products in cart!" });
-  } else {
-    req.body.ID = ++ctr;
-    orderList.push(req.body);
-    res.send("Successfully Inserted");
-  }
+  req.body.ID = ++ctr;
+  orderList.push(req.body);
+  res.send("Successfully Inserted");
 });
 
-app.patch("/order/update-status", (req, res) => {
+app.patch("/order/update-order-status", (req, res) => {
   // Updates the order status to APPROVED, CANCELLED, or appends edited changes made to the order.
   var temp = orderList.findIndex((SL) => SL.ID === req.body.ID);
   orderList[temp] = req.body;
   res.send("Order successfully " + req.body.Status);
 });
 
-app.get("/order/send-list", (req, res) => {
+app.get("/order/send-order-list", (req, res) => {
   // Sends order list to frontend.
   res.send(orderList);
 });
 
-app.get("/product/send-list", (req, res) => {
+app.get("/product/send-product-list", (req, res) => {
   // Sends product list to frontend.
-  res.send(productList);
-});
-
-app.post("/user/login", (req, res) => {
-  // receives user login information and authenticates it
-  let userPos = userList.findIndex((u) => req.body.Email == u.Email);
-  if (userPos == -1) {
-    res.status(400).send({ error: "Email and/or Password Mismatch" });
-  } else if (userList[userPos].Password != req.body.Password) {
-    res.status(400).send({ error: "Password Mismatch" });
-  } else {
-    const userInfo = {
-      message: "Successfully logged in!",
-      data: userList[userPos],
-    };
-    res.send(userInfo);
-  }
-});
-
-app.post("/user/signup", (req, res) => {
-  // Receives signup details from frontend.
-  res.send(productList);
-});
-
-app.post("/customer/send-details", (req, res) => {
-  // Reveices
   res.send(productList);
 });
 
@@ -221,6 +110,131 @@ app.get("/", (req, res) => {
   console.log("Hello World!");
 });
 
+app.post('/signup-page', (req, res) => {
+  const { fname, midname, lname, contact_no, birthdate, address, email, password, confirmedpassword } = req.body;
+
+  if (!fname || !lname || !contact_no || !birthdate || !address || !email || !password || !confirmedpassword) {
+    return res.status(400).json({ success: false, message: 'Missing required fields' });
+  }
+
+  if (password !== confirmedpassword) {
+    return res.status(400).json({ success: false, message: 'Password does not match' });
+  }
+
+  const userInfo = {
+    fname: fname.trim(),
+    midname: midname ? midname.trim() : null,
+    lname: lname.trim(),
+    contact_no: contact_no.trim(),
+    birthdate: birthdate.trim(),
+    address: address.trim(), 
+  };
+
+  const userCredentials = {
+    email: email.trim(),
+    password: password,
+    user_type: 'Customer'
+  };
+
+  db.query('INSERT INTO customer SET ?', userInfo, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into customer table:', err);
+      return res.status(500).json({ success: false, message: 'Failed to create account' });
+    } else {
+      console.log('Data inserted into customer table successfully');
+
+      db.query('INSERT INTO user SET ?', userCredentials, (userErr, userResult) => {
+        if (userErr) {
+          console.error('Error inserting user credentials:', userErr);
+          return res.status(500).json({ success: false, message: 'Failed to create account' });
+        } else {
+          console.log('Data inserted into user table successfully');
+          return res.status(200).json({ success: true, message: 'Account created successfully' });
+        }
+      });
+    }
+  });
+});
+
+app.get('/login-page', (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Missing email or password' });
+  }
+
+  db.query('SELECT * FROM user WHERE email = ? AND password = ?', [email, password], (err, results) => {
+    if (err) {
+      console.error('Error retrieving user:', err);
+      return res.status(500).json({ success: false, message: 'Failed to log in' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: 'Account does not exist' });
+    }
+
+    const user = results[0];
+
+    const userDetails = {
+      email: user.email,
+    };
+
+    return res.status(200).json({ success: true, message: 'Logged in successfully', user: userDetails });
+  });
+});
+
+
+app.post('/forgot-password', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Email is required' });
+  }
+
+  db.query('SELECT * FROM user WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Error checking email:', err);
+      return res.status(500).json({ success: false, message: 'Failed to check email' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: 'Email not found' });
+    }
+
+    return res.status(200).json({ success: true, message: 'Email exists', email });
+  });
+});
+
+
+app.put('/ForgetPassword', (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ success: false, message: 'Email and newPassword are required' });
+  }
+
+  db.query('SELECT * FROM user WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Error retrieving user:', err);
+      return res.status(500).json({ success: false, message: 'Failed to update password' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: 'Email not found' });
+    }
+
+    db.query('UPDATE user SET password = ? WHERE email = ?', [newPassword, email], (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error('Error updating password:', updateErr);
+        return res.status(500).json({ success: false, message: 'Failed to update password' });
+      }
+
+      return res.status(200).json({ success: true, message: 'Password updated successfully' });
+    });
+  });
+});
+
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log("Example app listening on port ${port}");
 });
