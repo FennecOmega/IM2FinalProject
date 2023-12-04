@@ -158,13 +158,18 @@ ALTER TABLE `product`
 -- Triggers `product`
 --
 DELIMITER $$
+
 CREATE TRIGGER after_product_insert AFTER INSERT ON Product FOR EACH ROW BEGIN
     INSERT INTO Inventory (product_id, supplier_id, quantity, expiry_date)
-    VALUES (NEW.product_id, <supplier_id>, 1, CURDATE())
+    SELECT NEW.product_id, supplier_id, 1, CURDATE()
+    FROM user
+    WHERE user_type = 'Staff'
+    LIMIT 1
     ON DUPLICATE KEY UPDATE quantity = quantity + 1;
-END 
-$$
+END$$
+
 DELIMITER ;
+
 
 --
 -- Indexes for table `staff`
