@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleLogin = async (user) => {
     await axios
-      .post("http://localhost:3000/user/login", user)
+      .post("http://localhost:3000/login-page", user)
       .then(function (response) {
         console.log(response);
         toast.success(response.data.message, {
@@ -19,7 +19,7 @@ export const AuthContextProvider = ({ children }) => {
       })
       .catch(function (error) {
         console.log(error);
-        toast.error(error.response.data.error, {
+        toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
       });

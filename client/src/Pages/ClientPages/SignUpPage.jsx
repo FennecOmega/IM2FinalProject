@@ -1,13 +1,14 @@
 import { Link, Router, BrowserRouter } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
-  const [confirmPass, setConfirmPass] = useState("");
   const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
   const [selectedDay, setSelectedDay] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState("january");
+  const [selectedMonth, setSelectedMonth] = useState("1");
   const [selectedYear, setSelectedYear] = useState(2023);
   const [years, setYears] = useState(
     Array.from({ length: 110 }, (_, i) => 2023 - i)
@@ -50,6 +51,40 @@ function SignUpPage() {
         ))}
       </>
     );
+  }
+  async function handleClick() {
+    const date = new Date(selectedYear, selectedMonth, selectedDay);
+
+    const userDetails = {
+      fname: customerInfo.fname,
+      midname: customerInfo.midname,
+      lname: customerInfo.lname,
+      contact_no: customerInfo.contact_no,
+      birthdate: date.toISOString().slice(0, 19).replace("T", " "),
+      address: customerInfo.address,
+      email: userInfo.email,
+      password: userInfo.password,
+      confirmedpassword: userInfo.password,
+    };
+
+    await sendDetails(userDetails);
+  }
+
+  async function sendDetails(user) {
+    await axios
+      .post("http://localhost:3000/signup-page", user)
+      .then(function (response) {
+        console.log(response);
+        toast.success(response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(error.response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
   }
 
   return (
@@ -145,18 +180,18 @@ function SignUpPage() {
                 onChange={handleMonthChange}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
-                <option value="january">January</option>
-                <option value="february">February</option>
-                <option value="march">March</option>
-                <option value="april">April</option>
-                <option value="may">May</option>
-                <option value="june">June</option>
-                <option value="july">July</option>
-                <option value="august">August</option>
-                <option value="september">September</option>
-                <option value="october">October</option>
-                <option value="november">November</option>
-                <option value="december">December</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
               </select>
             </div>
             <div>
@@ -199,6 +234,9 @@ function SignUpPage() {
               type="email"
               id="email"
               name="email"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, email: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -211,6 +249,9 @@ function SignUpPage() {
               type="password"
               id="password"
               name="password"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, password: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -223,6 +264,9 @@ function SignUpPage() {
               type="password"
               id="confirm_password"
               name="confirm_password"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, confirmedpassword: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
