@@ -1,5 +1,5 @@
 import { Link, Router, BrowserRouter } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -10,6 +10,7 @@ function SignUpPage() {
   const [selectedDay, setSelectedDay] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState("1");
   const [selectedYear, setSelectedYear] = useState(2023);
+
   const [years, setYears] = useState(
     Array.from({ length: 110 }, (_, i) => 2023 - i)
   );
@@ -26,41 +27,34 @@ function SignUpPage() {
     setSelectedYear(e.target.value);
   };
 
-  function GetMonthDays() {
-    var day = Array.from({ length: 31 }, (_, i) => i + 1);
-    if (selectedMonth == "february") {
-      selectedYear % 4 == 0
-        ? (day = Array.from({ length: 29 }, (_, i) => i + 1))
-        : (day = Array.from({ length: 28 }, (_, i) => i + 1));
-    } else if (
-      selectedMonth == "april" ||
-      selectedMonth == "june" ||
-      selectedMonth == "september" ||
-      selectedMonth == "november"
-    ) {
-      day = Array.from({ length: 30 }, (_, i) => i + 1);
-    } else {
-      day = Array.from({ length: 31 }, (_, i) => i + 1);
+  useEffect(() => {
+    // Update selectedDay when selectedMonth or selectedYear changes
+    const daysInMonth = calculateDaysInMonth(selectedMonth, selectedYear);
+    if (selectedDay > daysInMonth) {
+      setSelectedDay(daysInMonth);
     }
-    return (
-      <>
-        {day.map((days) => (
-          <option key={days} value={days}>
-            {days}
-          </option>
-        ))}
-      </>
-    );
-  }
+  }, [selectedMonth, selectedYear]);
+
+  const calculateDaysInMonth = (month, year) => {
+    if (month === "2") {
+      return year % 4 === 0 ? 29 : 28;
+    } else if (["4", "6", "9", "11"].includes(month)) {
+      return 30;
+    } else {
+      return 31;
+    }
+  };
+
   async function handleClick() {
     const date = new Date(selectedYear, selectedMonth, selectedDay);
+    const bdate = date.toISOString().slice(0, 10);
 
     const userDetails = {
       fname: customerInfo.fname,
       midname: customerInfo.midname,
       lname: customerInfo.lname,
       contact_no: customerInfo.contact_no,
-      birthdate: date.toISOString().slice(0, 19).replace("T", " "),
+      birthdate: bdate,
       address: customerInfo.address,
       email: userInfo.email,
       password: userInfo.password,
@@ -72,7 +66,7 @@ function SignUpPage() {
 
   async function sendDetails(user) {
     await axios
-      .post("http://localhost:3000/signup-page", user)
+      .post("http://localhost:3007/signup-page", user)
       .then(function (response) {
         console.log(response);
         toast.success(response.data.message, {
@@ -202,9 +196,17 @@ function SignUpPage() {
                 id="day"
                 name="day"
                 onChange={handleDayChange}
+                value={selectedDay}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
-                {<GetMonthDays />}
+                {Array.from(
+                  { length: calculateDaysInMonth(selectedMonth, selectedYear) },
+                  (_, i) => i + 1
+                ).map((day) => (
+                  <option key={day} value={day}>
+                    {day}
+                  </option>
+                ))}
               </select>
             </div>
             <div>

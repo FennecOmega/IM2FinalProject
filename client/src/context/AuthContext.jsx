@@ -9,13 +9,13 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleLogin = async (user) => {
     await axios
-      .post("http://localhost:3000/login-page", user)
+      .post("http://localhost:3007/login-page", user)
       .then(function (response) {
         console.log(response);
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
-        setCurrentUser(response.data.data);
+        setCurrentUser(response.data.user);
       })
       .catch(function (error) {
         console.log(error);

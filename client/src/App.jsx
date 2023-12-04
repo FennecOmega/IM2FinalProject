@@ -27,7 +27,7 @@ function App() {
         <header>
           {user == null ? (
             <NavBar />
-          ) : user.UserType == "Customer" ? (
+          ) : user.user_type == "Customer" ? (
             <NavBar />
           ) : (
             <DashboardSideBar />
@@ -54,14 +54,20 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
             <Route path="/inventory-display" element={<InventoryDisplay />} />
-            <Route path="/reset-forgottenpassword" element={<ResetForgottenPassword />} />
+            <Route
+              path="/reset-forgottenpassword"
+              element={<ResetForgottenPassword />}
+            />
             <Route path="/check-email" element={<CheckEmailNewPassword />} />
-            <Route path="/success-changedpassword" element={<SuccessChangedPassword />} />
+            <Route
+              path="/success-changedpassword"
+              element={<SuccessChangedPassword />}
+            />
           </Routes>
         </main>
         {user == null ? (
           <Footer />
-        ) : user.UserType == "Customer" ? (
+        ) : user.user_type == "Customer" ? (
           <Footer />
         ) : (
           <></>

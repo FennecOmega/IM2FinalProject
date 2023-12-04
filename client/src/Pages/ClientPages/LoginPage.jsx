@@ -9,6 +9,7 @@ function LoginPage() {
   const { handleLogin } = useAuthContext(AuthContext);
 
   function handleClick() {
+    console.log(LoginDetails);
     handleLogin(LoginDetails);
   }
 
@@ -28,7 +29,7 @@ function LoginPage() {
             type="text"
             placeholder="Email"
             onChange={(e) =>
-              setLoginDetails({ ...LoginDetails, Email: e.target.value })
+              setLoginDetails({ ...LoginDetails, email: e.target.value })
             }
           />
           <input
@@ -36,7 +37,7 @@ function LoginPage() {
             type="text"
             placeholder="Password"
             onChange={(e) =>
-              setLoginDetails({ ...LoginDetails, Password: e.target.value })
+              setLoginDetails({ ...LoginDetails, password: e.target.value })
             }
           />
         </div>

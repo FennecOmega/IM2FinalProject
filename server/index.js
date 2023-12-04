@@ -111,6 +111,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signup-page", (req, res) => {
+  console.log(req.body);
   const {
     fname,
     midname,
@@ -138,7 +139,7 @@ app.post("/signup-page", (req, res) => {
       .json({ success: false, message: "Missing required fields" });
   }
 
-  if (password !== confirmedpassword) {
+  if (password != confirmedpassword) {
     return res
       .status(400)
       .json({ success: false, message: "Password does not match" });
@@ -153,12 +154,6 @@ app.post("/signup-page", (req, res) => {
     address: address.trim(),
   };
 
-  const userCredentials = {
-    email: email.trim(),
-    password: password,
-    user_type: "Customer",
-  };
-
   db.query("INSERT INTO customer SET ?", userInfo, (err, result) => {
     if (err) {
       console.error("Error inserting data into customer table:", err);
@@ -168,28 +163,54 @@ app.post("/signup-page", (req, res) => {
     } else {
       console.log("Data inserted into customer table successfully");
 
+      // START CHANGE
+      // FIX: adds customer_id into id_no field for referencing of customer data per user.
+
       db.query(
-        "INSERT INTO user SET ?",
-        userCredentials,
-        (userErr, userResult) => {
-          if (userErr) {
-            console.error("Error inserting user credentials:", userErr);
+        "SELECT * FROM customer WHERE contact_no = ? AND address = ?",
+        [contact_no, address],
+        (err, results) => {
+          if (err) {
+            console.error("Error retrieving customer:", err);
             return res
               .status(500)
-              .json({ success: false, message: "Failed to create account" });
-          } else {
-            console.log("Data inserted into user table successfully");
-            return res
-              .status(200)
-              .json({ success: true, message: "Account created successfully" });
+              .json({ success: false, message: "Failed to create user" });
           }
+          console.log(results[0]);
+          const userCredentials = {
+            email: email.trim(),
+            password: password,
+            user_type: "Customer",
+            id_no: results[0].customer_id,
+          };
+          // END CHANGE
+
+          db.query(
+            "INSERT INTO user SET ?",
+            userCredentials,
+            (userErr, userResult) => {
+              if (userErr) {
+                console.error("Error inserting user credentials:", userErr);
+                return res.status(500).json({
+                  success: false,
+                  message: "Failed to create account",
+                });
+              } else {
+                console.log("Data inserted into user table successfully");
+                return res.status(200).json({
+                  success: true,
+                  message: "Account created successfully",
+                });
+              }
+            }
+          );
         }
       );
     }
   });
 });
 
-app.get("/login-page", (req, res) => {
+app.post("/login-page", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -217,17 +238,18 @@ app.get("/login-page", (req, res) => {
 
       const user = results[0];
 
+      console.log(user);
+
       const userDetails = {
         email: user.email,
+        user_type: user.user_type,
       };
 
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Logged in successfully",
-          user: userDetails,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "Logged in successfully",
+        user: userDetails,
+      });
     }
   );
 });
