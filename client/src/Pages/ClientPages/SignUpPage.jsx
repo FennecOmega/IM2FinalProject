@@ -1,19 +1,16 @@
-import { Link, Router, BrowserRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
-  const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
-  const [selectedDay, setSelectedDay] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState("1");
+  const [selectedDay, setSelectedDay] = useState(2);
+  const [selectedMonth, setSelectedMonth] = useState("0");
   const [selectedYear, setSelectedYear] = useState(2023);
 
-  const [years, setYears] = useState(
-    Array.from({ length: 110 }, (_, i) => 2023 - i)
-  );
+  const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
@@ -28,17 +25,16 @@ function SignUpPage() {
   };
 
   useEffect(() => {
-    // Update selectedDay when selectedMonth or selectedYear changes
-    const daysInMonth = calculateDaysInMonth(selectedMonth, selectedYear);
+    const daysInMonth = calculateDaysInMonth(selectedMonth, selectedYear) + 1;
     if (selectedDay > daysInMonth) {
       setSelectedDay(daysInMonth);
     }
-  }, [selectedMonth, selectedYear]);
+  }, [selectedDay, selectedMonth, selectedYear]);
 
   const calculateDaysInMonth = (month, year) => {
-    if (month === "2") {
+    if (month === "1") {
       return year % 4 === 0 ? 29 : 28;
-    } else if (["4", "6", "9", "11"].includes(month)) {
+    } else if (["3", "5", "8", "10"].includes(month)) {
       return 30;
     } else {
       return 31;
@@ -157,10 +153,7 @@ function SignUpPage() {
             ></input>
           </div>
 
-          <label
-            htmlFor="birthday"
-            className="block mb-3 text-black text-gray-600"
-          >
+          <label htmlFor="birthday" className="block mb-3 text-gray-600">
             Birthday
           </label>
           <div className="grid grid-cols-3 gap-4 mb-4">
@@ -174,18 +167,18 @@ function SignUpPage() {
                 onChange={handleMonthChange}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
               </select>
             </div>
             <div>
@@ -203,7 +196,7 @@ function SignUpPage() {
                   { length: calculateDaysInMonth(selectedMonth, selectedYear) },
                   (_, i) => i + 1
                 ).map((day) => (
-                  <option key={day} value={day}>
+                  <option key={day} value={day + 1}>
                     {day}
                   </option>
                 ))}
