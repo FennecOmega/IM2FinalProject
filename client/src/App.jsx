@@ -18,6 +18,7 @@ import InventoryDisplay from "./Pages/StaffPages/InventoryDisplay.jsx";
 import ResetForgottenPassword from "./Pages/ClientPages/ResetForgottenPassword.jsx";
 import SuccessChangedPassword from "./Pages/ClientPages/SuccessChangedPassword.jsx";
 import CheckEmailNewPassword from "./Pages/ClientPages/CheckEmailNewPassword.jsx";
+import ViewProfile from "./Pages/ClientPages/ViewProfile.jsx";
 
 function App() {
   const { user } = useAuthContext(AuthContext);
@@ -27,7 +28,7 @@ function App() {
         <header>
           {user == null ? (
             <NavBar />
-          ) : user.UserType == "Customer" ? (
+          ) : user.user_type == "Customer" ? (
             <NavBar />
           ) : (
             <DashboardSideBar />
@@ -54,14 +55,21 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
             <Route path="/inventory-display" element={<InventoryDisplay />} />
-            <Route path="/reset-forgottenpassword" element={<ResetForgottenPassword />} />
+            <Route
+              path="/reset-forgottenpassword"
+              element={<ResetForgottenPassword />}
+            />
             <Route path="/check-email" element={<CheckEmailNewPassword />} />
-            <Route path="/success-changedpassword" element={<SuccessChangedPassword />} />
+            <Route
+              path="/success-changedpassword"
+              element={<SuccessChangedPassword />}
+            />
+            <Route path="/view-profile" element={<ViewProfile />} />
           </Routes>
         </main>
         {user == null ? (
           <Footer />
-        ) : user.UserType == "Customer" ? (
+        ) : user.user_type == "Customer" ? (
           <Footer />
         ) : (
           <></>

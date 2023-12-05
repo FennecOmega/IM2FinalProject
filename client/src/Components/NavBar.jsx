@@ -11,49 +11,54 @@ import { useAuthContext } from "../hooks/useAuthContext.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 
 function NavBar() {
-
   const location = useLocation();
   location.pathname;
 
   const { user, handleLogout } = useAuthContext(AuthContext);
   console.log(user);
 
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const toggleSideBar = () => {
-    setIsSideBarOpen((prev) => !prev);
-  };
+  // const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  // const toggleSideBar = () => {
+  //   setIsSideBarOpen((prev) => !prev);
+  // };
 
-  const closeSideBar = () => {
-    setIsSideBarOpen(false);
-  };
+  // const closeSideBar = () => {
+  //   setIsSideBarOpen(false);
+  // };
 
   return (
     <>
-    
       <nav className="sticky top-0 z-20 w-full mb-20 bg-green-700 dark:bg-gray-900 start-0">
         <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
-
-                <div className="flex-shrink-0 cursor-pointer" onClick={toggleSideBar}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="h-5 w-10"
-                    
-                  >
-                    <path d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" />
-                  </svg>
-                </div>
-                
-               
-              <a href="" className="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src={BakingBreadLogo} className="h-8" alt="Baking Bread Logo" />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap md:text-white dark:text-white">
-                  Baking Bread
-                </span>
-              </a>
+            <div
+              className="flex-shrink-0 cursor-pointer"
+              // onClick={toggleSideBar}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-10 h-5"
+              >
+                <path d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" />
+              </svg>
             </div>
+
+            <a
+              href=""
+              className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
+              <img
+                src={BakingBreadLogo}
+                className="h-8"
+                alt="Baking Bread Logo"
+              />
+              <span className="self-center text-2xl font-semibold whitespace-nowrap md:text-white dark:text-white">
+                Baking Bread
+              </span>
+            </a>
+          </div>
           <div className="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
             {user == null ? (
               <Link to="/login-page">
@@ -143,12 +148,9 @@ function NavBar() {
           </div>
         </div>
       </nav>
-      
 
-      <DashboardSideBar isOpen={isSideBarOpen} onClose={closeSideBar} />
- 
+      {/* <DashboardSideBar isOpen={isSideBarOpen} onClose={closeSideBar} /> */}
     </>
-    
   );
 }
 

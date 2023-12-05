@@ -9,6 +9,7 @@ function LoginPage() {
   const { handleLogin } = useAuthContext(AuthContext);
 
   function handleClick() {
+    console.log(LoginDetails);
     handleLogin(LoginDetails);
   }
 
@@ -17,7 +18,7 @@ function LoginPage() {
       <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
         <h1 className="mb-3 text-3xl font-bold">Login</h1>
         <p className="mb-3">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link to="/signup-page">
             <span className="text-green-700">Sign Up</span>
           </Link>
@@ -28,7 +29,7 @@ function LoginPage() {
             type="text"
             placeholder="Email"
             onChange={(e) =>
-              setLoginDetails({ ...LoginDetails, Email: e.target.value })
+              setLoginDetails({ ...LoginDetails, email: e.target.value })
             }
           />
           <input
@@ -36,7 +37,7 @@ function LoginPage() {
             type="text"
             placeholder="Password"
             onChange={(e) =>
-              setLoginDetails({ ...LoginDetails, Password: e.target.value })
+              setLoginDetails({ ...LoginDetails, password: e.target.value })
             }
           />
         </div>

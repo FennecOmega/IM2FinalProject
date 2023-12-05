@@ -1,17 +1,16 @@
-import { Link, Router, BrowserRouter } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
-  const [confirmPass, setConfirmPass] = useState("");
-  const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
-  const [selectedDay, setSelectedDay] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState("january");
+  const [selectedDay, setSelectedDay] = useState(2);
+  const [selectedMonth, setSelectedMonth] = useState("0");
   const [selectedYear, setSelectedYear] = useState(2023);
-  const [years, setYears] = useState(
-    Array.from({ length: 110 }, (_, i) => 2023 - i)
-  );
+
+  const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
@@ -25,31 +24,57 @@ function SignUpPage() {
     setSelectedYear(e.target.value);
   };
 
-  function GetMonthDays() {
-    var day = Array.from({ length: 31 }, (_, i) => i + 1);
-    if (selectedMonth == "february") {
-      selectedYear % 4 == 0
-        ? (day = Array.from({ length: 29 }, (_, i) => i + 1))
-        : (day = Array.from({ length: 28 }, (_, i) => i + 1));
-    } else if (
-      selectedMonth == "april" ||
-      selectedMonth == "june" ||
-      selectedMonth == "september" ||
-      selectedMonth == "november"
-    ) {
-      day = Array.from({ length: 30 }, (_, i) => i + 1);
-    } else {
-      day = Array.from({ length: 31 }, (_, i) => i + 1);
+  useEffect(() => {
+    const daysInMonth = calculateDaysInMonth(selectedMonth, selectedYear) + 1;
+    if (selectedDay > daysInMonth) {
+      setSelectedDay(daysInMonth);
     }
-    return (
-      <>
-        {day.map((days) => (
-          <option key={days} value={days}>
-            {days}
-          </option>
-        ))}
-      </>
-    );
+  }, [selectedDay, selectedMonth, selectedYear]);
+
+  const calculateDaysInMonth = (month, year) => {
+    if (month === "1") {
+      return year % 4 === 0 ? 29 : 28;
+    } else if (["3", "5", "8", "10"].includes(month)) {
+      return 30;
+    } else {
+      return 31;
+    }
+  };
+
+  async function handleClick() {
+    const date = new Date(selectedYear, selectedMonth, selectedDay);
+    const bdate = date.toISOString().slice(0, 10);
+
+    const userDetails = {
+      fname: customerInfo.fname,
+      midname: customerInfo.midname,
+      lname: customerInfo.lname,
+      contact_no: customerInfo.contact_no,
+      birthdate: bdate,
+      address: customerInfo.address,
+      email: userInfo.email,
+      password: userInfo.password,
+      confirmedpassword: userInfo.confirmedpassword,
+    };
+
+    await sendDetails(userDetails);
+  }
+
+  async function sendDetails(user) {
+    await axios
+      .post("http://localhost:3007/signup-page", user)
+      .then(function (response) {
+        console.log(response);
+        toast.success(response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+        toast.error(error.response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
   }
 
   return (
@@ -128,10 +153,7 @@ function SignUpPage() {
             ></input>
           </div>
 
-          <label
-            htmlFor="birthday"
-            className="block mb-3 text-black text-gray-600"
-          >
+          <label htmlFor="birthday" className="block mb-3 text-gray-600">
             Birthday
           </label>
           <div className="grid grid-cols-3 gap-4 mb-4">
@@ -145,18 +167,18 @@ function SignUpPage() {
                 onChange={handleMonthChange}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
-                <option value="january">January</option>
-                <option value="february">February</option>
-                <option value="march">March</option>
-                <option value="april">April</option>
-                <option value="may">May</option>
-                <option value="june">June</option>
-                <option value="july">July</option>
-                <option value="august">August</option>
-                <option value="september">September</option>
-                <option value="october">October</option>
-                <option value="november">November</option>
-                <option value="december">December</option>
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
               </select>
             </div>
             <div>
@@ -167,9 +189,17 @@ function SignUpPage() {
                 id="day"
                 name="day"
                 onChange={handleDayChange}
+                value={selectedDay}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               >
-                {<GetMonthDays />}
+                {Array.from(
+                  { length: calculateDaysInMonth(selectedMonth, selectedYear) },
+                  (_, i) => i + 1
+                ).map((day) => (
+                  <option key={day} value={day + 1}>
+                    {day}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -199,6 +229,9 @@ function SignUpPage() {
               type="email"
               id="email"
               name="email"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, email: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -211,6 +244,9 @@ function SignUpPage() {
               type="password"
               id="password"
               name="password"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, password: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -223,6 +259,9 @@ function SignUpPage() {
               type="password"
               id="confirm_password"
               name="confirm_password"
+              onChange={(e) => {
+                setUserInfo({ ...userInfo, confirmedpassword: e.target.value });
+              }}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
