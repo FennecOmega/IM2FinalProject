@@ -2,7 +2,8 @@ const router = require("express").Router();
 const db = require('../database');
 const authToken = require('../middleware/authToken');
 
-router.get("/login-page",  (req, res) => {
+//Logging In
+router.get("/",  (req, res) => {
     const { email, password } = req.body;
     
     if (!email || !password) {
@@ -35,7 +36,8 @@ router.get("/login-page",  (req, res) => {
         }
     );
 });
-    
+
+//Creating A new Customer
 router.post("/", (req, res) => {
     
     const { fname, midname, lname, contact_no, birthdate, address, email, password, confirmedpassword,} = req.body;
@@ -87,8 +89,8 @@ router.post("/", (req, res) => {
     });
 });
 
-
-router.post("/forgot-password", (req, res) => {
+//Forgetting Password
+router.post("/", (req, res) => {
     const { email } = req.body;
       
     if (!email) {
