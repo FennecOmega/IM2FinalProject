@@ -18,6 +18,7 @@ import InventoryDisplay from "./Pages/StaffPages/InventoryDisplay.jsx";
 import ResetForgottenPassword from "./Pages/ClientPages/ResetForgottenPassword.jsx";
 import SuccessChangedPassword from "./Pages/ClientPages/SuccessChangedPassword.jsx";
 import CheckEmailNewPassword from "./Pages/ClientPages/CheckEmailNewPassword.jsx";
+import ViewProfile from "./Pages/ClientPages/ViewProfile.jsx";
 
 function App() {
   const { user } = useAuthContext(AuthContext);
@@ -63,6 +64,7 @@ function App() {
               path="/success-changedpassword"
               element={<SuccessChangedPassword />}
             />
+            <Route path="/view-profile" element={<ViewProfile />} />
           </Routes>
         </main>
         {user == null ? (
