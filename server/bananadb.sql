@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2023 at 07:22 AM
+-- Generation Time: Dec 06, 2023 at 01:28 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -37,17 +37,6 @@ CREATE TABLE `customer` (
   `address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `customer`
---
-DELIMITER $$
-CREATE TRIGGER `insert_customer_user` AFTER INSERT ON `customer` FOR EACH ROW BEGIN
-    INSERT INTO user (user_type, id_no, email, password)
-    VALUES ('Customer', NEW.customer_id, CONCAT(NEW.fname, NEW.lname, NEW.customer_id, '@example.com'), 'defaultpassword');
-END
-$$
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -75,6 +64,21 @@ CREATE TABLE `product` (
   `unit_price` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Triggers `product`
+--
+DELIMITER $$
+CREATE TRIGGER `after_product_insert` AFTER INSERT ON `product` FOR EACH ROW BEGIN
+    INSERT INTO Inventory (product_id, supplier_id, quantity, expiry_date)
+    SELECT NEW.product_id, supplier_id, 1, CURDATE()
+    FROM user
+    WHERE user_type = 'Staff'
+    LIMIT 1
+    ON DUPLICATE KEY UPDATE quantity = quantity + 1;
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -92,16 +96,6 @@ CREATE TABLE `staff` (
   `staff_type` enum('inventory','accounting','admin') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `staff`
---
-DELIMITER $$
-CREATE TRIGGER `insert_staff_user` AFTER INSERT ON `staff` FOR EACH ROW BEGIN
-    INSERT INTO user (user_type, id_no, email, password)
-    VALUES ('Staff', NEW.staff_id, CONCAT(NEW.fname, NEW.lname, NEW.staff_id, '@example.com'), 'defaultpassword');
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -132,6 +126,22 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Trigger `user`
+--
+DELIMITER $$
+CREATE TRIGGER prevent_delete_user_1
+BEFORE DELETE ON users
+FOR EACH ROW
+BEGIN
+    IF OLD.id = 1 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Deletion of this user is not allowed';
+    END IF;
+END
+$$
+DELIMITER ;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -154,22 +164,6 @@ ALTER TABLE `inventory`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`);
---
--- Triggers `product`
---
-DELIMITER $$
-
-CREATE TRIGGER after_product_insert AFTER INSERT ON Product FOR EACH ROW BEGIN
-    INSERT INTO Inventory (product_id, supplier_id, quantity, expiry_date)
-    SELECT NEW.product_id, supplier_id, 1, CURDATE()
-    FROM user
-    WHERE user_type = 'Staff'
-    LIMIT 1
-    ON DUPLICATE KEY UPDATE quantity = quantity + 1;
-END$$
-
-DELIMITER ;
-
 
 --
 -- Indexes for table `staff`
@@ -197,7 +191,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -227,7 +221,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
