@@ -12,8 +12,8 @@ app.use((req,res,next) =>{
   next();
 });
 
-app.use("/signup-page", routes.customerRoute);
-app.use("/login-page", routes.customerRoute);
+app.use("/", routes.customerRoute);
+app.use("/product", routes.productRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
