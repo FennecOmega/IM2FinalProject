@@ -1,3 +1,5 @@
+import "../index.css";
+
 function ProductOrderCard({ AddQty, DelQty, Qty, item }) {
   const image = "/data/images/" + item.ProductID + ".jpg";
 

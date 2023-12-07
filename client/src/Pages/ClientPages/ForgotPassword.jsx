@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
 function ForgotPassword() {
+  const [email, setEmail] = useState("");
+
   return (
     <>
       <div className="flex-1 mb-24">
@@ -16,18 +20,23 @@ function ForgotPassword() {
             <input
               className="px-3 py-1 bg-gray-200 rounded-lg"
               type="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               placeholder="Email Address"
             />
           </div>
           <p className="mb-3 text-sm">
-            You'll receive an email for recovering your account.
+            You&apos;ll receive an email for recovering your account.
           </p>
-          <Link to="/check-email"><button
-            className="px-10 py-1 text-white bg-green-700 rounded-full"
-            type="submit"
-          >
-            Send
-          </button></Link>
+          <Link to="/check-email">
+            <button
+              className="px-10 py-1 text-white bg-green-700 rounded-full"
+              type="submit"
+            >
+              Send
+            </button>
+          </Link>
         </div>
       </div>
     </>

@@ -75,7 +75,7 @@ function OrderForms() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/product/send-product-list")
+      .get("http://localhost:3007/product/send-product-list")
       .then(function (response) {
         setProdList(response.data);
       })
@@ -86,7 +86,7 @@ function OrderForms() {
 
   async function postorder(order) {
     await axios
-      .post("http://localhost:3000/order/add-order", order)
+      .post("http://localhost:3007/order/add-order", order)
       .then(function (response) {
         console.log(response);
         toast.success(response.data, {

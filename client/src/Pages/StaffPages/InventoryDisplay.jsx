@@ -115,10 +115,16 @@ function InventoryDisplay() {
                         #
                       </th>
                       <th scope="col" className="px-6 py-4">
-                        Ingredient
+                        Item
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Item type
                       </th>
                       <th scope="col" className="px-6 py-4">
                         Quantity
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Expiry
                       </th>
                       <th scope="col" className="px-6 py-4 rounded-2xl">
                         Action
@@ -126,14 +132,20 @@ function InventoryDisplay() {
                     </tr>
                   </thead>
 
-                  {/* Only a sample data, should be from database*/}
+                  {/*Please turn this into a component*/}
                   <tbody>
                     <tr className="border-b dark:border-neutral-500">
                       <td className="px-6 py-4 font-medium whitespace-nowrap">
                         1
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">Banana</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        Ingredient
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">5</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        September 6, 2024
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button>Edit</button>
                         <button>Delete</button>
@@ -144,7 +156,11 @@ function InventoryDisplay() {
                         2
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">Test</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        Miscellaneous
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">5</td>
+                      <td className="px-6 py-4 whitespace-nowrap">Banana</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button>Edit</button>
                         <button>Delete</button>
