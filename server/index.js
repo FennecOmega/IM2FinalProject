@@ -7,10 +7,7 @@ const routes = require('./routes');
 
 app.use(express.json());
 app.use(cors());
-app.use((req,res,next) =>{
-  req.db = db;
-  next();
-});
+
 
 app.use("/", routes.customerRoute);
 app.use("/product", routes.productRoute);
