@@ -28,7 +28,7 @@ function NavBar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-20 w-full mb-20 bg-green-700 dark:bg-gray-900 start-0">
+      <nav className="sticky top-0 z-20 w-full bg-green-700 dark:bg-gray-900 start-0 ">
         <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
             <div
