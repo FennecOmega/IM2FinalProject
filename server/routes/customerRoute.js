@@ -159,7 +159,7 @@ router.post("/signup-page", async (req, res) => {
 });
 
 // Forgetting Password
-router.post("/", (req, res) => {
+router.post("/forgot-password", (req, res) => {
   const { email } = req.body;
 
   if (!email) {
