@@ -3,8 +3,8 @@ import OrderRow from "./OrderRow.jsx";
 import axios from "axios";
 import { useState } from "react";
 
-function OrdersList({ Orders, setOrder, item, setItem }) {
-  const [loading, setLoading] = useState(false);
+function OrdersList({ Orders, setOrder }) {
+  // const [loading, setLoading] = useState(false);
 
   function editFunction(order) {
     let orderPos = Orders.findIndex((O) => O.ID === order.ID);
@@ -16,7 +16,7 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
     if (orderPos != -1 && order.Status == "PENDING") {
       Orders[orderPos].Status = "COMPLETED";
       updateStatus(Orders[orderPos]);
-      setLoading(true);
+      // setLoading(true);
     }
   }
 
@@ -25,7 +25,7 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
     if (orderPos != -1 && order.Status == "PENDING") {
       Orders[orderPos].Status = "CANCELLED";
       updateStatus(Orders[orderPos]);
-      setLoading(true);
+      // setLoading(true);
     }
   }
 
@@ -37,10 +37,10 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
       })
       .catch(function (error) {
         console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
+    // .finally(() => {
+    //   setLoading(false);
+    // });
   }
 
   async function refreshOrders() {

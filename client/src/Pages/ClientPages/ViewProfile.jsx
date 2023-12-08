@@ -47,10 +47,22 @@ function ViewProfile() {
           <form action="" className="w-81">
             <div className="flex flex-col py-1">
               <label className="py-1 font-bold" htmlFor="">
-                Name
+                First Name
               </label>
               <p className="w-full px-2 py-1 text-gray-800 rounded-md bg-neutral-200">
-                Test name
+                {user.fname != null ? user.fname : "N/A"}
+              </p>
+              <label className="py-1 font-bold" htmlFor="">
+                Middle Name
+              </label>
+              <p className="w-full px-2 py-1 text-gray-800 rounded-md bg-neutral-200">
+                {user.midname != null ? user.midname : "N/A"}
+              </p>
+              <label className="py-1 font-bold" htmlFor="">
+                Last Name
+              </label>
+              <p className="w-full px-2 py-1 text-gray-800 rounded-md bg-neutral-200">
+                {user.lname != undefined ? user.lname : "N/A"}
               </p>
               {/* <input class="w-full rounded-md bg-neutral-200 py-1 px-2" type="text" name="" id="" /> */}
             </div>
@@ -59,7 +71,7 @@ function ViewProfile() {
                 Email
               </label>
               <p className="w-full px-2 py-1 text-gray-800 rounded-md bg-neutral-200">
-                Test email
+                {user.email != null ? user.email : "N/A"}
               </p>
               {/* <input class="w-full rounded-md bg-neutral-200 py-1 px-2" type="text" name="" id="" /> */}
             </div>

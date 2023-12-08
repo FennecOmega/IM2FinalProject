@@ -35,54 +35,79 @@ router.post("/login-page", (req, res) => {
       try {
         const match = await bcrypt.compare(password, user.password); // Compare hashed passwords
 
-        // START OF CHANGES
-        // GETS PERMISSION STATUS OF USER
-        var permission = "Customer";
-        if (user.user_type === "staff") {
-          db.query(
-            "SELECT * FROM staff WHERE id_no = ?",
-            [user.id_no],
-            async (err, results) => {
-              if (err) {
-                console.error("Error retrieving staff permissions", err);
-                return res.status(500).json({
-                  success: false,
-                  message: "Failed to retrieve permissions",
-                });
-              }
-
-              if (results.length === 0) {
-                return res.status(404).json({
-                  success: false,
-                  message: "Staff member does not exist",
-                });
-              }
-              if (results[0].staff_status === "inactive") {
-                return res.status(403).json({
-                  success: false,
-                  message: "Staff member is inactive",
-                });
-              }
-              try {
-                permission = results[0].staff_type;
-              } catch (error) {
-                console.error("Error retrieving permissions:", error);
-                return res.status(500).json({
-                  success: false,
-                  message: "Failed to retrieve permissions",
-                });
-              }
-            }
-          );
-        }
-        // END OF CHANGES
-
         if (match) {
+          // START OF CHANGES
+          // GETS PERMISSION STATUS OF USER
+
+          const getDetails = async () => {
+            return new Promise((resolve, reject) => {
+              if (user.user_type === "staff") {
+                db.query(
+                  "SELECT * FROM staff WHERE staff_id = ?",
+                  [user.id_no],
+                  (err, results) => {
+                    if (err) {
+                      console.error("Error retrieving staff details", err);
+                      reject("Failed to retrieve details");
+                    }
+
+                    if (results.length === 0) {
+                      reject("Staff member does not exist");
+                    }
+
+                    if (results[0].staff_status === "inactive") {
+                      reject("Staff member is inactive");
+                    }
+
+                    const data = {
+                      fname: results[0].fname,
+                      midname: results[0].mname,
+                      lname: results[0].lname,
+                      permission: results[0].staff_type,
+                    };
+
+                    resolve(data);
+                  }
+                );
+              } else {
+                db.query(
+                  "SELECT * FROM customer WHERE customer_id = ?",
+                  [user.id_no],
+                  (err, results) => {
+                    if (err) {
+                      console.error("Error retrieving customer details", err);
+                      reject("Failed to retrieve customer details");
+                    }
+
+                    if (results.length === 0) {
+                      reject("Customer does not exist");
+                    }
+
+                    const data = {
+                      fname: results[0].fname,
+                      midname: results[0].mname,
+                      lname: results[0].lname,
+                      permission: "Customer",
+                    };
+
+                    resolve(data);
+                  }
+                );
+              }
+            });
+          };
+          // END OF CHANGES
+          const UD = await getDetails();
+          console.log(UD);
           const userDetails = {
+            fname: UD.fname,
+            midname: UD.midname,
+            lname: UD.lname,
             email: user.email,
             user_type: user.user_type,
-            permissions: permission,
+            permissions: UD.permission,
           };
+          console.log(userDetails);
 
           return res.status(200).json({
             user: userDetails,
