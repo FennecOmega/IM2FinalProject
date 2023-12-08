@@ -224,7 +224,7 @@ function SignUpPage() {
             Privacy Policy
           </p>
           <button
-            className="px-10 py-2 text-white bg-yellow-400 rounded-full"
+            className="px-10 py-2 text-white font-bold bg-yellow-400 rounded-full"
             onClick={handleClick}
             type="submit"
           >

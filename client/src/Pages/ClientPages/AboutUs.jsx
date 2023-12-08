@@ -11,7 +11,7 @@ function AboutUs() {
         <section className="text-center">
           <h1 className="mb-4 text-4xl font-bold">
             Welcome to
-            <span className="relative inline-block p-1 mx-3 before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-emerald-700 before:shadow-xl before:shadow-emerald-900/75">
+            <span className="relative inline-block p-1 mx-3 before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-yellow-400 before:shadow-xl before:shadow-yellow-900/75">
               <span className="relative text-white">Banana Cupcake</span>
             </span>
           </h1>
@@ -45,7 +45,7 @@ function AboutUs() {
           </div>
           <div className="w-32 mx-auto">
             <Link to="/signup-page">
-              <button className="w-full px-2 py-4 my-6 text-white shadow-xl bg-emerald-700 rounded-xl hover:bg-emerald-800">
+              <button className="w-full px-2 py-4 my-6 text-white shadow-xl bg-amber-900 rounded-xl hover:bg-amber-700">
                 Get Started
               </button>
             </Link>
@@ -104,7 +104,7 @@ function AboutUs() {
             </div>
           </div>
 
-          <div className="py-4 text-2xl font-semibold text-center">
+          <div className="py-6 text-2xl font-semibold text-center">
             <div className="h-1 my-5 rounded-full bg-gradient-to-r via-yellow-400"></div>
             <p>
               Discover the joy of
