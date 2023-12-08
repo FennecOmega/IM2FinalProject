@@ -8,8 +8,8 @@ import bancupvanilla from "/data/images/bancup-vanilla.jpg"
 function ProductDisplay() {
   return (
     <>
-<div className="max-w-3xl mx-auto px-8">
-  <h1 className="text-center py-10 text-3xl font-semibold">Our Products</h1>
+<div className="max-w-4xl mx-auto px-8 py-8 my-8">
+  <h1 className="text-center py-4 text-3xl font-semibold">Our Products</h1>
 
   {/* Adjust the grid. Kung 1 product i change lang og grid-cols-1 thanks */}
   <div className="grid md:grid-cols-3 grid-cols-2 gap-3">

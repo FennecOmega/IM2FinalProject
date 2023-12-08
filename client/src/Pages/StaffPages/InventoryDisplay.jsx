@@ -38,12 +38,13 @@ function InventoryDisplay() {
 
   return (
     <>
-      <div className="max-w-lg mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
+    <div className=" w-5/6 mx-auto items-center flex-1 mb-24">
+      <div className="max-w-full mx-auto mt-20 text-center border-4 border-yellow-400 rounded-2xl">
         <div className="flex justify-between p-4">
           {!showSearchBar && (
             <button
               onClick={() => setShowSearchBar(true)}
-              className="px-4 py-2 text-white bg-blue-500 rounded-md"
+              className="px-4 py-2 text-white bg-amber-900 hover:bg-amber-600 rounded-md"
             >
               Search
             </button>
@@ -56,13 +57,13 @@ function InventoryDisplay() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onBlur={() => setShowSearchBar(false)}
-              className="w-full p-2 border rounded-md"
+              className="w-2/3 px-2 py-2 border rounded-md"
             />
           )}
 
           <button
             onClick={() => setShowPopup(true)}
-            className="px-4 py-2 text-white bg-blue-500 rounded-md"
+            className="px-4 py-2 text-white bg-amber-900 hover:text-amber-600 rounded-md"
           >
             Add New
           </button>
@@ -99,13 +100,13 @@ function InventoryDisplay() {
               </label>
               <button
                 onClick={handleAddInventory}
-                className="px-4 py-2 text-white bg-blue-500 rounded-md"
+                className="px-4 py-2 text-white bg-green-500 rounded-md"
               >
                 Add
               </button>
               <button
                 onClick={() => setShowPopup(false)}
-                className="px-4 py-2 ml-2 text-black bg-gray-300 rounded-md"
+                className="px-4 py-2 ml-2 text-white bg-red-500 rounded-md"
               >
                 Cancel
               </button>
@@ -153,6 +154,7 @@ function InventoryDisplay() {
           </div>
         </div>
       </div>
+    </div>
     </>
   );
 }

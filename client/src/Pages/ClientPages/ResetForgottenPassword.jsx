@@ -32,7 +32,7 @@ function ResetForgottenPassword() {
   return (
     <>
       <div className="flex-1 mb-24">
-        <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
+        <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-yellow-400 rounded-2xl">
           <h1 className="mb-2 text-3xl font-bold">Create New Password</h1>
           <p className="mb-3">
             Enter a new password below to reset your password
@@ -53,14 +53,14 @@ function ResetForgottenPassword() {
             />
           </div>
           <button
-            className="px-10 py-1 mr-2 text-white bg-green-700 rounded-full"
+            className="px-10 py-1 mr-2 text-white bg-red-500 rounded-full"
             type="submit"
           >
             Cancel
           </button>
           <Link to="/success-changedpassword">
             <button
-              className="px-5 py-1 text-white bg-green-700 rounded-full"
+              className="px-5 py-1 text-white bg-green-500 rounded-full"
               type="submit"
             >
               Change Password

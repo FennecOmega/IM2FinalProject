@@ -6,7 +6,7 @@ function AboutUs() {
   return (
     <>
       <main class="h-fit bg-gradient-to-tr from-amber-100 to-lime-50">
-  <div class="mx-auto max-w-xl py-9">
+  <div class="mx-auto max-w-xl py-12">
     <h1 class="py-3 text-center text-3xl font-bold">About Us</h1>
     <div class="text-center text-3xl font-semibold">
       <span class="relative mx-3 inline-block p-1 before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-yellow-400 before:shadow-xl before:shadow-yellow-500/75">
@@ -35,7 +35,7 @@ function AboutUs() {
     </div>
     
 
-    <div class="py-4 text-center text-2xl font-semibold">
+    <div class="py-8 text-center text-2xl font-semibold">
       <div class="my-5 h-1 rounded-full bg-gradient-to-r via-yellow-400"></div>
       <p>
         Discover the joy of

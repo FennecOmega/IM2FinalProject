@@ -80,18 +80,18 @@ function SignUpPage() {
   return (
     <>
       <div className="items-center flex-1 mb-24">
-        <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
+        <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-yellow-400 rounded-2xl">
           <h1 className="mb-3 text-3xl font-bold">Sign Up</h1>
-          <p className="mb-3">Be a Baking Bread Member now!</p>
+          <p className="mb-3">Be a Banana Cupcake Member now!</p>
           <p className="mb-3">
             Already have an account?{" "}
-            <span className="text-green-700">
-              <Link to="/login-page">Login here</Link>
-            </span>
+              <Link to="/login-page">
+                <span className="font-bold text-amber-900 hover:text-amber-600">Login here</span>
+              </Link>
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
-              <label htmlFor="first_name" className="block text-gray-600">
+              <label htmlFor="first_name" className="font-semibold block text-gray-600">
                 First Name
               </label>
               <input
@@ -105,7 +105,7 @@ function SignUpPage() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="last_name" className="block text-gray-600">
+              <label htmlFor="last_name" className="font-semibold block text-gray-600">
                 Last Name
               </label>
               <input
@@ -121,7 +121,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="contact_number" className="block text-gray-600">
+            <label htmlFor="contact_number" className="font-semibold block text-gray-600">
               Contact Number
             </label>
             <input
@@ -139,7 +139,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="address" className="block text-gray-600">
+            <label htmlFor="address" className="font-semibold block text-gray-600">
               Address
             </label>
             <input
@@ -153,7 +153,7 @@ function SignUpPage() {
             ></input>
           </div>
 
-          <label htmlFor="birthday" className="block mb-3 text-gray-600">
+          <label htmlFor="birthday" className="font-semibold block mb-3 text-gray-600">
             Birthday
           </label>
           <div className="grid grid-cols-3 gap-4 mb-4">
@@ -222,7 +222,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-600">
+            <label htmlFor="email" className="font-semibold block text-gray-600">
               Email
             </label>
             <input
@@ -237,7 +237,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-600">
+            <label htmlFor="password" className="font-semibold block text-gray-600">
               Password
             </label>
             <input
@@ -252,7 +252,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="confirm_password" className="block text-gray-600">
+            <label htmlFor="confirm_password" className="font-semibold block text-gray-600">
               Confirm Password
             </label>
             <input
@@ -266,12 +266,12 @@ function SignUpPage() {
             />
           </div>
 
-          <p className="mb-3 text-sm">
+          <p className="mb-4 text-sm">
             By creating an account. You agree to our Terms & Conditions and
             Privacy Policy
           </p>
           <button
-            className="px-10 py-1 text-white bg-green-700 rounded-full"
+            className="px-10 py-3 font-bold text-white bg-yellow-400 rounded-full"
             onClick={handleClick}
             type="submit"
           >
