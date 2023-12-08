@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2023 at 01:28 PM
+-- Generation Time: Dec 08, 2023 at 06:05 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -37,6 +37,24 @@ CREATE TABLE `customer` (
   `address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customer_id`, `fname`, `midname`, `lname`, `contact_no`, `birthdate`, `address`) VALUES
+(1, 'von', NULL, 'manginsay', '12345678', '2003-11-05', 'Address Address');
+
+--
+-- Triggers `customer`
+--
+DELIMITER $$
+CREATE TRIGGER `add_user_on_customer_staff_insert` AFTER INSERT ON `customer` FOR EACH ROW BEGIN
+    INSERT INTO `user` (`user_type`, `id_no`, `email`, `password`)
+    VALUES ('Customer', NEW.`customer_id`, NULL, NULL);
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -45,11 +63,41 @@ CREATE TABLE `customer` (
 
 CREATE TABLE `inventory` (
   `inventory_id` int(11) NOT NULL,
+  `item_type` enum('product','ingredient','miscellaneous') DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
   `supplier_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT 0,
-  `expiry_date` date DEFAULT NULL
+  `staff_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+CREATE TABLE `order` (
+  `Order_id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `transaction_date` datetime DEFAULT NULL,
+  `completion_date` datetime DEFAULT NULL,
+  `ArrayOfProduct` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`ArrayOfProduct`)),
+  `payment_method` enum('Gcash','Onsite') DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `order_status` enum('PENDING','APPROVED','CANCELLED') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `order`
+--
+DELIMITER $$
+CREATE TRIGGER `set_completion_date` AFTER UPDATE ON `order` FOR EACH ROW BEGIN
+    IF NEW.order_status = 'APPROVED' THEN
+        UPDATE `order` SET completion_date = NOW() WHERE order_id = NEW.order_id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -61,20 +109,34 @@ CREATE TABLE `product` (
   `product_id` int(11) NOT NULL,
   `product_name` varchar(255) DEFAULT NULL,
   `product_desc` varchar(255) DEFAULT NULL,
-  `unit_price` decimal(10,2) DEFAULT NULL
+  `product_image_url` varchar(255) DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receipt`
+--
+
+CREATE TABLE `receipt` (
+  `receipt_no` int(11) NOT NULL,
+  `approver_name` varchar(255) DEFAULT NULL,
+  `transaction_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `customer_id` int(11) DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Triggers `product`
+-- Triggers `receipt`
 --
 DELIMITER $$
-CREATE TRIGGER `after_product_insert` AFTER INSERT ON `product` FOR EACH ROW BEGIN
-    INSERT INTO Inventory (product_id, supplier_id, quantity, expiry_date)
-    SELECT NEW.product_id, supplier_id, 1, CURDATE()
-    FROM user
-    WHERE user_type = 'Staff'
-    LIMIT 1
-    ON DUPLICATE KEY UPDATE quantity = quantity + 1;
+CREATE TRIGGER `approve_order_on_receipt_creation` AFTER INSERT ON `receipt` FOR EACH ROW BEGIN
+    UPDATE `order`
+    SET order_status = 'APPROVED'
+    WHERE order_id = NEW.order_id AND order_status = 'PENDING';
 END
 $$
 DELIMITER ;
@@ -96,6 +158,24 @@ CREATE TABLE `staff` (
   `staff_type` enum('inventory','accounting','admin') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `staff`
+--
+
+INSERT INTO `staff` (`staff_id`, `fname`, `mname`, `lname`, `residence`, `birthdate`, `staff_status`, `staff_type`) VALUES
+(1, 'kenneth', 'john', 'cantillas', 'address address', '2003-09-15', 'active', 'admin'),
+(2, 'Phillip', 'Isidro', 'Go', 'Address Address', '2003-11-05', 'active', 'admin');
+
+--
+-- Triggers `staff`
+--
+DELIMITER $$
+CREATE TRIGGER `add_user_on_staff_insert` AFTER INSERT ON `staff` FOR EACH ROW BEGIN
+    INSERT INTO `user` (`user_type`, `id_no`, `email`, `password`)
+    VALUES ('Staff', NEW.`staff_id`, NULL, NULL);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -109,6 +189,29 @@ CREATE TABLE `supplier` (
   `email` varchar(255) DEFAULT NULL,
   `contact_no` varchar(20) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`supplier_id`, `supplier_name`, `email`, `contact_no`, `address`) VALUES
+(1, 'Matthea Trina Borromeo', 'mattheatrina@gmail.com', '12345678', 'Address Address');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplyorder`
+--
+
+CREATE TABLE `supplyorder` (
+  `SupplyOrder_ID` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `order_date` date DEFAULT NULL,
+  `delivery_date` date DEFAULT NULL,
+  `order_status` enum('Pending','Complete') DEFAULT NULL,
+  `ArrayOfProduct` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`ArrayOfProduct`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,20 +229,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Trigger `user`
+-- Dumping data for table `user`
 --
-DELIMITER $$
-CREATE TRIGGER prevent_delete_user_1
-BEFORE DELETE ON users
-FOR EACH ROW
-BEGIN
-    IF OLD.id = 1 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Deletion of this user is not allowed';
-    END IF;
-END
-$$
-DELIMITER ;
+
+INSERT INTO `user` (`user_id`, `user_type`, `id_no`, `email`, `password`) VALUES
+(1, 'Staff', 1, 'kennethcantillas@gmail.com', '$2a$10$KjTyNVtgoAIxE0skR4Mimu0bbiBx9Gzw1QAuJhtWIubfuzq8ymfTK'),
+(2, 'Staff', 2, 'phillipgo@gmail.com', '$2a$10$6mMAQzBsw5BhzIMfMNJLU.xRpXjLYTdjnW.4MjZJ0WinwoI1N5fTe'),
+(11, 'Customer', 1, 'vonmanginsay@gmail.com', '$2a$12$ezuwVZixlnXBAOxAKVKNtu.27qlFVp5WlTk7G6jd9K1N85tWOQXjK');
 
 --
 -- Indexes for dumped tables
@@ -157,13 +253,29 @@ ALTER TABLE `customer`
 ALTER TABLE `inventory`
   ADD PRIMARY KEY (`inventory_id`),
   ADD KEY `product_id` (`product_id`),
-  ADD KEY `supplier_id` (`supplier_id`);
+  ADD KEY `supplier_id` (`supplier_id`),
+  ADD KEY `inventory_ibfk_3` (`staff_id`);
+
+--
+-- Indexes for table `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`Order_id`),
+  ADD KEY `customer_id` (`customer_id`);
 
 --
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`);
+
+--
+-- Indexes for table `receipt`
+--
+ALTER TABLE `receipt`
+  ADD PRIMARY KEY (`receipt_no`),
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `staff`
@@ -176,6 +288,14 @@ ALTER TABLE `staff`
 --
 ALTER TABLE `supplier`
   ADD PRIMARY KEY (`supplier_id`);
+
+--
+-- Indexes for table `supplyorder`
+--
+ALTER TABLE `supplyorder`
+  ADD PRIMARY KEY (`SupplyOrder_ID`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `supplier_id` (`supplier_id`);
 
 --
 -- Indexes for table `user`
@@ -191,37 +311,55 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `order`
+--
+ALTER TABLE `order`
+  MODIFY `Order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT for table `receipt`
+--
+ALTER TABLE `receipt`
+  MODIFY `receipt_no` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `supplyorder`
+--
+ALTER TABLE `supplyorder`
+  MODIFY `SupplyOrder_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
@@ -232,7 +370,28 @@ ALTER TABLE `user`
 --
 ALTER TABLE `inventory`
   ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
-  ADD CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`);
+  ADD CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`),
+  ADD CONSTRAINT `inventory_ibfk_3` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`);
+
+--
+-- Constraints for table `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
+
+--
+-- Constraints for table `receipt`
+--
+ALTER TABLE `receipt`
+  ADD CONSTRAINT `receipt_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  ADD CONSTRAINT `receipt_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`Order_id`);
+
+--
+-- Constraints for table `supplyorder`
+--
+ALTER TABLE `supplyorder`
+  ADD CONSTRAINT `supplyorder_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`),
+  ADD CONSTRAINT `supplyorder_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

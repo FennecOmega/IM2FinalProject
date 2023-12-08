@@ -2,16 +2,39 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useCartContext } from "../../hooks/useCartContext.jsx";
-import { CartContext } from "../../context/CartContext.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import DatePicker from "../../Components/DatePicker.jsx";
 
 function PaymentDetails() {
+  const location = useLocation();
+  const { state } = location;
+  const totalPrice = state ? state.totalPrice : 0;
+
   const { user } = useAuthContext(AuthContext);
 
   const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setPaymentDetails({ ...paymentDetails, payment_method: e.target.value });
+  };
+  const [selectedDate, setSelectedDate] = useState({
+    day: 1,
+    month: "0",
+    year: 2023,
+  });
+
+  function convertPhp(price) {
+    return Intl.NumberFormat("en-DE", {
+      style: "currency",
+      currency: "PHP",
+    }).format(price);
+  }
 
   useEffect(() => {
     const loader = async () => {
@@ -24,83 +47,68 @@ function PaymentDetails() {
     loader();
   }, [user, navigate]);
 
-  const [prodList, setProdList] = useState([]);
-
-  const { cart, handleEmptyCart } = useCartContext(CartContext);
-
-  // async function postorder(order) {
-  //   await axios
-  //     .post("http://localhost:3001/order/add-order", order)
-  //     .then(function (response) {
-  //       console.log(response);
-  //       toast.success(response.data, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       return (document.getElementById("errMessage").innerHTML =
-  //         response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //       toast.error(error.response.data.error, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       return (document.getElementById("errMessage").innerHTML =
-  //         error.response.data.error);
-  //     });
-  // }
-
-  // async function handleClick() {
-  //   var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-  //   var localISOTime = new Date(Date.now() - tzoffset)
-  //     .toISOString()
-  //     .slice(0, 19)
-  //     .replace("T", " ");
-  //   console.log(localISOTime);
-
-  //   const order = {
-  //     ID: 0,
-  //     TransactionDate: localISOTime,
-  //     Name: details.Name,
-  //     Contact: details.Contact,
-  //     OrderedProducts: itemList.map(
-  //       (item) => ((item.Subtotal = item.Price * item.Qty), item)
-  //     ),
-  //     TotalPrice: itemList.reduce(
-  //       (currPrice, item) => (currPrice += item.Subtotal),
-  //       0
-  //     ),
-  //     PaymentMethod: "",
-  //     Status: "PENDING",
-  //   };
-
-  //   console.log(order);
-  //   await postorder(order);
-  //   handleEmptyCart([]);
-  // }
-
-  // todo: create a functional order
+  const [paymentDetails, setPaymentDetails] = useState({});
 
   return (
     <>
-      <p>This is Payment Details.jsx</p>
-      <input
-        id="username"
-        type="text"
-        className="border-4 border-black"
-      ></input>
-      <p>contact no.</p>
-      <input id="contact" type="text" className="border-4 border-black"></input>
-      <p>Products</p>
-      <div>
-        <button onClick={handleEmptyCart} className="mr-20">
-          REMOVE ALL ITEMS
+      <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
+        <h1 className="mb-3 text-3xl font-bold">Payment Details</h1>
+        <div className="flex flex-col gap-4 mb-3">
+          <div>
+            <label htmlFor="payment_method" className="block text-gray-600">
+              Payment Method
+            </label>
+            <select
+              id="payment_method"
+              name="payment_method"
+              onChange={handlePaymentMethodChange}
+              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            >
+              <option value="Cash">Cash</option>
+              <option value="GCash">GCash</option>
+            </select>
+          </div>
+          {paymentDetails.payment_method === "GCash" ? (
+            <>
+              <p>
+                Scan this GCash QR code and pay the amount of:{" "}
+                {convertPhp(totalPrice)}
+              </p>
+              <p>Or input this number in express send: 09469338740</p>
+              <p className="mb-3">GCash reference no:</p>
+              <input
+                className="px-3 py-1 bg-gray-200 rounded-lg"
+                type="text"
+                placeholder="GCash reference no."
+                onChange={(e) =>
+                  setPaymentDetails({
+                    ...paymentDetails,
+                    gcash_reference: e.target.value,
+                  })
+                }
+              />
+            </>
+          ) : null}
+        </div>
+        <DatePicker
+          Date={selectedDate}
+          DateChange={setSelectedDate}
+          DateType="Pickup Date"
+        />
+        <button
+          className="px-10 py-1 text-white bg-green-700 rounded-full"
+          type="Go back"
+          onClick={handleGoBack}
+        >
+          Go Back
         </button>
-        <Link to="/order-form/order-details">
-          <button>Confirm Order Details</button>
+
+        <Link to="/forgot-password">
+          <button className="px-10 py-1 text-white bg-green-700 rounded-full">
+            Proceed to Confirmation
+          </button>
         </Link>
       </div>
-      <ToastContainer />
-      <p id="errMessage"></p>
     </>
   );
 }

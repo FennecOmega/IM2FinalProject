@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductOrderCard from "./ProductOrderCard.jsx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCartContext } from "../hooks/useCartContext.jsx";
 import { CartContext } from "../context/CartContext.jsx";
@@ -11,16 +11,6 @@ function OrderForms() {
   const [prodList, setProdList] = useState([]);
 
   const { cart, handleEmptyCart } = useCartContext(CartContext);
-
-  // NEW TODO
-  // Finished form (Cart/itemList) will be the first page in order form.
-  // Afterwards, if user is not logged in, they will be prompted to enter customer details. This will be posted to the backend.
-  // Else, if user is logged in, use the current user token too check for customer type and customer ID, and Order inherits that ID.
-  // Once the backend generates a unique customer ID, it will be inherited by the Order object upon continuing to payment.
-  // Payment can be done in-person or through GCASH.
-  // if in-person payment is chosen, immediately skip to confirming order, showing details of the customer's order.
-  // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
-  // After confirmation, print out a png/pdf of the order ticket, format will be specified.
 
   function setTotal() {
     if (cart != null) {
@@ -126,7 +116,7 @@ function OrderForms() {
         className="mr-20 bg-red-500 text-white">
           REMOVE ALL ITEMS
         </button>
-        <Link to="/order-form/payment-details">
+        <Link to="/order-form/payment-details" state={{ totalPrice: 500 }}>
           <button
           className="bg-green-500 text-white">GO TO PAYMENT</button>
         </Link>
