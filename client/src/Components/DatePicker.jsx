@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 
 function DatePicker({ Date, DateChange, DateType }) {
+  //component accepts the date, function to change date, and what the date is for (eg. Birthday, Completion Date, etc.)
+  //component allows user to pick a date
+
   const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
   console.log(Date);
   function changeSelectedDate(daysInMonth) {

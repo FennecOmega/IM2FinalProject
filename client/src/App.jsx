@@ -40,7 +40,7 @@ function App() {
               path="/"
               element={
                 user == null ? (
-                  <Navigate to="/dashboard" />
+                  <Navigate to="/about-us" />
                 ) : (
                   <Navigate to="/about-us" />
                 )

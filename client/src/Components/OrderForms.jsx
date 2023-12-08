@@ -84,15 +84,7 @@ function OrderForms() {
 
   return (
     <>
-      <p>name</p>
-      <input
-        id="username"
-        type="text"
-        className="border-4 border-black"
-      ></input>
-      <p>contact no.</p>
-      <input id="contact" type="text" className="border-4 border-black"></input>
-      <p>Products</p>
+      <h1 className="mt-10">Products</h1>
       <div className="flex gap-4">
         {prodList.map((prod, index) => (
           <ProductOrderCard key={index} item={prod} />

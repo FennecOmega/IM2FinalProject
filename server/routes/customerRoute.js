@@ -35,10 +35,53 @@ router.post("/login-page", (req, res) => {
       try {
         const match = await bcrypt.compare(password, user.password); // Compare hashed passwords
 
+        // START OF CHANGES
+        // GETS PERMISSION STATUS OF USER
+        var permission = "Customer";
+        if (user.user_type === "staff") {
+          db.query(
+            "SELECT * FROM staff WHERE id_no = ?",
+            [user.id_no],
+            async (err, results) => {
+              if (err) {
+                console.error("Error retrieving staff permissions", err);
+                return res.status(500).json({
+                  success: false,
+                  message: "Failed to retrieve permissions",
+                });
+              }
+
+              if (results.length === 0) {
+                return res.status(404).json({
+                  success: false,
+                  message: "Staff member does not exist",
+                });
+              }
+              if (results[0].staff_status === "inactive") {
+                return res.status(403).json({
+                  success: false,
+                  message: "Staff member is inactive",
+                });
+              }
+              try {
+                permission = results[0].staff_type;
+              } catch (error) {
+                console.error("Error retrieving permissions:", error);
+                return res.status(500).json({
+                  success: false,
+                  message: "Failed to retrieve permissions",
+                });
+              }
+            }
+          );
+        }
+        // END OF CHANGES
+
         if (match) {
           const userDetails = {
             email: user.email,
             user_type: user.user_type,
+            permissions: permission,
           };
 
           return res.status(200).json({
@@ -139,12 +182,10 @@ router.post("/signup-page", async (req, res) => {
                 .json({ success: false, message: "Failed to create account" });
             } else {
               console.log("Data inserted into user table successfully");
-              return res
-                .status(200)
-                .json({
-                  success: true,
-                  message: "Account created successfully",
-                });
+              return res.status(200).json({
+                success: true,
+                message: "Account created successfully",
+              });
             }
           }
         );
