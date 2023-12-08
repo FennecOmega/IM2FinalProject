@@ -8,10 +8,13 @@ export const CartContextProvider = ({ children }) => {
   const [currentCart, setCurrentCart] = useState(null);
 
   const handleCart = (cart) => {
-    setCurrentCart(cart);
+    // setCurrentCart(cart);
+    localStorage.setItem("cartKey", JSON.stringify(cart));
+    setCurrentCart(JSON.parse(localStorage.getItem("cartKey")));
   };
 
   const handleEmptyCart = () => {
+    localStorage.removeItem("cartKey", JSON.stringify(currentCart));
     setCurrentCart(null);
   };
 

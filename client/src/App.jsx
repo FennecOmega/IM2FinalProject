@@ -1,4 +1,3 @@
-import { useState, useEffect, createContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import AboutUs from "./Pages/ClientPages/AboutUs.jsx";

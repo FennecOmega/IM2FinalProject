@@ -62,7 +62,7 @@ function SignUpPage() {
 
   async function sendDetails(user) {
     await axios
-      .post("http://localhost:3007/signup-page", user)
+      .post("http://localhost:3001/signup-page", user)
       .then(function (response) {
         console.log(response);
         toast.success(response.data.message, {

@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext.jsx"; // temp
+import { AuthContext } from "../../context/AuthContext.jsx"; // temp
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const { user, handleLogout } = useAuthContext(AuthContext); // temp
 
   return (
     <>
@@ -33,6 +36,7 @@ function ForgotPassword() {
             <button
               className="px-10 py-1 text-white bg-green-700 rounded-full"
               type="submit"
+              onClick={handleLogout}
             >
               Send
             </button>
