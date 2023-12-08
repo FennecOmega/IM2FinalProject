@@ -3,12 +3,14 @@ import axios from "axios";
 import ProductOrderCard from "./ProductOrderCard.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCartContext } from "../hooks/useCartContext.jsx";
+import { CartContext } from "../context/CartContext.jsx";
+import { Link } from "react-router-dom";
 
 function OrderForms() {
-  const [details, setDetails] = useState({ Name: "", Contact: "" });
   const [prodList, setProdList] = useState([]);
-  const [itemList, setItemList] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+
+  const { cart, handleEmptyCart } = useCartContext(CartContext);
 
   // NEW TODO
   // Finished form (Cart/itemList) will be the first page in order form.
@@ -20,57 +22,11 @@ function OrderForms() {
   // else, prompt users to upload an image file of their GCASH receipt OR submit reference number. then proceed to confirmation.
   // After confirmation, print out a png/pdf of the order ticket, format will be specified.
 
-  function AddProduct(item) {
-    var product = {
-      ProductID: item.ProductID,
-      Qty: 1,
-      Price: item.UnitPrice,
-      Subtotal: 0.0,
-    };
-
-    let newProductIndex = itemList.findIndex(
-      (i) => item.ProductID === i.ProductID
-    );
-
-    if (newProductIndex == -1) {
-      setItemList([...itemList, product]);
-    } else {
-      itemList[newProductIndex].Qty++;
-      setRefresh(!refresh);
-    }
-  }
-
-  function DelProduct(item) {
-    var temp = itemList
-      .map((product) => product.ProductID)
-      .indexOf(item.ProductID);
-    if (temp != -1 && itemList[temp].Qty > 0) {
-      itemList[temp].Qty--;
-      if (itemList[temp].Qty == 0) {
-        setItemList(itemList.filter((i) => i.Qty > 0));
-      }
-    }
-  }
-
-  function retQty(ID) {
-    var a = itemList.findIndex((i) => ID == i.ProductID);
-    if (a != -1) {
-      return itemList[a].Qty;
-    } else {
-      return 0;
-    }
-  }
-
   function setTotal() {
-    itemList.map((item) => ((item.Subtotal = item.Price * item.Qty), item));
-    return itemList.reduce(
-      (currPrice, item) => (currPrice += item.Subtotal),
-      0
-    );
-  }
-
-  function removeAll() {
-    setItemList([]);
+    if (cart != null) {
+      cart.map((item) => ((item.Subtotal = item.Price * item.Qty), item));
+      return cart.reduce((currPrice, item) => (currPrice += item.Subtotal), 0);
+    }
   }
 
   useEffect(() => {
@@ -84,55 +40,55 @@ function OrderForms() {
       });
   }, []);
 
-  async function postorder(order) {
-    await axios
-      .post("http://localhost:3001/order/add-order", order)
-      .then(function (response) {
-        console.log(response);
-        toast.success(response.data, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        return (document.getElementById("errMessage").innerHTML =
-          response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        toast.error(error.response.data.error, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        return (document.getElementById("errMessage").innerHTML =
-          error.response.data.error);
-      });
-  }
+  // async function postorder(order) {
+  //   await axios
+  //     .post("http://localhost:3001/order/add-order", order)
+  //     .then(function (response) {
+  //       console.log(response);
+  //       toast.success(response.data, {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //       return (document.getElementById("errMessage").innerHTML =
+  //         response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //       toast.error(error.response.data.error, {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //       return (document.getElementById("errMessage").innerHTML =
+  //         error.response.data.error);
+  //     });
+  // }
 
-  async function handleClick() {
-    var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-    var localISOTime = new Date(Date.now() - tzoffset)
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    console.log(localISOTime);
+  // async function handleClick() {
+  //   var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+  //   var localISOTime = new Date(Date.now() - tzoffset)
+  //     .toISOString()
+  //     .slice(0, 19)
+  //     .replace("T", " ");
+  //   console.log(localISOTime);
 
-    const order = {
-      ID: 0,
-      TransactionDate: localISOTime,
-      Name: details.Name,
-      Contact: details.Contact,
-      OrderedProducts: itemList.map(
-        (item) => ((item.Subtotal = item.Price * item.Qty), item)
-      ),
-      TotalPrice: itemList.reduce(
-        (currPrice, item) => (currPrice += item.Subtotal),
-        0
-      ),
-      PaymentMethod: "",
-      Status: "PENDING",
-    };
+  //   const order = {
+  //     ID: 0,
+  //     TransactionDate: localISOTime,
+  //     Name: details.Name,
+  //     Contact: details.Contact,
+  //     OrderedProducts: itemList.map(
+  //       (item) => ((item.Subtotal = item.Price * item.Qty), item)
+  //     ),
+  //     TotalPrice: itemList.reduce(
+  //       (currPrice, item) => (currPrice += item.Subtotal),
+  //       0
+  //     ),
+  //     PaymentMethod: "",
+  //     Status: "PENDING",
+  //   };
 
-    console.log(order);
-    await postorder(order);
-    setItemList([]);
-  }
+  //   console.log(order);
+  //   await postorder(order);
+  //   handleEmptyCart([]);
+  // }
 
   // todo: create a functional order
 
@@ -143,32 +99,24 @@ function OrderForms() {
         id="username"
         type="text"
         className="border-4 border-black"
-        onChange={(e) => setDetails({ ...details, Name: e.target.value })}
       ></input>
       <p>contact no.</p>
-      <input
-        id="contact"
-        type="text"
-        className="border-4 border-black"
-        onChange={(e) => setDetails({ ...details, Contact: e.target.value })}
-      ></input>
+      <input id="contact" type="text" className="border-4 border-black"></input>
       <p>Products</p>
       <div className="flex gap-4">
         {prodList.map((prod, index) => (
-          <ProductOrderCard
-            key={index}
-            AddQty={AddProduct}
-            DelQty={DelProduct}
-            Qty={retQty(prod.ProductID)}
-            item={prod}
-          />
+          <ProductOrderCard key={index} item={prod} />
         ))}
       </div>
 
       <p>Current Total: {setTotal()}</p>
       <div>
-        <button onClick={handleClick}>ADD</button>
-        <button onClick={removeAll}>REMOVE ALL</button>
+        <button onClick={handleEmptyCart} className="mr-20">
+          REMOVE ALL ITEMS
+        </button>
+        <Link to="/order-form/payment-details">
+          <button>GO TO PAYMENT</button>
+        </Link>
       </div>
       <ToastContainer />
       <p id="errMessage"></p>

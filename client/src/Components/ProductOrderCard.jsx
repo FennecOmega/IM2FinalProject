@@ -1,15 +1,13 @@
 import "../index.css";
 
-function ProductOrderCard({ AddQty, DelQty, Qty, item }) {
+import { useCartContext } from "../hooks/useCartContext.jsx";
+import { CartContext } from "../context/CartContext.jsx";
+
+function ProductOrderCard({ item }) {
   const image = "/data/images/" + item.ProductID + ".jpg";
 
-  function DelFunc() {
-    DelQty(item);
-  }
-
-  function AddFunc() {
-    AddQty(item);
-  }
+  const { handleCartAdd, handleCartDelete, retQty } =
+    useCartContext(CartContext);
 
   function convertPhp(price) {
     return Intl.NumberFormat("en-DE", {
@@ -34,17 +32,17 @@ function ProductOrderCard({ AddQty, DelQty, Qty, item }) {
             {convertPhp(item.UnitPrice)}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            Quantity: {Qty}
+            Quantity: {retQty(item.ID)}
           </span>
           <div className="flex mt-4 md:mt-6">
             <button
-              onClick={AddFunc}
+              onClick={handleCartAdd(item)}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Add Qty
             </button>
             <button
-              onClick={DelFunc}
+              onClick={handleCartDelete(item)}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700 ms-3"
             >
               Remove Qty

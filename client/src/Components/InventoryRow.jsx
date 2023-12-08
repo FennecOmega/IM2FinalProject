@@ -1,23 +1,24 @@
-function InventoryRow() {
+import { useAuthContext } from "./hooks/useAuthContext.jsx";
+import { AuthContext } from "./context/AuthContext.jsx";
+import axios from "axios";
+
+function InventoryRow({ Item, Edit, Delete }) {
+  const { user } = useAuthContext(AuthContext);
+
+  const getPrivileges = (user) => {
+    axios.post({});
+  };
+
   return (
     <>
       <tr className="border-b dark:border-neutral-500">
-        <td className="px-6 py-4 font-medium whitespace-nowrap">1</td>
-        <td className="px-6 py-4 whitespace-nowrap">Banana</td>
-        <td className="px-6 py-4 whitespace-nowrap">Ingredient</td>
-        <td className="px-6 py-4 whitespace-nowrap">5</td>
-        <td className="px-6 py-4 whitespace-nowrap">September 6, 2024</td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <button>Edit</button>
-          <button>Delete</button>
+        <td className="px-6 py-4 font-medium whitespace-nowrap">
+          {Item.inventory_id}
         </td>
-      </tr>
-      <tr className="border-b dark:border-neutral-500">
-        <td className="px-6 py-4 font-medium whitespace-nowrap">2</td>
-        <td className="px-6 py-4 whitespace-nowrap">Test</td>
-        <td className="px-6 py-4 whitespace-nowrap">Miscellaneous</td>
-        <td className="px-6 py-4 whitespace-nowrap">5</td>
-        <td className="px-6 py-4 whitespace-nowrap">Banana</td>
+        <td className="px-6 py-4 whitespace-nowrap">{Item.item_name}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{Item.item_type}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{Item.qty}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{Item.expiry_date}</td>
         <td className="px-6 py-4 whitespace-nowrap">
           <button>Edit</button>
           <button>Delete</button>
