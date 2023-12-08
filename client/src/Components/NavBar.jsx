@@ -49,12 +49,12 @@ function NavBar() {
               href=""
               className="flex items-center space-x-3 rtl:space-x-reverse"
             >
-              <Link to="/dashboard"><img
+              <Link to="/about-us"><img
                 src={BakingBreadLogo}
                 className="w-16 h-16 lg:w-24 lg:h-24 xl:w-32 xl:h-32"
                 alt="Banana Cupcake Logo"
               /></Link>
-               <Link to="/dashboard"><span className="self-center text-2xl font-semibold whitespace-nowrap md:text-white dark:text-white">
+               <Link to="/about-us"><span className="self-center text-2xl font-semibold whitespace-nowrap md:text-white dark:text-white">
                 Banana Cupcake
               </span></Link>
             </a>
