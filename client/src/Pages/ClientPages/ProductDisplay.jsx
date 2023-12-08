@@ -36,7 +36,7 @@ function ProductDisplay() {
         </svg>
         <p className="font-medium text-md">120</p> */}
             </div>
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               {/* <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-box-model" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M8 8h8v8h-8z" />
@@ -64,7 +64,7 @@ function ProductDisplay() {
 
             <div className="flex items-center pt-2 text-neutral-500"></div>
 
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               <p className="font-medium line-clamp-1">
                 Chocolate Banana Cupcake
               </p>
@@ -84,7 +84,7 @@ function ProductDisplay() {
 
             <div className="flex items-center pt-2 text-neutral-500"></div>
 
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               <p className="font-medium line-clamp-1">Lemon Banana Cupcake</p>
             </div>
           </div>
@@ -102,7 +102,7 @@ function ProductDisplay() {
 
             <div className="flex items-center pt-2 text-neutral-500"></div>
 
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               <p className="font-medium line-clamp-1">
                 Peanut Butter Banana Cupcake
               </p>
@@ -122,7 +122,7 @@ function ProductDisplay() {
 
             <div className="flex items-center pt-2 text-neutral-500"></div>
 
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               <p className="font-medium line-clamp-1">
                 Strawberry Banana Cupcake
               </p>
@@ -142,7 +142,7 @@ function ProductDisplay() {
 
             <div className="flex items-center pt-2 text-neutral-500"></div>
 
-            <div className="flex items-center justify-center text-emerald-800">
+            <div className="flex items-center justify-center text-black">
               <p className="font-medium line-clamp-1">
                 Vanilla Bean Banana Cupcake
               </p>

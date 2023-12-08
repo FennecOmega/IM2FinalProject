@@ -15,7 +15,7 @@ function AboutUs() {
               <span className="relative text-white">Banana Cupcake</span>
             </span>
           </h1>
-          <p className="mt-10 text-emerald-700">
+          <p className="mt-10 text-black-700">
             Delicious Cupcakes For You and Your Family
           </p>
         </section>
