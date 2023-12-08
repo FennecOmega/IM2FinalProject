@@ -1,134 +1,96 @@
-const router = require("express").Router();
-const db = require("../database");
+const router = require('express').Router();
+const db = require('../database');
 
-router.post("/addProductToInventory", (req, res) => {
-  const {
-    productName,
-    productDesc,
-    unitPrice,
-    imageUrl,
-    supplierId,
-    quantity,
-  } = req.body;
+router.post('/addProduct', (req, res) => {
+  const { product_name, product_desc, product_image_url, unit_price, expiry_date, quantity } = req.body;
 
-  db.query(
-    "SELECT product_id FROM product WHERE product_name = ? AND product_desc = ?",
-    [productName, productDesc],
-    (error, results, fields) => {
-      if (error) {
-        res.status(500).json({ error: "Database error" });
+  // Check if the product already exists in the product table
+  db.query('SELECT * FROM product WHERE product_name = ?', [product_name], (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Database error1' });
+      return;
+    }
+
+    if (results.length > 0) {
+      // If the product exists, update the inventory quantity
+      const productId = results[0].product_id;
+      db.query('UPDATE inventory SET quantity = quantity + ? WHERE product_id = ?',
+        [quantity, productId],
+        (error) => {
+          if (error) {
+            res.status(500).json({ error: 'Database error2' });
+            return;
+          }
+          res.status(200).json({ message: 'Inventory updated' });
+        });
+    } else {
+      // If the product doesn't exist, create a new product and add it to inventory
+      db.query('INSERT INTO product (product_name, product_desc, product_image_url, unit_price, expiry_date) VALUES (?, ?, ?, ?, ?)',
+        [product_name, product_desc, product_image_url, unit_price, expiry_date],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Database error3' });
+            return;
+          }
+          
+          const productId = results.insertId;
+          db.query('INSERT INTO inventory (product_id, quantity) VALUES (?, ?)',
+            [productId, quantity],
+            (error) => {
+              console.log(error);
+              if (error) {
+                res.status(500).json({ error: 'Database error4' });
+                return;
+              }
+              res.status(200).json({ message: 'New product and inventory entry added' });
+            });
+        });
+    }
+  });
+});
+
+//POST route to handle order creation
+router.post('/order', (req, res) => {
+  const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
+
+  // First, check if the customer exists in the database
+  db.query('SELECT * FROM customer WHERE customer_id = ?', [customer_id], (error, customerResult) => {
+    if (error) {
+      console.error('Error checking customer:', error);
+      res.status(500).json({ message: 'Error checking customer' });
+      return;
+    }
+
+    if (customerResult.length === 0) {
+      res.status(404).json({ message: 'Customer not found' });
+      return;
+    }
+
+    // Customer exists, proceed with order creation
+    const newOrder = { customer_id, transaction_date, completion_date: order_status === 'APPROVED' ? new Date() : null, ArrayOfProduct, payment_method, total_price, order_status };
+
+    const values = [
+      newOrder.customer_id,
+      newOrder.transaction_date,
+      newOrder.completion_date,
+      JSON.stringify(newOrder.ArrayOfProduct),
+      newOrder.payment_method,
+      newOrder.total_price,
+      newOrder.order_status
+    ];
+
+    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', values, (orderError, result) => {
+      if (orderError) {
+        console.error('Error inserting order:', orderError);
+        res.status(500).json({ message: 'Error creating order' });
         return;
       }
 
-      if (results.length > 0) {
-        const productId = results[0].product_id;
-        db.query(
-          "SELECT * FROM inventory WHERE product_id = ?",
-          [productId],
-          (error, invResults, fields) => {
-            if (error) {
-              res.status(500).json({ error: "Database error" });
-              return;
-            }
-
-            if (invResults.length > 0) {
-              db.query(
-                "UPDATE inventory SET quantity = quantity + ?, supplier_id = ?, item_type = CASE WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? ELSE ? END WHERE product_id = ?",
-                [
-                  quantity,
-                  supplierId,
-                  "%product%",
-                  "product",
-                  "%ingredient%",
-                  "ingredient",
-                  "%miscellaneous%",
-                  "miscellaneous",
-                  "unknown",
-                  productId,
-                ],
-                (error) => {
-                  if (error) {
-                    res.status(500).json({ error: "Database error" });
-                    return;
-                  }
-                  res.status(200).json({ message: "Inventory updated" });
-                }
-              );
-            } else {
-              db.query(
-                "INSERT INTO inventory (product_id, supplier_id, quantity, expiry_date, item_type) VALUES (?, ?, ?, ?, CASE WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? ELSE ? END)",
-                [
-                  productId,
-                  supplierId,
-                  quantity,
-                  "expiry_date",
-                  "%product%",
-                  "product",
-                  "%ingredient%",
-                  "ingredient",
-                  "%miscellaneous%",
-                  "miscellaneous",
-                  "unknown",
-                ],
-                (error) => {
-                  if (error) {
-                    res.status(500).json({ error: "Database error" });
-                    return;
-                  }
-                  res
-                    .status(200)
-                    .json({ message: "New inventory entry added" });
-                }
-              );
-            }
-          }
-        );
-      } else {
-        db.query(
-          "INSERT INTO product (product_name, product_desc, unit_price, product_image_url) VALUES (?, ?, ?, ?)",
-          [productName, productDesc, unitPrice, imageUrl],
-          (error, results, fields) => {
-            if (error) {
-              res.status(500).json({ error: "Database error" });
-              return;
-            }
-
-            const productId = results.insertId;
-            db.query(
-              "INSERT INTO inventory (product_id, supplier_id, quantity, expiry_date, item_type) VALUES (?, ?, ?, ?, CASE WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? WHEN product_desc LIKE ? THEN ? ELSE ? END)",
-              [
-                productId,
-                supplierId,
-                quantity,
-                "expiry_date",
-                "%product%",
-                "product",
-                "%ingredient%",
-                "ingredient",
-                "%miscellaneous%",
-                "miscellaneous",
-                "unknown",
-              ],
-              (error) => {
-                if (error) {
-                  res.status(500).json({ error: "Database error" });
-                  return;
-                }
-                res
-                  .status(200)
-                  .json({ message: "New product and inventory entry added" });
-              }
-            );
-          }
-        );
-      }
-    }
-  );
+      console.log('Order inserted:', result.insertId);
+      res.status(201).json({ message: 'Order created successfully', order_id: result.insertId });
+    });
+  });
 });
-
-// router.get("/getInventory", (req, res) => {
-//   const inventory = db.query("SELECT * FROM inventory")
-
-// })
 
 module.exports = router;
