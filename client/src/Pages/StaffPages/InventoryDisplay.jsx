@@ -1,29 +1,38 @@
 import "../../index.css";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function InventoryDisplay() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [newIngredient, setNewIngredient] = useState({
+  const [data, setData] = useState([]);
+  const [newInventory, setNewInventory] = useState({
     name: "",
     quantity: "",
   });
 
-  const data = [
-    // attributes from database?? Still not able to search/filter
-  ];
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/product/send-product-list")
+      .then(function (response) {
+        setData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
   const filteredData = data.filter((item) =>
-    item.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+    item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddIngredient = () => {
-    // Logic to handle adding the new ingredient to database
+  const handleAddInventory = () => {
+    // Logic to handle adding the new Inventory to database
     // For now this is temporary
-    console.log("New Ingredient:", newIngredient);
+    console.log("New Inventory:", newInventory);
 
-    setNewIngredient({ name: "", quantity: "" });
+    setNewInventory({ name: "", quantity: "" });
     setShowPopup(false);
   };
 
@@ -62,14 +71,14 @@ function InventoryDisplay() {
         {showPopup && (
           <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
             <div className="p-4 bg-white rounded-md">
-              <h2 className="mb-4 text-xl font-semibold">Add New Ingredient</h2>
+              <h2 className="mb-4 text-xl font-semibold">Add New Inventory</h2>
               <label className="block mb-2">
                 Name:
                 <input
                   type="text"
-                  value={newIngredient.name}
+                  value={newInventory.name}
                   onChange={(e) =>
-                    setNewIngredient({ ...newIngredient, name: e.target.value })
+                    setNewInventory({ ...newInventory, name: e.target.value })
                   }
                   className="w-full p-2 border rounded-md"
                 />
@@ -78,10 +87,10 @@ function InventoryDisplay() {
                 Quantity:
                 <input
                   type="text"
-                  value={newIngredient.quantity}
+                  value={newInventory.quantity}
                   onChange={(e) =>
-                    setNewIngredient({
-                      ...newIngredient,
+                    setNewInventory({
+                      ...newInventory,
                       quantity: e.target.value,
                     })
                   }
@@ -89,7 +98,7 @@ function InventoryDisplay() {
                 />
               </label>
               <button
-                onClick={handleAddIngredient}
+                onClick={handleAddInventory}
                 className="px-4 py-2 text-white bg-blue-500 rounded-md"
               >
                 Add
@@ -134,38 +143,9 @@ function InventoryDisplay() {
 
                   {/*Please turn this into a component*/}
                   <tbody>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="px-6 py-4 font-medium whitespace-nowrap">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">Banana</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        Ingredient
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">5</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        September 6, 2024
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </td>
-                    </tr>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="px-6 py-4 font-medium whitespace-nowrap">
-                        2
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">Test</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        Miscellaneous
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">5</td>
-                      <td className="px-6 py-4 whitespace-nowrap">Banana</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </td>
-                    </tr>
+                    {filteredData.map((data) => (
+                      <InventoryRow />
+                    ))}
                   </tbody>
                 </table>
               </div>
