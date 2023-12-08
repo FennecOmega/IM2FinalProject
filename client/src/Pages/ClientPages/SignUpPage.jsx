@@ -1,48 +1,63 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import DatePicker from "../../Components/DatePicker.jsx";
 
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
-  const [selectedDay, setSelectedDay] = useState(2);
-  const [selectedMonth, setSelectedMonth] = useState("0");
-  const [selectedYear, setSelectedYear] = useState(2023);
+  // const [selectedDay, setSelectedDay] = useState(2);
+  // const [selectedMonth, setSelectedMonth] = useState("0");
+  // const [selectedYear, setSelectedYear] = useState(2023);
 
-  const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
+  const [selectedDate, setSelectedDate] = useState({
+    day: 1,
+    month: "0",
+    year: 2023,
+  });
 
-  const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value);
-  };
+  console.log(selectedDate);
+  console.log(
+    new Date(selectedDate.year, selectedDate.month, selectedDate.day)
+  );
+  // const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
 
-  const handleDayChange = (e) => {
-    setSelectedDay(e.target.value);
-  };
+  // const handleMonthChange = (e) => {
+  //   setSelectedDate({...selectedDate, month: e.target.value});
+  // };
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
-  };
+  // const handleDayChange = (e) => {
+  //   setSelectedDate({...selectedDate, day: e.target.value});
+  // };
 
-  useEffect(() => {
-    const daysInMonth = calculateDaysInMonth(selectedMonth, selectedYear) + 1;
-    if (selectedDay > daysInMonth) {
-      setSelectedDay(daysInMonth);
-    }
-  }, [selectedDay, selectedMonth, selectedYear]);
+  // const handleYearChange = (e) => {
+  //   setSelectedDate({...selectedDate, year: e.target.value});
+  // };
 
-  const calculateDaysInMonth = (month, year) => {
-    if (month === "1") {
-      return year % 4 === 0 ? 29 : 28;
-    } else if (["3", "5", "8", "10"].includes(month)) {
-      return 30;
-    } else {
-      return 31;
-    }
-  };
+  // useEffect(() => {
+  //   const daysInMonth = calculateDaysInMonth(selectedDate.Month, selectedDate.Year) + 1;
+  //   if (selectedDate.day > daysInMonth) {
+  //     setSelectedDate({...selectedDate, daysInMonth});
+  //   }
+  // }, [selectedDate.day, selectedDate.month, selectedDate.year]);
+
+  // const calculateDaysInMonth = (month, year) => {
+  //   if (month === "1") {
+  //     return year % 4 === 0 ? 29 : 28;
+  //   } else if (["3", "5", "8", "10"].includes(month)) {
+  //     return 30;
+  //   } else {
+  //     return 31;
+  //   }
+  // };
 
   async function handleClick() {
-    const date = new Date(selectedYear, selectedMonth, selectedDay);
+    const date = new Date(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day
+    );
     const bdate = date.toISOString().slice(0, 10);
 
     const userDetails = {
@@ -153,73 +168,11 @@ function SignUpPage() {
             ></input>
           </div>
 
-          <label htmlFor="birthday" className="block mb-3 text-gray-600">
-            Birthday
-          </label>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div>
-              <label htmlFor="month" className="block text-gray-600">
-                Month
-              </label>
-              <select
-                id="month"
-                name="month"
-                onChange={handleMonthChange}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                <option value="0">January</option>
-                <option value="1">February</option>
-                <option value="2">March</option>
-                <option value="3">April</option>
-                <option value="4">May</option>
-                <option value="5">June</option>
-                <option value="6">July</option>
-                <option value="7">August</option>
-                <option value="8">September</option>
-                <option value="9">October</option>
-                <option value="10">November</option>
-                <option value="11">December</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="day" className="block text-gray-600">
-                Day
-              </label>
-              <select
-                id="day"
-                name="day"
-                onChange={handleDayChange}
-                value={selectedDay}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                {Array.from(
-                  { length: calculateDaysInMonth(selectedMonth, selectedYear) },
-                  (_, i) => i + 1
-                ).map((day) => (
-                  <option key={day} value={day + 1}>
-                    {day}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="year" className="block text-gray-600">
-                Year
-              </label>
-              <select
-                id="year"
-                name="year"
-                onChange={handleYearChange}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <DatePicker
+            Date={selectedDate}
+            DateChange={setSelectedDate}
+            DateType="Birthday"
+          />
 
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-600">
