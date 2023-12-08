@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import "../index.css";
 import "../ui/Login.css";
-import BakingBreadLogo from "/data/images/Breaking_Bad_logo.png";
+import BakingBreadLogo from "/data/images/altlogo.png";
 import { useAuthContext } from "../hooks/useAuthContext.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 

@@ -1,5 +1,5 @@
 // NOTE: To be used ONLY in client pages
-import BakingBreadLogo from "/data/images/Breaking_Bad_logo.png";
+import BakingBreadLogo from "/data/images/mainlogo.png";
 
 function Footer() {
   return (
@@ -10,7 +10,7 @@ function Footer() {
             <img
               src={BakingBreadLogo}
               className="h-12"
-              alt="Baking Bread Logo"
+              alt="Banana Cupcake Logo"
             />
             <div className="flex gap-20">
               <ul>
