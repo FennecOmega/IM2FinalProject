@@ -53,21 +53,13 @@ function AboutUs() {
         </section>
       </div>
       <div className="h-fit bg-gradient-to-tr from-amber-100 to-lime-50">
-        <div className="max-w-xl mx-auto py-12">
+        <div className="max-w-xl mx-auto py-9">
           <h1 className="py-3 text-3xl font-bold text-center">About Us</h1>
           <div className="text-3xl font-semibold text-center">
             <span className="relative inline-block p-1 mx-3 before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-yellow-400 before:shadow-xl before:shadow-yellow-500/75">
               <span className="relative">Banana Cupcake</span>
             </span>
           </div>
-      <main class="h-fit bg-gradient-to-tr from-amber-100 to-lime-50">
-  <div class="mx-auto max-w-xl py-12">
-    <h1 class="py-3 text-center text-3xl font-bold">About Us</h1>
-    <div class="text-center text-3xl font-semibold">
-      <span class="relative mx-3 inline-block p-1 before:absolute before:-inset-1 before:block before:-skew-y-2 before:bg-yellow-400 before:shadow-xl before:shadow-yellow-500/75">
-        <span class="relative">Banana Cupcake</span>
-      </span>
-    </div>
 
           <div className="text-center mt-9">
             <p>
@@ -112,7 +104,7 @@ function AboutUs() {
             </div>
           </div>
 
-          <div className="py-8 text-2xl font-semibold text-center">
+          <div className="py-4 text-2xl font-semibold text-center">
             <div className="h-1 my-5 rounded-full bg-gradient-to-r via-yellow-400"></div>
             <p>
               Discover the joy of

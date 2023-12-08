@@ -100,13 +100,13 @@ function SignUpPage() {
           <p className="mb-3">Be a Banana Cupcake Member now!</p>
           <p className="mb-3">
             Already have an account?{" "}
-              <Link to="/login-page">
-                <span className="font-bold text-amber-900 hover:text-amber-600">Login here</span>
+              <Link to="/login-page">            
+              <span className="font-bold text-amber-900"> Login here </span>
               </Link>
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
-              <label htmlFor="first_name" className="font-semibold block text-gray-600">
+              <label htmlFor="first_name" className="block text-gray-600">
                 First Name
               </label>
               <input
@@ -120,7 +120,7 @@ function SignUpPage() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="last_name" className="font-semibold block text-gray-600">
+              <label htmlFor="last_name" className="block text-gray-600">
                 Last Name
               </label>
               <input
@@ -136,7 +136,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="contact_number" className="font-semibold block text-gray-600">
+            <label htmlFor="contact_number" className="block text-gray-600">
               Contact Number
             </label>
             <input
@@ -154,7 +154,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="address" className="font-semibold block text-gray-600">
+            <label htmlFor="address" className="block text-gray-600">
               Address
             </label>
             <input
@@ -168,76 +168,14 @@ function SignUpPage() {
             ></input>
           </div>
 
-          <label htmlFor="birthday" className="block mb-3 text-gray-600">
-            Birthday
-          </label>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div>
-              <label htmlFor="month" className="block text-gray-600">
-                Month
-              </label>
-              <select
-                id="month"
-                name="month"
-                onChange={handleMonthChange}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                <option value="0">January</option>
-                <option value="1">February</option>
-                <option value="2">March</option>
-                <option value="3">April</option>
-                <option value="4">May</option>
-                <option value="5">June</option>
-                <option value="6">July</option>
-                <option value="7">August</option>
-                <option value="8">September</option>
-                <option value="9">October</option>
-                <option value="10">November</option>
-                <option value="11">December</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="day" className="block text-gray-600">
-                Day
-              </label>
-              <select
-                id="day"
-                name="day"
-                onChange={handleDayChange}
-                value={selectedDay}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                {Array.from(
-                  { length: calculateDaysInMonth(selectedMonth, selectedYear) },
-                  (_, i) => i + 1
-                ).map((day) => (
-                  <option key={day} value={day + 1}>
-                    {day}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="year" className="block text-gray-600">
-                Year
-              </label>
-              <select
-                id="year"
-                name="year"
-                onChange={handleYearChange}
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              >
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <DatePicker
+            Date={selectedDate}
+            DateChange={setSelectedDate}
+            DateType="Birthday"
+          />
 
           <div className="mb-4">
-            <label htmlFor="email" className="font-semibold block text-gray-600">
+            <label htmlFor="email" className="block text-gray-600">
               Email
             </label>
             <input
@@ -252,7 +190,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="font-semibold block text-gray-600">
+            <label htmlFor="password" className="block text-gray-600">
               Password
             </label>
             <input
@@ -267,7 +205,7 @@ function SignUpPage() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="confirm_password" className="font-semibold block text-gray-600">
+            <label htmlFor="confirm_password" className="block text-gray-600">
               Confirm Password
             </label>
             <input
@@ -281,12 +219,12 @@ function SignUpPage() {
             />
           </div>
 
-          <p className="mb-4 text-sm">
+          <p className="mb-3 text-sm">
             By creating an account. You agree to our Terms & Conditions and
             Privacy Policy
           </p>
           <button
-            className="px-10 py-3 font-bold text-white bg-yellow-400 rounded-full"
+            className="px-10 py-2 text-white bg-yellow-400 rounded-full"
             onClick={handleClick}
             type="submit"
           >
