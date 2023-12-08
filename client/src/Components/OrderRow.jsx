@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function OrderRow({ Order, Edit, Approve, Cancel }) {
+function OrderRow({ Order, Edit, Approve, Cancel, index }) {
   const [prodList, setProdList] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/product/send-product-list")
+      .get("http://localhost:3001/product/send-product-list")
       .then(function (response) {
         setProdList(response.data);
       })
@@ -46,7 +46,7 @@ function OrderRow({ Order, Edit, Approve, Cancel }) {
     <>
       <tr
         className={
-          true
+          index % 2 == 0
             ? "bg-white border-b dark:bg-gray-800 dark:border-gray-700"
             : "bg-white dark:bg-gray-800"
         }

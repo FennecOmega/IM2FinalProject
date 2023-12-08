@@ -8,7 +8,7 @@ function ResetForgottenPassword() {
 
   async function sendNewPassword(newUser) {
     await axios
-      .put("http://localhost:3007/ForgetPassword", newUser)
+      .put("http://localhost:3001/ForgetPassword", newUser)
       .then(function (response) {
         console.log(response);
         toast.success(response.data, {

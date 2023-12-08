@@ -144,6 +144,22 @@ function NavBar() {
                   Order Now
                 </Link>
               </li>
+              {user != null ? (
+                <li>
+                  <Link
+                    to="/view-profile"
+                    className={
+                      location.pathname == "/view-profile"
+                        ? "currentPage"
+                        : "otherPage"
+                    }
+                  >
+                    View Profile
+                  </Link>
+                </li>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>

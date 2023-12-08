@@ -1,11 +1,21 @@
-import { createContext, useState } from "react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { createContext, useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 export const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
   const [currentCart, setCurrentCart] = useState(null);
+
+  const getLocalStorageCart = () => {
+    const storedCart = localStorage.getItem("cartKey");
+    if (storedCart) {
+      setCurrentCart(JSON.parse(storedCart));
+    }
+  };
+
+  useEffect(() => {
+    getLocalStorageCart();
+  }, []);
 
   const handleCart = (cart) => {
     // setCurrentCart(cart);
@@ -19,7 +29,7 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const globalState = {
-    user: currentCart,
+    cart: currentCart,
     handleCart,
     handleEmptyCart,
   };

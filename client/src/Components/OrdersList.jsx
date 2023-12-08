@@ -94,6 +94,7 @@ function OrdersList({ Orders, setOrder, item, setItem }) {
                 Approve={approveFunction}
                 Cancel={cancelFunction}
                 key={index}
+                index={index}
               />
             ))}
           </tbody>
