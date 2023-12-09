@@ -2,13 +2,23 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useAuthContext } from "../hooks/useAuthContext";
+import AuthContext from "../context/AuthContext";
+import { useState, useEffect } from "react";
 
-const DashboardSideBar = ({ isOpen, onClose }) => {
+const DashboardSideBar = () => {
+  const { user, handleLogout } = useAuthContext(AuthContext);
+  const [sidebar, setSideBar] = useState(false);
+  const dashboardStyle = useEffect(() => {
+    user.permissions != "Customer" && user.permissions != null
+      ? setSideBar(true)
+      : setSideBar(false);
+  }, []);
+
   const sidebarStyles = {
     position: "absolute",
     top: "1",
-    left: isOpen ? 0 : "-150px",
+    left: true ? 0 : "-150px",
     width: "64px",
     backgroundColor: "#fff",
     transition: "left 0.3s ease-in-out",
@@ -176,7 +186,7 @@ const DashboardSideBar = ({ isOpen, onClose }) => {
                 </li>
 
                 <li>
-                  <a href="/">
+                  <button onClick={handleLogout}>
                     <div className="flex items-center gap-2 px-3 py-3 cursor-pointer hover:bg-green-700 hover:text-white">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +207,7 @@ const DashboardSideBar = ({ isOpen, onClose }) => {
                       </svg>
                       Logout
                     </div>
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -206,11 +216,6 @@ const DashboardSideBar = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
-};
-
-DashboardSideBar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default DashboardSideBar;
