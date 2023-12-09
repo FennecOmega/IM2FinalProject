@@ -24,56 +24,6 @@ function OrderForms() {
       });
   }, []);
 
-  // async function postorder(order) {
-  //   await axios
-  //     .post("http://localhost:3001/order/add-order", order)
-  //     .then(function (response) {
-  //       console.log(response);
-  //       toast.success(response.data, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       return (document.getElementById("errMessage").innerHTML =
-  //         response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //       toast.error(error.response.data.error, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       return (document.getElementById("errMessage").innerHTML =
-  //         error.response.data.error);
-  //     });
-  // }
-
-  // async function handleClick() {
-  //   var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-  //   var localISOTime = new Date(Date.now() - tzoffset)
-  //     .toISOString()
-  //     .slice(0, 19)
-  //     .replace("T", " ");
-  //   console.log(localISOTime);
-
-  //   const order = {
-  //     ID: 0,
-  //     TransactionDate: localISOTime,
-  //     Name: details.Name,
-  //     Contact: details.Contact,
-  //     OrderedProducts: itemList.map(
-  //       (item) => ((item.Subtotal = item.Price * item.Qty), item)
-  //     ),
-  //     TotalPrice: itemList.reduce(
-  //       (currPrice, item) => (currPrice += item.Subtotal),
-  //       0
-  //     ),
-  //     PaymentMethod: "",
-  //     Status: "PENDING",
-  //   };
-
-  //   console.log(order);
-  //   await postorder(order);
-  //   handleEmptyCart([]);
-  // }
-
   // todo: create a functional order
 
   return (
