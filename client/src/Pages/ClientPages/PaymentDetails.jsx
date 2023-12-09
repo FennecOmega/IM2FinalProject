@@ -42,7 +42,10 @@ function PaymentDetails() {
     loader();
   }, [user, navigate]);
 
-  const [paymentDetails, setPaymentDetails] = useState({});
+  const [paymentDetails, setPaymentDetails] = useState({
+    payment_method: "Onsite",
+    gcash_reference: "",
+  });
 
   return (
     <>

@@ -108,7 +108,7 @@ router.get("/getProduct", (req, res) => {
       res.status(404).json({ error: 'Products do not exist' });
       return;
     } else {
-      res.status(200).json(results); // Sending results as JSON
+      res.send(results)
     }
   });
 });

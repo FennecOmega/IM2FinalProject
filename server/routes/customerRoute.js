@@ -102,7 +102,7 @@ router.post("/login-page", (req, res) => {
           const UD = await getDetails();
           console.log(UD);
           const userDetails = {
-            customer_id: user.customer_id,
+            id_no: user.id_no,
             fname: UD.fname,
             midname: UD.midname,
             lname: UD.lname,
@@ -247,7 +247,7 @@ router.post("/forgot-password", (req, res) => {
   });
 });
 
-router.patch('/editProfile', authToken, (req, res) => {
+router.patch('/editProfile', (req, res) => {
   const { fname, midname, lname, contact_no, birthdate, address } = req.body;
   const userId = req.user.id; // Assuming the authenticated user's ID is available in req.user
 

@@ -22,31 +22,16 @@ function OrderForms() {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  }, [1]);
 
   // todo: create a functional order
 
   return (
     <>
       <div className="items-center flex-1 mb-24">
-        <div className="max-w-xl px-12 py-8 mx-auto mt-16 text-center border-4 border-yellow-400 rounded-2xl">
+        <div className="max-w-xl px-0 py-8 mx-auto mt-16 text-center border-4 border-yellow-400 rounded-2xl">
           <h1 className="mb-3 text-3xl font-bold">Order Now!</h1>
-          <div className="mb-4">
-            <p className="font-semibold block text-gray-600">Name</p>
-            <input
-              id="username"
-              type="text"
-              className="w-5/6 p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-            ></input>
-          </div>
-          <div className="mb-4">
-            <p className="font-semibold block text-gray-600">Contact Number</p>
-            <input
-              id="contact"
-              type="text"
-              className="w-5/6 p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-            ></input>
-          </div>
+          <div className="mb-4"></div>
           <p className="mb-4 block font-semibold text-gray-600">Products</p>
           <div className="flex gap-4">
             {prodList.map((prod, index) => (
