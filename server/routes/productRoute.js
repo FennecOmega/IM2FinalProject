@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const db = require('../database');
+const permissionStaff = require('../middleware/permissionStaff');
 
-router.post('/addProduct', (req, res) => {
+router.post('/addProduct', permissionStaff, (req, res) => {
   const { product_name, product_desc, product_image_url, unit_price, expiry_date, quantity } = req.body;
 
   // Check if the product already exists in the product table
@@ -51,7 +52,7 @@ router.post('/addProduct', (req, res) => {
 });
 
 //POST route to handle order creation
-router.post('/order', (req, res) => {
+router.post('/order', permissionStaff, (req, res) => {
   const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
 
   // First, check if the customer exists in the database
@@ -90,6 +91,28 @@ router.post('/order', (req, res) => {
       console.log('Order inserted:', result.insertId);
       res.status(201).json({ message: 'Order created successfully', order_id: result.insertId });
     });
+  });
+});
+
+// GET route to retrieve a product by product_id
+router.get('/:product_id', permissionStaff, (req, res) => {
+  const productId = req.params.product_id;
+
+  // Check if the product exists in the database by product_id
+  db.query('SELECT * FROM product WHERE product_id = ?', [productId], (error, results) => {
+    if (error) {
+      console.error('Error fetching product:', error);
+      res.status(500).json({ message: 'Error fetching product' });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ message: 'Product not found' });
+      return;
+    }
+
+    const product = results[0];
+    res.status(200).json({ product });
   });
 });
 

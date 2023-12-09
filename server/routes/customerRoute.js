@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const db = require("../database");
 const bcrypt = require("bcrypt");
-const authToken = require("../middleware/authToken");
+const authToken = require('../middleware/authToken');
 
 // Logging In
 router.post("/login-page", (req, res) => {
@@ -41,7 +41,7 @@ router.post("/login-page", (req, res) => {
 
           const getDetails = async () => {
             return new Promise((resolve, reject) => {
-              if (user.user_type === "staff") {
+              if (user.user_type === "Staff") {
                 db.query(
                   "SELECT * FROM staff WHERE staff_id = ?",
                   [user.id_no],
@@ -129,18 +129,8 @@ router.post("/login-page", (req, res) => {
 });
 
 // Creating A new Customer
-router.post("/signup-page", async (req, res) => {
-  const {
-    fname,
-    midname,
-    lname,
-    contact_no,
-    birthdate,
-    address,
-    email,
-    password,
-    confirmedpassword,
-  } = req.body;
+router.post("/signup-page", authToken, async (req, res) => {
+  const { fname, midname, lname, contact_no, birthdate, address, email, password, confirmedpassword } = req.body;
 
   if (
     !fname ||
@@ -225,7 +215,7 @@ router.post("/signup-page", async (req, res) => {
 });
 
 // Forgetting Password
-router.post("/forgot-password", (req, res) => {
+router.post("/forgot-password", authToken, (req, res) => {
   const { email } = req.body;
 
   if (!email) {
