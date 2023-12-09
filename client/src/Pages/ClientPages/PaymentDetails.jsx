@@ -49,7 +49,7 @@ function PaymentDetails() {
 
   return (
     <>
-      <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-green-700 rounded-2xl">
+      <div className="max-w-lg px-12 py-5 mx-auto mt-16 text-center border-4 border-yellow-400 rounded-2xl">
         <h1 className="mb-3 text-3xl font-bold">Payment Details</h1>
         <div className="flex flex-col gap-4 mb-3">
           <div>
@@ -94,7 +94,7 @@ function PaymentDetails() {
           DateType="Pickup Date"
         />
         <button
-          className="px-10 py-1 text-white bg-green-700 rounded-full"
+          className="px-10 py-1 text-white bg-yellow-400 rounded-full"
           type="Go back"
           onClick={handleGoBack}
         >

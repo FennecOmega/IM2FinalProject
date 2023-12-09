@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 06:05 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Generation Time: Dec 09, 2023 at 04:33 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -70,6 +70,15 @@ CREATE TABLE `inventory` (
   `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`inventory_id`, `item_type`, `product_id`, `supplier_id`, `staff_id`, `quantity`) VALUES
+(4, NULL, 45, NULL, NULL, NULL),
+(5, NULL, 46, NULL, NULL, NULL),
+(6, NULL, 47, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -113,6 +122,15 @@ CREATE TABLE `product` (
   `unit_price` decimal(10,2) DEFAULT NULL,
   `expiry_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`product_id`, `product_name`, `product_desc`, `product_image_url`, `unit_price`, `expiry_date`) VALUES
+(45, 'Banana Cupcake', 'Banana Cupcake for the family', 'https://tornadoughalli.com/wp-content/uploads/2021/12/BANANA-CUPCAKES-4-1.jpg', 75.00, '0000-00-00'),
+(46, 'Banana Bread', 'Banana Bread for the family', 'https://www.superhealthykids.com/wp-content/uploads/2019/07/healthy-banana-bread-featured-image-2.jpg', 50.00, '2023-12-25'),
+(47, 'Banana Split', 'Banana Split for the family', 'https://static.toiimg.com/thumb/52500416.cms?imgsize=1164165&width=800&height=800', 135.00, '2023-12-25');
 
 -- --------------------------------------------------------
 
@@ -317,7 +335,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `order`
@@ -329,7 +347,7 @@ ALTER TABLE `order`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `receipt`

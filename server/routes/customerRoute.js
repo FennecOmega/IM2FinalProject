@@ -40,7 +40,9 @@ router.post("/login-page", (req, res) => {
           // GETS PERMISSION STATUS OF USER
 
           const getDetails = async () => {
+            console.log(user.user_type);
             return new Promise((resolve, reject) => {
+              
               if (user.user_type === "Staff") {
                 db.query(
                   "SELECT * FROM staff WHERE staff_id = ?",
@@ -244,4 +246,39 @@ router.post("/forgot-password", authToken, (req, res) => {
   });
 });
 
+router.patch('/editProfile', authToken, (req, res) => {
+  const { fname, midname, lname, contact_no, birthdate, address } = req.body;
+  const userId = req.user.id; // Assuming the authenticated user's ID is available in req.user
+
+  // Create an object containing updated profile information
+  const updatedProfile = {
+    fname: fname ? fname.trim() : undefined,
+    midname: midname ? midname.trim() : undefined,
+    lname: lname ? lname.trim() : undefined,
+    contact_no: contact_no ? contact_no.trim() : undefined,
+    birthdate: birthdate ? birthdate.trim() : undefined,
+    address: address ? address.trim() : undefined,
+  };
+
+  // Remove undefined fields from the updatedProfile object
+  Object.keys(updatedProfile).forEach((key) => updatedProfile[key] === undefined && delete updatedProfile[key]);
+
+  if (Object.keys(updatedProfile).length === 0) {
+    return res.status(400).json({ success: false, message: "No fields to update" });
+  }
+
+  // Update the user's profile information in the database
+  db.query('UPDATE user SET ? WHERE id = ?', [updatedProfile, userId], (err, result) => {
+    if (err) {
+      console.error("Error updating user profile:", err);
+      return res.status(500).json({ success: false, message: "Failed to update profile" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "User not found or no changes applied" });
+    }
+
+    return res.status(200).json({ success: true, message: "Profile updated successfully" });
+  });
+});
 module.exports = router;

@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const db = require('../database');
-const permissionStaff = require('../middleware/permissionStaff');
 
-router.post('/addProduct', permissionStaff, (req, res) => {
+router.post('/addProduct', (req, res) => {
   const { product_name, product_desc, product_image_url, unit_price, expiry_date, quantity } = req.body;
 
   // Check if the product already exists in the product table
@@ -52,7 +51,7 @@ router.post('/addProduct', permissionStaff, (req, res) => {
 });
 
 //POST route to handle order creation
-router.post('/order', permissionStaff, (req, res) => {
+router.post('/order', (req, res) => {
   const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
 
   // First, check if the customer exists in the database
@@ -94,9 +93,26 @@ router.post('/order', permissionStaff, (req, res) => {
   });
 });
 
+//GET route to retrieve the products
+router.get("/getProduct", (req, res) => {
+  db.query('SELECT * FROM product', (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Products do not exist' });
+      return;
+    } else {
+      res.status(200).json(results); // Sending results as JSON
+    }
+  });
+});
+
 // GET route to retrieve a product by product_id
-router.get('/:product_id', permissionStaff, (req, res) => {
-  const productId = req.params.product_id;
+router.get('/:id', (req, res) => {
+  const productId = req.params.id; // Using 'id' as the parameter here
 
   // Check if the product exists in the database by product_id
   db.query('SELECT * FROM product WHERE product_id = ?', [productId], (error, results) => {
@@ -115,22 +131,5 @@ router.get('/:product_id', permissionStaff, (req, res) => {
     res.status(200).json({ product });
   });
 });
-
-router.get("/getProduct", (req, res) => {
-  db.query('SELECT * FROM product', (error, results) => {
-    if (error) {
-      res.status(500).json({ error: 'Database error1' });
-      return;
-    }
-
-    if (results.length === 0) {
-      res.status(404).json({ error: 'Products do not exist' });
-      return;
-    }else{
-      res.send(results)
-    }
-   }
-  )
-})
 
 module.exports = router;
