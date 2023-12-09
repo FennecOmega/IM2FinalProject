@@ -41,8 +41,10 @@ function App() {
               element={
                 user == null ? (
                   <Navigate to="/about-us" />
-                ) : (
+                ) : user.permissions == "Customer" ? (
                   <Navigate to="/about-us" />
+                ) : (
+                  <Navigate to="/dashboard" />
                 )
               }
             />
