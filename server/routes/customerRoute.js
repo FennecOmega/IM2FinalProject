@@ -131,7 +131,7 @@ router.post("/login-page", (req, res) => {
 });
 
 // Creating A new Customer
-router.post("/signup-page", authToken, async (req, res) => {
+router.post("/signup-page", async (req, res) => {
   const { fname, midname, lname, contact_no, birthdate, address, email, password, confirmedpassword } = req.body;
 
   if (
@@ -246,11 +246,11 @@ router.post("/forgot-password", authToken, (req, res) => {
   });
 });
 
-router.patch('/editProfile', authToken, (req, res) => {
-  const { fname, midname, lname, contact_no, birthdate, address } = req.body;
-  const userId = req.user.id; // Assuming the authenticated user's ID is available in req.user
+router.patch('/editProfile/:id', (req, res) => {
+  const userId = req.params.id; // Fetch user ID from params
 
-  // Create an object containing updated profile information
+  const { fname, midname, lname, contact_no, birthdate, address } = req.body;
+
   const updatedProfile = {
     fname: fname ? fname.trim() : undefined,
     midname: midname ? midname.trim() : undefined,
@@ -260,15 +260,13 @@ router.patch('/editProfile', authToken, (req, res) => {
     address: address ? address.trim() : undefined,
   };
 
-  // Remove undefined fields from the updatedProfile object
   Object.keys(updatedProfile).forEach((key) => updatedProfile[key] === undefined && delete updatedProfile[key]);
 
   if (Object.keys(updatedProfile).length === 0) {
     return res.status(400).json({ success: false, message: "No fields to update" });
   }
 
-  // Update the user's profile information in the database
-  db.query('UPDATE user SET ? WHERE id = ?', [updatedProfile, userId], (err, result) => {
+  db.query('UPDATE customer SET ? WHERE customer_id = ?', [updatedProfile, userId], (err, result) => {
     if (err) {
       console.error("Error updating user profile:", err);
       return res.status(500).json({ success: false, message: "Failed to update profile" });
@@ -281,4 +279,5 @@ router.patch('/editProfile', authToken, (req, res) => {
     return res.status(200).json({ success: true, message: "Profile updated successfully" });
   });
 });
+
 module.exports = router;
