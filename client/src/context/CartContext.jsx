@@ -5,6 +5,7 @@ export const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
   const [currentCart, setCurrentCart] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   const getLocalStorageCart = () => {
     const storedCart = localStorage.getItem("cartKey");
@@ -21,6 +22,9 @@ export const CartContextProvider = ({ children }) => {
     if (currentCart != null) {
       currentCart.map(
         (item) => ((item.subtotal = item.unit_price * item.qty), item)
+      );
+      console.log(
+        currentCart.reduce((currPrice, item) => (currPrice += item.subtotal), 0)
       );
       return currentCart.reduce(
         (currPrice, item) => (currPrice += item.subtotal),
@@ -50,6 +54,7 @@ export const CartContextProvider = ({ children }) => {
       setCurrentCart([...currentCart, product]);
     } else {
       currentCart[newProductIndex].qty++;
+      setRefresh(!refresh);
     }
     localStorage.setItem("cartKey", JSON.stringify(currentCart));
   };
@@ -60,6 +65,7 @@ export const CartContextProvider = ({ children }) => {
       .indexOf(item.product_id);
     if (temp != -1 && currentCart[temp].qty > 0) {
       currentCart[temp].qty--;
+      setRefresh(!refresh);
       if (currentCart[temp].qty == 0) {
         setCurrentCart(currentCart.filter((i) => i.qty > 0));
       }
@@ -70,9 +76,9 @@ export const CartContextProvider = ({ children }) => {
   };
 
   function retQty(ID) {
-    var a = currentCart.findIndex((i) => ID == i.ProductID);
+    var a = currentCart.findIndex((i) => ID == i.product_id);
     if (a != -1) {
-      return currentCart[a].Qty;
+      return currentCart[a].qty;
     } else {
       return 0;
     }

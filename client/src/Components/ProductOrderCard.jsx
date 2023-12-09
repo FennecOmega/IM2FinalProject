@@ -24,7 +24,7 @@ function ProductOrderCard({ item }) {
             {FormatPriceToPhp(item.unit_price)}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            Quantity: {() => retQty(item.product_id)}
+            Quantity: {retQty(item.product_id)}
           </span>
           <div className="flex mt-4 md:mt-6">
             <button

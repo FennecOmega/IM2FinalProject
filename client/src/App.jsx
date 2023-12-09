@@ -28,7 +28,7 @@ function App() {
         <header>
           {user == null ? (
             <NavBar />
-          ) : user.user_permissions == "Customer" ? (
+          ) : user.permissions == "Customer" ? (
             <NavBar />
           ) : (
             <DashboardSideBar />

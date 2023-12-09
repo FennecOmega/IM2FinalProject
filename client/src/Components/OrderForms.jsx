@@ -105,7 +105,7 @@ function OrderForms() {
           </div>
 
           <p className="mb-8 font-bold block text-gray-600">
-            Current Total: {() => setTotal()}
+            Current Total: {FormatPriceToPhp(setTotal())}
           </p>
           <div>
             <button
@@ -114,10 +114,7 @@ function OrderForms() {
             >
               REMOVE ALL ITEMS
             </button>
-            <Link
-              to="/order-form/payment-details"
-              state={FormatPriceToPhp(setTotal())}
-            >
+            <Link to="/order-form/payment-details">
               <button className="bg-green-500 text-white">GO TO PAYMENT</button>
             </Link>
           </div>
