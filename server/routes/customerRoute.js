@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const db = require("../database");
 const bcrypt = require("bcrypt");
-const authToken = require('../middleware/authToken');
+// cons = require('../middlewar');
 
 // Logging In
 router.post("/login-page", (req, res) => {
@@ -102,6 +102,7 @@ router.post("/login-page", (req, res) => {
           const UD = await getDetails();
           console.log(UD);
           const userDetails = {
+            customer_id: user.customer_id,
             fname: UD.fname,
             midname: UD.midname,
             lname: UD.lname,
@@ -217,7 +218,7 @@ router.post("/signup-page", async (req, res) => {
 });
 
 // Forgetting Password
-router.post("/forgot-password", authToken, (req, res) => {
+router.post("/forgot-password", (req, res) => {
   const { email } = req.body;
 
   if (!email) {

@@ -19,6 +19,7 @@ import SuccessChangedPassword from "./Pages/ClientPages/SuccessChangedPassword.j
 import CheckEmailNewPassword from "./Pages/ClientPages/CheckEmailNewPassword.jsx";
 import ViewProfile from "./Pages/ClientPages/ViewProfile.jsx";
 import PaymentDetails from "./Pages/ClientPages/PaymentDetails.jsx";
+import ConfirmDetails from "./Pages/ClientPages/ConfirmDetails.jsx";
 
 function App() {
   const { user } = useAuthContext(AuthContext);
@@ -56,6 +57,10 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order-list" element={<OrderList />} />
+            <Route
+              path="/order-form/confirm-order"
+              element={<ConfirmDetails />}
+            />
             <Route
               path="/order-form/payment-details"
               element={<PaymentDetails />}

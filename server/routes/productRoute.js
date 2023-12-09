@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const db = require('../database');
 
+
 router.post('/addProduct', (req, res) => {
   const { item_type, product_name, product_desc, product_image_url, unit_price, expiry_date, quantity, supplier_id, staff_id } = req.body;
 
@@ -75,19 +76,21 @@ router.post('/order', (req, res) => {
     }
 
     // Customer exists, proceed with order creation
-    const newOrder = { customer_id, transaction_date, completion_date: order_status === 'APPROVED' ? new Date() : null, ArrayOfProduct, payment_method, total_price, order_status };
+    const newOrder = { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, gcash_reference, total_price, order_status };
 
-    const orderValues = [
+    // order_status === 'APPROVED' ? new Date()
+    const values = [
       newOrder.customer_id,
       newOrder.transaction_date,
       newOrder.completion_date,
       JSON.stringify(newOrder.ArrayOfProduct),
       newOrder.payment_method,
+      newOrder.gcash_reference,
       newOrder.total_price,
       newOrder.order_status
     ];
 
-    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', orderValues, (orderError, orderResult) => {
+    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', values, (orderError, orderResult) => {
       if (orderError) {
         console.error('Error inserting order:', orderError);
         res.status(500).json({ message: 'Error creating order' });
