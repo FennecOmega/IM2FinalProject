@@ -1,7 +1,26 @@
 import "../../index.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { useEffect } from "react";
 
 function Dashboard() {
+  const { user } = useAuthContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loader = async () => {
+      console.log(user);
+      if (user.user_type != "Staff") {
+        navigate("/about-us");
+      }
+    };
+
+    loader();
+  }, [user, navigate]);
+
   return (
     <>
       <div class="p-6 sm:p-10 space-y-6 ml-40">

@@ -2,11 +2,29 @@ import "../../index.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import OrdersList from "../../Components/OrdersList.jsx";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 function OrderList() {
+  const { user } = useAuthContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loader = async () => {
+      console.log(user);
+      if (user.user_type != "Staff") {
+        navigate("/about-us");
+      }
+    };
+
+    loader();
+  }, [user, navigate]);
+
   useEffect(() => {
     axios
-      .get("http://localhost:3000/order/send-order-list")
+      .get("http://localhost:3001/product/getOrders")
       .then(function (response) {
         setForms(response.data);
         console.log(response.data);
@@ -21,7 +39,7 @@ function OrderList() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="flex ml-40">
         <OrdersList
           Orders={forms}
           item={order}

@@ -34,9 +34,13 @@ function OrderForms() {
           <div className="mb-4"></div>
           <p className="mb-4 block font-semibold text-gray-600">Products</p>
           <div className="flex gap-4">
-            {prodList.map((prod, index) => (
-              <ProductOrderCard key={index} item={prod} />
-            ))}
+            {prodList.map((prod, index) =>
+              prod.product_name != "Sugar" ? (
+                <ProductOrderCard key={index} item={prod} />
+              ) : (
+                <></>
+              )
+            )}
           </div>
 
           <p className="mb-8 font-bold block text-gray-600">

@@ -10,20 +10,12 @@ function OrdersList({ Orders, setOrder }) {
     let orderPos = Orders.findIndex((O) => O.ID === order.ID);
   }
 
-  function approveFunction(order) {
-    console.log("approveFunction");
-    let orderPos = Orders.findIndex((O) => O.ID === order.ID);
-    if (orderPos != -1 && order.Status == "PENDING") {
-      Orders[orderPos].Status = "COMPLETED";
-      updateStatus(Orders[orderPos]);
-      // setLoading(true);
-    }
-  }
-
-  function cancelFunction(order) {
-    let orderPos = Orders.findIndex((O) => O.ID === order.ID);
-    if (orderPos != -1 && order.Status == "PENDING") {
-      Orders[orderPos].Status = "CANCELLED";
+  function editStatus(order, e) {
+    console.log("changeStatus");
+    console.log(e.target.value);
+    let orderPos = Orders.findIndex((O) => O.product_id === order.product_id);
+    if (orderPos != -1 && order.order_status == "PENDING") {
+      Orders[orderPos].order_status = e.target.value;
       updateStatus(Orders[orderPos]);
       // setLoading(true);
     }
@@ -31,7 +23,7 @@ function OrdersList({ Orders, setOrder }) {
 
   async function updateStatus(order) {
     await axios
-      .patch("http://localhost:3000/order/update-order-status", order)
+      .patch("http://localhost:3001/product/updateOrder", order)
       .then(function (response) {
         console.log(response);
       })
@@ -91,8 +83,7 @@ function OrdersList({ Orders, setOrder }) {
               <OrderRow
                 Order={form}
                 Edit={editFunction}
-                Approve={approveFunction}
-                Cancel={cancelFunction}
+                EditStatus={editStatus}
                 key={index}
                 index={index}
               />

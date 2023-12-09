@@ -8,6 +8,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { useCartContext } from "../../hooks/useCartContext.jsx";
 import { CartContext } from "../../context/CartContext.jsx";
 import FormatPriceToPhp from "../../functions/FormatPriceToPhp.jsx";
+import { toast } from "react-toastify";
 
 function ConfirmDetails() {
   const location = useLocation();
@@ -17,7 +18,7 @@ function ConfirmDetails() {
   const pickupdate = state ? state.pickupdate : null;
   const [order, setOrder] = useState({});
 
-  const { cart, setTotal } = useCartContext(CartContext);
+  const { cart, setTotal, handleEmptyCart } = useCartContext(CartContext);
 
   const { user } = useAuthContext(AuthContext);
 
@@ -49,7 +50,11 @@ function ConfirmDetails() {
       var pickupToISOTime = new Date(
         pickupdate.year,
         pickupdate.month,
-        pickupdate.day
+        pickupdate.day,
+        0,
+        0,
+        0,
+        0 - tzoffset
       )
         .toISOString()
         .slice(0, 19)
@@ -72,7 +77,7 @@ function ConfirmDetails() {
 
   async function postorder(order) {
     await axios
-      .post("http://localhost:3001/order/add-order", order)
+      .post("http://localhost:3001/product/order", order)
       .then(function (response) {
         console.log(response);
         toast.success(response.data, {
@@ -124,7 +129,7 @@ function ConfirmDetails() {
             )}
           </p>
           <p>payment method: {order.payment_method}</p>
-          {order.payment_method == "GCash" ? (
+          {order.payment_method == "Gcash" ? (
             <p>gcash reference: {order.gcash_reference}</p>
           ) : (
             <></>

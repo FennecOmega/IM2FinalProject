@@ -60,7 +60,7 @@ router.post('/addProduct', (req, res) => {
 
 //POST route to handle order creation
 router.post('/order', (req, res) => {
-  const { customer_id, transaction_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
+  const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status, gcash_reference } = req.body;
 
   // First, check if the customer exists in the database
   db.query('SELECT * FROM customer WHERE customer_id = ?', [customer_id], (error, customerResult) => {
@@ -85,12 +85,12 @@ router.post('/order', (req, res) => {
       newOrder.completion_date,
       JSON.stringify(newOrder.ArrayOfProduct),
       newOrder.payment_method,
-      newOrder.gcash_reference,
       newOrder.total_price,
-      newOrder.order_status
+      newOrder.order_status,
+      newOrder.gcash_reference,
     ];
 
-    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', values, (orderError, orderResult) => {
+    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status, GCash_Reference) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', values, (orderError, orderResult) => {
       if (orderError) {
         console.error('Error inserting order:', orderError);
         res.status(500).json({ message: 'Error creating order' });
@@ -190,6 +190,43 @@ router.get("/getProduct", (req, res) => {
     }
   });
 });
+
+router.get("/getOrders", (req, res) => {
+  db.query('SELECT * FROM `order` ', (error, results) => {
+    if (error) {
+      console.log(error)
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Orders do not exist' });
+      return;
+    } else {
+      res.send(results)
+    }
+  });
+});
+
+router.patch("/updateOrder", (req, res) => {
+  console.log(req.body)
+  const order_status = req.body.order_status
+  const prod_id = req.body.order_id
+  db.query('UPDATE `order` SET `order_status` = ? WHERE order_id = ?', [order_status, prod_id], (error, results) => {
+    if (error) {
+      console.log(error)
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Orders do not exist' });
+      return;
+    } else {
+      res.send(results)
+    }
+  });
+
+});
+
 
 // GET route to retrieve a product by product_id
 router.get('/:id', (req, res) => {

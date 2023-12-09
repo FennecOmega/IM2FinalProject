@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useCartContext } from "../../hooks/useCartContext.jsx";
@@ -63,10 +63,10 @@ function PaymentDetails() {
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             >
               <option value="Onsite">Onsite</option>
-              <option value="GCash">GCash</option>
+              <option value="Gcash">GCash</option>
             </select>
           </div>
-          {paymentDetails.payment_method === "GCash" ? (
+          {paymentDetails.payment_method === "Gcash" ? (
             <>
               <p>
                 Scan this GCash QR code and pay the amount of:{" "}
@@ -77,7 +77,7 @@ function PaymentDetails() {
               <input
                 className="px-3 py-1 bg-gray-200 rounded-lg"
                 type="text"
-                placeholder="GCash reference no."
+                placeholder="Gcash reference no."
                 onChange={(e) =>
                   setPaymentDetails({
                     ...paymentDetails,

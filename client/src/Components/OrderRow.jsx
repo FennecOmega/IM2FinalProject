@@ -2,12 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import FormatPriceToPhp from "../functions/FormatPriceToPhp";
 
-function OrderRow({ Order, Edit, Approve, Cancel, index }) {
+function OrderRow({ Order, Edit, EditStatus, index }) {
   const [prodList, setProdList] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/product/send-product-list")
+      .get("http://localhost:3001/product/getProduct")
       .then(function (response) {
         setProdList(response.data);
       })
@@ -18,23 +18,34 @@ function OrderRow({ Order, Edit, Approve, Cancel, index }) {
 
   function getProdName(product) {
     var temp = prodList
-      .map((prod) => prod.ProductID)
-      .indexOf(product.ProductID);
+      .map((prod) => prod.product_id)
+      .indexOf(product.product_id);
     try {
-      return prodList[temp].ProductName;
+      return prodList[temp].product_name;
     } catch (e) {
       return "undefined";
     }
   }
 
+  function ShowProducts(Products) {
+    const product = JSON.parse(Products);
+    console.log(product);
+
+    return product.map((product, index) => {
+      return (
+        <div key={index}>
+          {getProdName(product)} | Quantity: {product.qty} |{" "}
+          {FormatPriceToPhp(product.subtotal)}
+        </div>
+      );
+    });
+  }
+
   function EditFunc() {
     Edit(Order);
   }
-  function ApproveFunc() {
-    Approve(Order);
-  }
-  function CancelFunc() {
-    Cancel(Order);
+  function EditStatusFunc(e) {
+    EditStatus(Order, e);
   }
 
   return (
@@ -52,25 +63,28 @@ function OrderRow({ Order, Edit, Approve, Cancel, index }) {
         >
           {Order.ID}
         </th>
-        <td>{Order.TransactionDate}</td>
+        <td>{Order.transaction_date}</td>
         <td className="px-6 py-4">{Order.Name}</td>
         <td className="px-6 py-4">{Order.Contact}</td>
         <td className="px-6 py-4">
-          {Order.OrderedProducts.map((product, index) => {
+          {
+            /* {Order.ArrayOfProducts.map((product, index) => {
             return (
               <div key={index}>
                 {getProdName(product)} | Quantity: {product.Qty} |{" "}
                 {FormatPriceToPhp(product.Subtotal)}
               </div>
             );
-          })}
+          })} */ ShowProducts(Order.ArrayOfProduct)
+          }
         </td>
-        <td className="px-6 py-4">{convertPhp(Order.TotalPrice)}</td>
-        <td className="px-6 py-4">{Order.Status}</td>
+        <td className="px-6 py-4">{FormatPriceToPhp(Order.total_price)}</td>
+        <td className="px-6 py-4">{Order.order_status}</td>
         <td className="px-6 py-4">
           <button
+            value="APPROVED"
             className="mr-5 font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            onClick={ApproveFunc}
+            onClick={(e) => EditStatusFunc(e)}
           >
             Approve
           </button>
@@ -81,8 +95,9 @@ function OrderRow({ Order, Edit, Approve, Cancel, index }) {
             Edit
           </button>
           <button
+            value="CANCELLED"
             className="ml-5 font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            onClick={CancelFunc}
+            onClick={(e) => EditStatusFunc(e)}
           >
             Cancel
           </button>
