@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2023 at 04:33 AM
+-- Generation Time: Dec 09, 2023 at 05:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -42,7 +42,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `fname`, `midname`, `lname`, `contact_no`, `birthdate`, `address`) VALUES
-(1, 'von', NULL, 'manginsay', '12345678', '2003-11-05', 'Address Address');
+(1, 'von', NULL, 'manginsay', '12345678', '2003-11-05', 'address new');
 
 --
 -- Triggers `customer`
@@ -77,7 +77,8 @@ CREATE TABLE `inventory` (
 INSERT INTO `inventory` (`inventory_id`, `item_type`, `product_id`, `supplier_id`, `staff_id`, `quantity`) VALUES
 (4, NULL, 45, NULL, NULL, NULL),
 (5, NULL, 46, NULL, NULL, NULL),
-(6, NULL, 47, NULL, NULL, NULL);
+(6, NULL, 47, NULL, NULL, NULL),
+(7, NULL, 49, 1, 2, 100);
 
 -- --------------------------------------------------------
 
@@ -93,8 +94,20 @@ CREATE TABLE `order` (
   `ArrayOfProduct` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`ArrayOfProduct`)),
   `payment_method` enum('Gcash','Onsite') DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
-  `order_status` enum('PENDING','APPROVED','CANCELLED') DEFAULT NULL
+  `order_status` enum('PENDING','APPROVED','CANCELLED') DEFAULT NULL,
+  `GCash_Reference` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order`
+--
+
+INSERT INTO `order` (`Order_id`, `customer_id`, `transaction_date`, `completion_date`, `ArrayOfProduct`, `payment_method`, `total_price`, `order_status`, `GCash_Reference`) VALUES
+(2, 1, '2023-12-10 10:00:00', NULL, '[{\"item\":\"Product 1\",\"quantity\":2,\"unit_price\":10,\"subtotal\":20},{\"item\":\"Product 2\",\"quantity\":1,\"unit_price\":15,\"subtotal\":15}]', 'Gcash', 35.00, 'PENDING', NULL),
+(3, 1, '2023-12-10 10:00:00', NULL, '[{\"item\":\"Banana Cupcake\",\"quantity\":5,\"unit_price\":10,\"subtotal\":20}]', 'Gcash', 35.00, 'PENDING', NULL),
+(4, 1, '2023-12-10 10:00:00', NULL, '[{\"item\":\"Banana Cupcake\",\"quantity\":5,\"unit_price\":10,\"subtotal\":20}]', 'Gcash', 35.00, 'PENDING', NULL),
+(5, 1, '2023-12-10 10:00:00', NULL, '[{\"item\":\"Banana Cupcake\",\"quantity\":5,\"unit_price\":10,\"subtotal\":20}]', 'Gcash', 35.00, 'PENDING', NULL),
+(6, 1, '2023-12-10 10:00:00', NULL, '[{\"item\":\"Banana Cupcake\",\"quantity\":5,\"unit_price\":10,\"subtotal\":20}]', 'Gcash', 35.00, 'PENDING', NULL);
 
 --
 -- Triggers `order`
@@ -130,7 +143,8 @@ CREATE TABLE `product` (
 INSERT INTO `product` (`product_id`, `product_name`, `product_desc`, `product_image_url`, `unit_price`, `expiry_date`) VALUES
 (45, 'Banana Cupcake', 'Banana Cupcake for the family', 'https://tornadoughalli.com/wp-content/uploads/2021/12/BANANA-CUPCAKES-4-1.jpg', 75.00, '0000-00-00'),
 (46, 'Banana Bread', 'Banana Bread for the family', 'https://www.superhealthykids.com/wp-content/uploads/2019/07/healthy-banana-bread-featured-image-2.jpg', 50.00, '2023-12-25'),
-(47, 'Banana Split', 'Banana Split for the family', 'https://static.toiimg.com/thumb/52500416.cms?imgsize=1164165&width=800&height=800', 135.00, '2023-12-25');
+(47, 'Banana Split', 'Banana Split for the family', 'https://static.toiimg.com/thumb/52500416.cms?imgsize=1164165&width=800&height=800', 135.00, '2023-12-25'),
+(49, 'Sugar', 'Sweet ', 'NULL', 5.00, '2030-01-30');
 
 -- --------------------------------------------------------
 
@@ -144,20 +158,16 @@ CREATE TABLE `receipt` (
   `transaction_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `customer_id` int(11) DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
-  `payment_method` varchar(50) DEFAULT NULL
+  `payment_method` varchar(50) DEFAULT NULL,
+  `total_price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Triggers `receipt`
+-- Dumping data for table `receipt`
 --
-DELIMITER $$
-CREATE TRIGGER `approve_order_on_receipt_creation` AFTER INSERT ON `receipt` FOR EACH ROW BEGIN
-    UPDATE `order`
-    SET order_status = 'APPROVED'
-    WHERE order_id = NEW.order_id AND order_status = 'PENDING';
-END
-$$
-DELIMITER ;
+
+INSERT INTO `receipt` (`receipt_no`, `approver_name`, `transaction_date`, `customer_id`, `order_id`, `payment_method`, `total_price`) VALUES
+(2, NULL, '2023-12-10 02:00:00', 1, 6, 'Gcash', 35);
 
 -- --------------------------------------------------------
 
@@ -335,25 +345,25 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `Order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `receipt_no` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `receipt_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `staff`

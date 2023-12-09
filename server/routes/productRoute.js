@@ -3,7 +3,7 @@ const db = require('../database');
 
 
 router.post('/addProduct', (req, res) => {
-  const { product_name, product_desc, product_image_url, unit_price, expiry_date, quantity } = req.body;
+  const { item_type, product_name, product_desc, product_image_url, unit_price, expiry_date, quantity, supplier_id, staff_id } = req.body;
 
   // Check if the product already exists in the product table
   db.query('SELECT * FROM product WHERE product_name = ?', [product_name], (error, results) => {
@@ -13,17 +13,19 @@ router.post('/addProduct', (req, res) => {
     }
 
     if (results.length > 0) {
-      // If the product exists, update the inventory quantity
+      // If the product exists, update the inventory quantity and other details
       const productId = results[0].product_id;
-      db.query('UPDATE inventory SET quantity = quantity + ? WHERE product_id = ?',
-        [quantity, productId],
+      db.query(
+        'UPDATE inventory SET item_type = ?, supplier_id = ?, staff_id = ?, quantity = quantity + ? WHERE product_id = ?',
+        [item_type, supplier_id, staff_id, quantity, productId],
         (error) => {
           if (error) {
             res.status(500).json({ error: 'Database error2' });
             return;
           }
           res.status(200).json({ message: 'Inventory updated' });
-        });
+        }
+      );
     } else {
       // If the product doesn't exist, create a new product and add it to inventory
       db.query('INSERT INTO product (product_name, product_desc, product_image_url, unit_price, expiry_date) VALUES (?, ?, ?, ?, ?)',
@@ -36,8 +38,12 @@ router.post('/addProduct', (req, res) => {
           }
           
           const productId = results.insertId;
-          db.query('INSERT INTO inventory (product_id, quantity) VALUES (?, ?)',
-            [productId, quantity],
+          // Determine the table to use based on the item_type
+          const inventoryTable = item_type === 'product' ? 'ingredient' : 'miscellaneous';
+          
+          // Insert into the respective inventory table with additional details
+          db.query(`INSERT INTO inventory (product_id, quantity, supplier_id, staff_id) VALUES (?, ?, ?, ?)`,
+            [productId, quantity, supplier_id, staff_id],
             (error) => {
               console.log(error);
               if (error) {
@@ -51,9 +57,10 @@ router.post('/addProduct', (req, res) => {
   });
 });
 
+
 //POST route to handle order creation
 router.post('/order', (req, res) => {
-  const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
+  const { customer_id, transaction_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
 
   // First, check if the customer exists in the database
   db.query('SELECT * FROM customer WHERE customer_id = ?', [customer_id], (error, customerResult) => {
@@ -83,15 +90,86 @@ router.post('/order', (req, res) => {
       newOrder.order_status
     ];
 
-    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', values, (orderError, result) => {
+    db.query('INSERT INTO `order` (customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status) VALUES (?, ?, ?, ?, ?, ?, ?)', values, (orderError, orderResult) => {
       if (orderError) {
         console.error('Error inserting order:', orderError);
         res.status(500).json({ message: 'Error creating order' });
         return;
       }
 
-      console.log('Order inserted:', result.insertId);
-      res.status(201).json({ message: 'Order created successfully', order_id: result.insertId });
+      const orderId = orderResult.insertId;
+      console.log('Order inserted:', orderId);
+
+      // Create the receipt right after the order is inserted
+      const receiptValues = [
+        orderId,
+        customer_id,
+        transaction_date,
+        payment_method,
+        total_price,
+        // Add more receipt fields as needed
+      ];
+
+      db.query('INSERT INTO receipt (order_id, customer_id, transaction_date, payment_method, total_price) VALUES (?, ?, ?, ?, ?)', receiptValues, (receiptError, receiptResult) => {
+        if (receiptError) {
+          console.error('Error inserting receipt:', receiptError);
+          res.status(500).json({ message: 'Error creating receipt' });
+          return;
+        }
+
+        console.log('Receipt inserted:', receiptResult.insertId);
+        res.status(201).json({ message: 'Order and receipt created successfully', order_id: orderId, receipt_id: receiptResult.insertId });
+      });
+    });
+  });
+});
+
+router.get('/receipt/:order_id', (req, res) => {
+
+  const orderId = req.params.order_id;  
+
+  db.query('SELECT * FROM `order` WHERE order_id = ?', [orderId], (error, orderResult) => {
+    if (error) {
+      console.error('Error retrieving order:', error);
+      res.status(500).json({ message: 'Error fetching order details' });
+      return;
+    }
+
+    if (orderResult.length === 0) {
+      res.status(404).json({ message: 'Order not found' });
+      return;
+    }
+
+    const order = orderResult[0];
+    const { customer_id, transaction_date, payment_method } = order;
+
+    // Retrieve customer details based on customer_id
+    db.query('SELECT * FROM customer WHERE customer_id = ?', [customer_id], (customerError, customerResult) => {
+      if (customerError) {
+        console.error('Error retrieving customer details:', customerError);
+        res.status(500).json({ message: 'Error fetching customer details' });
+        return;
+      }
+
+      if (customerResult.length === 0) {
+        res.status(404).json({ message: 'Customer not found' });
+        return;
+      }
+
+      const customer = customerResult[0];
+      const { fname, mname, lname } = customer;
+      const customerName = [fname, mname, lname].filter(Boolean).join(' ');
+
+      // Construct the receipt object
+      const receipt = {
+        customer_name: customerName,
+        transaction_date,
+        payment_method,
+        order_id: orderId,
+        // Add more fields as needed based on your receipt structure or order details
+      };
+
+      res.status(200).json({ receipt });
     });
   });
 });
