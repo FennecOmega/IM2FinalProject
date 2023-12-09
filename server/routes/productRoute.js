@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../database');
 
-router.post('/addProduct', (req, res) => {
+
 router.post('/addProduct', (req, res) => {
   const { product_name, product_desc, product_image_url, unit_price, expiry_date, quantity } = req.body;
 
@@ -52,7 +52,6 @@ router.post('/addProduct', (req, res) => {
 });
 
 //POST route to handle order creation
-router.post('/order', (req, res) => {
 router.post('/order', (req, res) => {
   const { customer_id, transaction_date, completion_date, ArrayOfProduct, payment_method, total_price, order_status } = req.body;
 
