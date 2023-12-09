@@ -93,4 +93,21 @@ router.post('/order', (req, res) => {
   });
 });
 
+router.get("/getProduct", (req, res) => {
+  db.query('SELECT * FROM product', (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Database error1' });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Products do not exist' });
+      return;
+    }else{
+      res.send(results)
+    }
+   }
+  )
+})
+
 module.exports = router;

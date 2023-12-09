@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 export const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
-  const [currentCart, setCurrentCart] = useState(null);
+  const [currentCart, setCurrentCart] = useState([]);
 
   const getLocalStorageCart = () => {
     const storedCart = localStorage.getItem("cartKey");
@@ -17,37 +17,51 @@ export const CartContextProvider = ({ children }) => {
     getLocalStorageCart();
   }, []);
 
+  const setTotal = () => {
+    if (currentCart != null) {
+      currentCart.map(
+        (item) => ((item.subtotal = item.unit_price * item.qty), item)
+      );
+      return currentCart.reduce(
+        (currPrice, item) => (currPrice += item.subtotal),
+        0
+      );
+    } else {
+      return 0;
+    }
+  };
+
   const handleAddCart = (item) => {
     // setCurrentCart(cart);
     // localStorage.setItem("cartKey", JSON.stringify(cart));
     // setCurrentCart(JSON.parse(localStorage.getItem("cartKey")));
     var product = {
-      ProductID: item.ProductID,
-      Qty: 1,
-      Price: item.UnitPrice,
-      Subtotal: item.UnitPrice,
+      product_id: item.product_id,
+      qty: 1,
+      unit_price: item.unit_price,
+      subtotal: item.unit_price,
     };
 
     let newProductIndex = currentCart.findIndex(
-      (i) => item.ProductID === i.ProductID
+      (i) => item.product_id === i.product_id
     );
 
     if (newProductIndex == -1) {
       setCurrentCart([...currentCart, product]);
     } else {
-      currentCart[newProductIndex].Qty++;
+      currentCart[newProductIndex].qty++;
     }
     localStorage.setItem("cartKey", JSON.stringify(currentCart));
   };
 
   const handleCartDelete = (item) => {
     var temp = currentCart
-      .map((product) => product.ProductID)
-      .indexOf(item.ProductID);
-    if (temp != -1 && currentCart[temp].Qty > 0) {
-      currentCart[temp].Qty--;
-      if (currentCart[temp].Qty == 0) {
-        setCurrentCart(currentCart.filter((i) => i.Qty > 0));
+      .map((product) => product.product_id)
+      .indexOf(item.product_id);
+    if (temp != -1 && currentCart[temp].qty > 0) {
+      currentCart[temp].qty--;
+      if (currentCart[temp].qty == 0) {
+        setCurrentCart(currentCart.filter((i) => i.qty > 0));
       }
     } else if (currentCart.length == 0) {
       handleEmptyCart();
@@ -66,7 +80,7 @@ export const CartContextProvider = ({ children }) => {
 
   const handleEmptyCart = () => {
     localStorage.removeItem("cartKey", JSON.stringify(currentCart));
-    setCurrentCart(null);
+    setCurrentCart([]);
   };
 
   const globalState = {
@@ -75,9 +89,11 @@ export const CartContextProvider = ({ children }) => {
     handleCartDelete,
     handleEmptyCart,
     retQty,
+    setTotal,
   };
 
   console.log("Cart state: ", currentCart);
+
   return (
     <CartContext.Provider value={globalState}>
       <ToastContainer></ToastContainer>

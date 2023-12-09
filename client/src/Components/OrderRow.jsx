@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import FormatPriceToPhp from "../functions/FormatPriceToPhp";
 
 function OrderRow({ Order, Edit, Approve, Cancel, index }) {
   const [prodList, setProdList] = useState([]);
@@ -24,12 +25,6 @@ function OrderRow({ Order, Edit, Approve, Cancel, index }) {
     } catch (e) {
       return "undefined";
     }
-  }
-  function convertPhp(price) {
-    return Intl.NumberFormat("en-DE", {
-      style: "currency",
-      currency: "PHP",
-    }).format(price);
   }
 
   function EditFunc() {
@@ -65,7 +60,7 @@ function OrderRow({ Order, Edit, Approve, Cancel, index }) {
             return (
               <div key={index}>
                 {getProdName(product)} | Quantity: {product.Qty} |{" "}
-                {convertPhp(product.Subtotal)}
+                {FormatPriceToPhp(product.Subtotal)}
               </div>
             );
           })}

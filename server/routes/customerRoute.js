@@ -41,7 +41,7 @@ router.post("/login-page", (req, res) => {
 
           const getDetails = async () => {
             return new Promise((resolve, reject) => {
-              if (user.user_type === "staff") {
+              if (user.user_type === "Staff") {
                 db.query(
                   "SELECT * FROM staff WHERE staff_id = ?",
                   [user.id_no],

@@ -5,12 +5,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { useCartContext } from "../../hooks/useCartContext.jsx";
+import { CartContext } from "../../context/CartContext.jsx";
 import DatePicker from "../../Components/DatePicker.jsx";
+import FormatPriceToPhp from "../../functions/FormatPriceToPhp.jsx";
 
 function PaymentDetails() {
-  const location = useLocation();
-  const { state } = location;
-  const totalPrice = state ? state.totalPrice : 0;
+  // const location = useLocation();
+  // const { state } = location;
+  // const totalPrice = state ? state.totalPrice : 0;
+
+  const { setTotal } = useCartContext(CartContext);
 
   const { user } = useAuthContext(AuthContext);
 
@@ -28,13 +33,6 @@ function PaymentDetails() {
     month: "0",
     year: 2023,
   });
-
-  function convertPhp(price) {
-    return Intl.NumberFormat("en-DE", {
-      style: "currency",
-      currency: "PHP",
-    }).format(price);
-  }
 
   useEffect(() => {
     const loader = async () => {
@@ -64,7 +62,7 @@ function PaymentDetails() {
               onChange={handlePaymentMethodChange}
               className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             >
-              <option value="Cash">Cash</option>
+              <option value="Onsite">Onsite</option>
               <option value="GCash">GCash</option>
             </select>
           </div>
@@ -72,7 +70,7 @@ function PaymentDetails() {
             <>
               <p>
                 Scan this GCash QR code and pay the amount of:{" "}
-                {convertPhp(totalPrice)}
+                {FormatPriceToPhp(setTotal())}
               </p>
               <p>Or input this number in express send: 09469338740</p>
               <p className="mb-3">GCash reference no:</p>
@@ -102,8 +100,10 @@ function PaymentDetails() {
         >
           Go Back
         </button>
-
-        <Link to="/forgot-password">
+        <Link
+          to="/order-form/confirm-order"
+          state={{ pickupdate: selectedDate, payment: paymentDetails }}
+        >
           <button className="px-10 py-1 text-white bg-green-700 rounded-full">
             Proceed to Confirmation
           </button>

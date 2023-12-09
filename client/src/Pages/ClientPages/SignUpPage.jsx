@@ -7,9 +7,6 @@ import DatePicker from "../../Components/DatePicker.jsx";
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
   const [customerInfo, setCustomerInfo] = useState({});
-  // const [selectedDay, setSelectedDay] = useState(2);
-  // const [selectedMonth, setSelectedMonth] = useState("0");
-  // const [selectedYear, setSelectedYear] = useState(2023);
 
   const [selectedDate, setSelectedDate] = useState({
     day: 1,
@@ -21,36 +18,6 @@ function SignUpPage() {
   console.log(
     new Date(selectedDate.year, selectedDate.month, selectedDate.day)
   );
-  // const years = Array.from({ length: 110 }, (_, i) => 2023 - i);
-
-  // const handleMonthChange = (e) => {
-  //   setSelectedDate({...selectedDate, month: e.target.value});
-  // };
-
-  // const handleDayChange = (e) => {
-  //   setSelectedDate({...selectedDate, day: e.target.value});
-  // };
-
-  // const handleYearChange = (e) => {
-  //   setSelectedDate({...selectedDate, year: e.target.value});
-  // };
-
-  // useEffect(() => {
-  //   const daysInMonth = calculateDaysInMonth(selectedDate.Month, selectedDate.Year) + 1;
-  //   if (selectedDate.day > daysInMonth) {
-  //     setSelectedDate({...selectedDate, daysInMonth});
-  //   }
-  // }, [selectedDate.day, selectedDate.month, selectedDate.year]);
-
-  // const calculateDaysInMonth = (month, year) => {
-  //   if (month === "1") {
-  //     return year % 4 === 0 ? 29 : 28;
-  //   } else if (["3", "5", "8", "10"].includes(month)) {
-  //     return 30;
-  //   } else {
-  //     return 31;
-  //   }
-  // };
 
   async function handleClick() {
     const date = new Date(
@@ -100,9 +67,9 @@ function SignUpPage() {
           <p className="mb-3">Be a Banana Cupcake Member now!</p>
           <p className="mb-3">
             Already have an account?{" "}
-              <Link to="/login-page">            
+            <Link to="/login-page">
               <span className="font-bold text-amber-900"> Login here </span>
-              </Link>
+            </Link>
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
