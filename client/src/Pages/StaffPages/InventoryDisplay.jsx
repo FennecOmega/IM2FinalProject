@@ -142,7 +142,7 @@ function InventoryDisplay() {
                     </tr>
                   </thead>
 
-                  {/*Please turn this into a component*/}
+                  
                   <tbody>
                     {filteredData.map((data) => (
                       <InventoryRow />
