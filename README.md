@@ -1,12 +1,16 @@
 # IM2FinalProject
+
+gonna repurpose this as a personal project :upside_down:
 TEMPORARY README
 
 # Tech Stack (INCOMPLETE)
+
 Frontend: HTML5, CSS3, JavaScript, React, React Router, Vite
- 
-Backend: Express 
+
+Backend: Express, MySQL
 
 # Setup
+
 Run this command to clone the repository into your desired directory
 
     # clones the repo into your local device
@@ -23,7 +27,7 @@ Once that's done, you will have to install dependencies on both client and serve
 For client folder:
 
     # changes directory to client folder and does a clean install of dependencies according to package-lock.json
-    cd client 
+    cd client
     npm ci
 
 For server folder:
@@ -50,7 +54,7 @@ To run the backend, change your directory to the server folder and run index.js 
 
 # To Contribute
 
-To contribute, #Fork this repository in your Github which can be seen on the top right. 
+To contribute, #Fork this repository in your Github which can be seen on the top right.
 
 ![image of github watch, star, fork](https://user-images.githubusercontent.com/111989096/273213128-089875d8-74bc-4919-809c-b4ff11e82c79.png)
 
@@ -64,7 +68,6 @@ In your terminal, navigate to the Directory you want it to be saved, and with th
 
     git clone https://github.com/FennecOmega/IM2FinalProject.git    # Example
     cd IM2FinalProject                                                     # Make that file the current directory
-
 
 You can then make changes within that file whenever you want, but make sure to git pull everytime you start coding to fetch the most recent changes. Once you are done adding new features, you want the changes to appear in your Forked Repository.
 
@@ -96,7 +99,7 @@ If theres any concern about the project organization, feel free to PM me through
 
         # our application
         App.jsx
-        # our css stylesheet 
+        # our css stylesheet
         index.css
         # config files
         package.json
@@ -108,5 +111,3 @@ If theres any concern about the project organization, feel free to PM me through
 
     > server
         index.js
-
-
