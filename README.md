@@ -51,7 +51,15 @@ To run the frontend webpage(s), simply change your directory to the client folde
     # starts and runs the frontend
     npm run dev
 
-To run the backend, change your directory to the server folder and run index.js using node
+To run the backend, you need to setup the SQL server. The SQL file is located in bananadb.sql
+
+First start the Apache and MySQL servers on XAMPP
+(image)
+Then, create a database in http://localhost/phpmyadmin named bananadb.
+
+Import the bananadb.sql file into the newly created database.
+
+Then, go to the server folder directory and run index.js using node
 
     # changes directory to server
     cd server
