@@ -1,7 +1,13 @@
 # IM2FinalProject
 
-gonna repurpose this as a personal project :upside_down:
-TEMPORARY README
+SYSTEM NAME: Banana Cupcake Inventory Management & Order System
+
+Group Members:
+
+- Philip Isidro J. Go (Leader, Backend, Frontend)
+- Kenneth J. Cantillas (Backend, SQL Database)
+- Von Manginsay (Frontend CSS, original Documentation)
+- Matthea Trina Borromeo (Frontend CSS, Revised Documentation, Presentation)
 
 # Tech Stack (INCOMPLETE)
 
@@ -60,7 +66,7 @@ To contribute, #Fork this repository in your Github which can be seen on the top
 
 Go to your Forked Repository, click on Code, and copy the URL as shown.
 
-![image of github](https://user-images.githubusercontent.com/111989096/273165397-09e93194-be12-423d-845b-64540ac63a0e.png)
+![ross gets me pregnant](https://user-images.githubusercontent.com/111989096/273165397-09e93194-be12-423d-845b-64540ac63a0e.png)
 
 In your terminal, navigate to the Directory you want it to be saved, and with the saved URL do the following:
 
